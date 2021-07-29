@@ -6,7 +6,7 @@ COPY . .
 RUN npm install
 RUN npm run build:h5
 
-# 运行环境
+# 运行环境自动构建
 FROM nginx:alpine
 
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
