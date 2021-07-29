@@ -7,10 +7,7 @@
 			}
 		},
 		{
-			"path": "pages/pay/qrcode/index",
-			"style": {
-				"navigationBarTitleText": "快速买单"
-			}
+			"path": "pages/pay/qrcode/index"
 		}
 	],
 	"globalStyle": {

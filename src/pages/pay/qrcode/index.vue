@@ -15,7 +15,7 @@
 					<span class="totalFee">
 						￥
 					</span>
-					<u-input 
+					<input 
 						v-model="form.totalFee"  
 						@input="check"
 						focus 
