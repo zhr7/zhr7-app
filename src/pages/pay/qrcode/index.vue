@@ -15,14 +15,7 @@
 					<span class="totalFee">
 						￥
 					</span>
-					<input 
-						v-model="form.totalFee"  
-						@input="check"
-						focus 
-						type="number" 
-						maxlength="11"
-						placeholder="请输入消费金额"
-					/>
+					<input focus type="number" v-model="form.totalFee" @input="check" maxlength="11" placeholder="请输入消费金额" />
 				</u-form-item>
 				<u-divider></u-divider>
 				<u-form-item>
@@ -59,7 +52,7 @@
 			check(e) {
 				//重新赋值给input
 				this.$nextTick(() => {
-					this.form.totalFee = (e.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+					this.form.totalFee = (e.detail.value.match(/^\d*(\.?\d{0,2})/g)[0]) || null
 				})
 			},
 			simpleInfo(){
