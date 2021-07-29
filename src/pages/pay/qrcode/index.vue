@@ -120,7 +120,7 @@
 
 	.pay{
 		width: 95vw;
-		height: 50vh;
+		height: 100vw;
 		border-radius: 5px;
 		border: 1px solid #c8c9cc;
 		box-shadow: 5px 5px 2px #c8c9cc;
