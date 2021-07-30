@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="pay">
-			<u-form :model="form" ref="uForm" label-position="top">
+			<u-form :model="form" ref="uForm" label-width="190">
 				<u-form-item>
 					<span class="top">
 						<u-icon name="home"></u-icon> 
@@ -10,31 +10,36 @@
 						{{storeName}}
 					</span>
 				</u-form-item>
-				<u-divider></u-divider>
 				<u-form-item label="消费金额:" prop="name">
 					<span class="totalFee">
 						￥
 					</span>
-					<u-input 
-						v-model="form.totalFee"  
-						@input="check"
-						focus 
-						type="number" 
-						maxlength="11"
-						placeholder="请输入消费金额"
-					/>
+					<span class="input-label totalFee">{{form.totalFee}}</span>
 				</u-form-item>
-				<u-divider></u-divider>
 				<u-form-item>
 				</u-form-item>
 			</u-form>
 			<u-button @click="submit" type="warning" :disabled="disabled">确认付款</u-button>
 		</view>
+		<u-keyboard 
+			ref="uKeyboard" 
+			mode="number" 
+			v-model="keyboard"
+			:mask="false"
+			:tooltip="false"
+			:mask-close-able="false"
+			:safe-area-inset-bottom="true"
+			:dot-enabled="true" 
+			@change="onChange"
+			@backspace="onBackspace"
+		></u-keyboard>
+		<u-toast ref="uToast" position="top"/>
 		<u-modal v-model="show" title="错误提示" :content="err"></u-modal>
 	</view>
 </template>
 
 <script>
+	import wx from 'weixin-js-sdk'
     import { parseTime }  from '@/utils'
 	export default {
 		data() {
@@ -45,6 +50,7 @@
 				form: {
 					totalFee: ""
 				},
+				keyboard: true,
 				show: false,
 				err: ""
 			}
@@ -54,6 +60,8 @@
 		},
 		mounted() {
 			this.simpleInfo()
+			this.hideOptionMenu() // 因此分享
+
 		},
 		methods: {
 			check(e) {
@@ -104,7 +112,27 @@
 					this.show = true
 					this.err =  "下单失败：" + err.data.detail
 				})
-			}
+			},
+			hideOptionMenu(){
+				wx.hideOptionMenu()
+			},
+			onChange(val){
+				if (Number(this.form.totalFee + val)<100000) {
+					this.form.totalFee += val;
+					this.form.totalFee = this.form.totalFee.match(/^\d+(?:\.\d{0,2})?/)[0]
+				}else{
+					this.$refs.uToast.show({
+						duration: 5000,
+						title: "不允许大于10万元",
+						type: 'warning'
+					});
+				}
+			},
+			onBackspace(e){
+				if(this.form.totalFee.length>0){
+					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
+				}
+			},
 		}
 	}
 </script>
@@ -120,7 +148,7 @@
 
 	.pay{
 		width: 95vw;
-		height: 100vw;
+		height: 110vw;
 		border-radius: 5px;
 		border: 1px solid #c8c9cc;
 		box-shadow: 5px 5px 2px #c8c9cc;
@@ -141,5 +169,31 @@
 	}
 	/deep/ .uni-input-input{
 		font-size: 8vw;
+	}
+</style>
+<style scoped>
+	.input-label::before {
+		float: right;
+		content: " ";
+		background-color: #ff9900;
+		letter-spacing: 0.88px;
+		width: 2px;
+		height: 9vw;
+		animation: cursor-blinks 1.5s infinite steps(1, start);
+	}
+
+	@keyframes cursor-blinks {
+		0% {
+			opacity: 1;
+			display: block;
+		}
+		50% {
+			opacity: 0;
+			display: none;
+		}
+		100% {
+			opacity: 1;
+			display: block;
+		}
 	}
 </style>

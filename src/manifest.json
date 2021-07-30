@@ -54,11 +54,19 @@
 
 	},
 	"mp-weixin": { /* 微信小程序特有相关 */
-		"appid": "",
-		"setting": {
-			"urlCheck": false
-		},
-		"usingComponents": true
+		"appid" : "wxfdd6e1142e54d88b",
+        "setting" : {
+            "urlCheck" : false,
+            "minified" : true,
+            "postcss" : false,
+            "es6" : true
+        },
+        "usingComponents" : true,
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "通过位置获取最近店面"
+            }
+        }
 	},
 	"mp-alipay" : {
         "usingComponents" : true
