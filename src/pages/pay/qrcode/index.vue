@@ -64,12 +64,6 @@
 
 		},
 		methods: {
-			check(e) {
-				//重新赋值给input
-				this.$nextTick(() => {
-					this.form.totalFee = (e.match(/^\d*(\.?\d{0,2})/g)[0]) || null
-				})
-			},
 			simpleInfo(){
 				this.disabled = true
 				this.$u.api.SimpleInfo({ config: {
@@ -154,6 +148,7 @@
 		box-shadow: 5px 5px 2px #c8c9cc;
 		padding: 5vw;
 		background-color: #fff;
+		z-index: 11000;
 	}
 	.top{
 		font-size: 6vw;
