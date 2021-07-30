@@ -30,6 +30,7 @@
 			:mask-close-able="false"
 			:safe-area-inset-bottom="true"
 			:dot-enabled="true" 
+			:z-index="100"
 			@change="onChange"
 			@backspace="onBackspace"
 		></u-keyboard>
@@ -65,7 +66,7 @@
 		},
 		methods: {
 			simpleInfo(){
-				this.disabled = true
+				// this.disabled = true
 				this.$u.api.SimpleInfo({ config: {
 					id: this.$route.query.store_id
 				}}).then(res =>{
@@ -85,7 +86,7 @@
 					this.err =  "请输入下单金额"
 					return
 				}
-				this.disabled = true
+				// this.disabled = true
 				this.$u.api.QRCode({
 					storeId: this.$route.query.store_id,
 					bizContent: {
@@ -111,13 +112,13 @@
 				wx.hideOptionMenu()
 			},
 			onChange(val){
-				if (Number(this.form.totalFee + val)<100000) {
+				if (Number(this.form.totalFee + val)<1000000) {
 					this.form.totalFee += val;
 					this.form.totalFee = this.form.totalFee.match(/^\d+(?:\.\d{0,2})?/)[0]
 				}else{
 					this.$refs.uToast.show({
 						duration: 5000,
-						title: "不允许大于10万元",
+						title: "不允许大于100万元",
 						type: 'warning'
 					});
 				}
@@ -148,7 +149,7 @@
 		box-shadow: 5px 5px 2px #c8c9cc;
 		padding: 5vw;
 		background-color: #fff;
-		z-index: 11000;
+		z-index:200
 	}
 	.top{
 		font-size: 6vw;
@@ -160,9 +161,6 @@
 		font-weight: 900;
 	}
 	.totalFee {
-		font-size: 8vw;
-	}
-	/deep/ .uni-input-input{
 		font-size: 8vw;
 	}
 </style>
