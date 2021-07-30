@@ -66,19 +66,19 @@
 		},
 		methods: {
 			simpleInfo(){
-				this.disabled = true
-				this.$u.api.SimpleInfo({ config: {
-					id: this.$route.query.store_id
-				}}).then(res =>{
-					if (res.config) {
-						this.disabled = false
-						this.channel = res.config.channel
-						this.storeName = res.config.storeName
-					}
-				}).catch(err => {
-					this.show = true
-					this.err =  "获取商户信息失败：" + err.data.detail
-				})
+				// this.disabled = true
+				// this.$u.api.SimpleInfo({ config: {
+				// 	id: this.$route.query.store_id
+				// }}).then(res =>{
+				// 	if (res.config) {
+				// 		this.disabled = false
+				// 		this.channel = res.config.channel
+				// 		this.storeName = res.config.storeName
+				// 	}
+				// }).catch(err => {
+				// 	this.show = true
+				// 	this.err =  "获取商户信息失败：" + err.data.detail
+				// })
 			},
 			submit() {
 				if (Math.round(this.form.totalFee*100)<=0) {
@@ -113,14 +113,11 @@
 			},
 			onChange(val){
 				if (Number(this.form.totalFee + val)<1000000) {
+					if (this.form.totalFee === "0" && val != ".") {
+						return
+					}
 					this.form.totalFee += val;
 					this.form.totalFee = this.form.totalFee.match(/^\d+(?:\.\d{0,2})?/)[0]
-				}else{
-					this.$refs.uToast.show({
-						duration: 5000,
-						title: "不允许大于100万元",
-						type: 'warning'
-					});
 				}
 			},
 			onBackspace(e){
