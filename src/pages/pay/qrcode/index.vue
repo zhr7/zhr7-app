@@ -19,7 +19,7 @@
 				<u-form-item>
 				</u-form-item>
 			</u-form>
-			<u-button @click="submit" type="warning" :disabled="disabled">确认付款</u-button>
+			<u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button>
 		</view>
 		<u-keyboard 
 			ref="uKeyboard" 
@@ -66,7 +66,7 @@
 		},
 		methods: {
 			simpleInfo(){
-				// this.disabled = true
+				this.disabled = true
 				this.$u.api.SimpleInfo({ config: {
 					id: this.$route.query.store_id
 				}}).then(res =>{
@@ -86,7 +86,7 @@
 					this.err =  "请输入下单金额"
 					return
 				}
-				// this.disabled = true
+				this.disabled = true
 				this.$u.api.QRCode({
 					storeId: this.$route.query.store_id,
 					bizContent: {
