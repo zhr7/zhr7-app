@@ -1,39 +1,44 @@
 <template>
 	<view class="content">
-		<view class="pay">
-			<u-form :model="form" ref="uForm" label-width="190">
-				<u-form-item>
-					<span class="top">
-						<u-icon name="home"></u-icon> 
-					</span>
-					<span class="top-name">
-						{{storeName}}
-					</span>
-				</u-form-item>
-				<u-form-item label="消费金额:" prop="name">
-					<span class="totalFee">
-						￥
-					</span>
-					<span class="input-label totalFee">{{form.totalFee}}</span>
-				</u-form-item>
-				<u-form-item>
-				</u-form-item>
-			</u-form>
-			<u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button>
+		<view v-if="method">
+			<view class="pay">
+				<u-form :model="form" ref="uForm" label-width="190">
+					<u-form-item>
+						<span class="top">
+							<u-icon name="home"></u-icon> 
+						</span>
+						<span class="top-name">
+							{{storeName}}
+						</span>
+					</u-form-item>
+					<u-form-item label="消费金额:" prop="name">
+						<span class="totalFee">
+							￥
+						</span>
+						<span class="input-label totalFee">{{form.totalFee}}</span>
+					</u-form-item>
+					<u-form-item>
+					</u-form-item>
+				</u-form>
+				<u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button>
+			</view>
+			<u-keyboard 
+				ref="uKeyboard" 
+				mode="number" 
+				v-model="keyboard"
+				:mask="false"
+				:tooltip="false"
+				:mask-close-able="false"
+				:safe-area-inset-bottom="true"
+				:dot-enabled="true" 
+				:z-index="100"
+				@change="onChange"
+				@backspace="onBackspace"
+			></u-keyboard>
 		</view>
-		<u-keyboard 
-			ref="uKeyboard" 
-			mode="number" 
-			v-model="keyboard"
-			:mask="false"
-			:tooltip="false"
-			:mask-close-able="false"
-			:safe-area-inset-bottom="true"
-			:dot-enabled="true" 
-			:z-index="100"
-			@change="onChange"
-			@backspace="onBackspace"
-		></u-keyboard>
+		<view v-else>
+			<u-alert-tips type="error" :show-icon="true" description="暂不支持此支付通道"></u-alert-tips>
+		</view>
 		<u-toast ref="uToast" position="top"/>
 		<u-modal v-model="show" title="错误提示" :content="err"></u-modal>
 	</view>
@@ -53,32 +58,41 @@
 				},
 				keyboard: true,
 				show: false,
-				err: ""
+				err: "",
+				method:'', //浏览器
 			}
 		},
 		onLoad() {
 
 		},
 		mounted() {
-			this.simpleInfo()
-			this.hideOptionMenu() // 因此分享
-
+			this.hideOptionMenu() // 禁止分享
+			this.navigator()
+			if (this.method) {
+				this.simpleInfo()
+			}
 		},
 		methods: {
 			simpleInfo(){
-				// this.disabled = true
-				// this.$u.api.SimpleInfo({ config: {
-				// 	id: this.$route.query.store_id
-				// }}).then(res =>{
-				// 	if (res.config) {
-				// 		this.disabled = false
-				// 		this.channel = res.config.channel
-				// 		this.storeName = res.config.storeName
-				// 	}
-				// }).catch(err => {
-				// 	this.show = true
-				// 	this.err =  "获取商户信息失败：" + err.data.detail
-				// })
+				if (!this.$route.query.store_id) {
+					this.show = true;
+					this.err =  "二维码错误!未找到用户信息。"
+					return
+				}
+				this.disabled = true
+				this.$u.api.SimpleInfo({ config: {
+					id: this.$route.query.store_id
+				}}).then(res =>{
+					if (res.config) {
+						this.disabled = false
+						this.channel = res.config.channel
+						this.storeName = res.config.storeName
+					}
+				}).catch(err => {
+					this.show = true;
+					this.err =  "获取商户支付通道信息失败。"
+					console.log(err);
+				})
 			},
 			submit() {
 				if (Math.round(this.form.totalFee*100)<=0) {
@@ -105,7 +119,8 @@
 					}
 				}).catch(err => {
 					this.show = true
-					this.err =  "下单失败：" + err.data.detail
+					this.err =  "下单失败："
+					console.log(err);
 				})
 			},
 			hideOptionMenu(){
@@ -125,6 +140,17 @@
 					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
 				}
 			},
+			navigator(){
+				if (/MicroMessenger/.test(window.navigator.userAgent)) { 
+					this.method = "wechat"
+				} 
+				if (/AlipayClient/.test(window.navigator.userAgent)) { 
+					this.method = "alipay"
+				}
+				if (/UnionPay/.test(window.navigator.userAgent)) { 
+					this.method = "unionpay"
+				}
+			}
 		}
 	}
 </script>
