@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view v-if="method">
+		<template v-if="method">
 			<view class="pay">
 				<u-form :model="form" ref="uForm" label-width="190">
 					<u-form-item>
@@ -35,11 +35,10 @@
 				@change="onChange"
 				@backspace="onBackspace"
 			></u-keyboard>
-		</view>
-		<view v-else>
+		</template>
+		<template v-else>
 			<u-alert-tips type="error" :show-icon="true" description="暂不支持此支付通道"></u-alert-tips>
-		</view>
-		<u-toast ref="uToast" position="top"/>
+		</template>
 		<u-modal v-model="show" title="错误提示" :content="err"></u-modal>
 	</view>
 </template>
