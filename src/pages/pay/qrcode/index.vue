@@ -8,7 +8,7 @@
 							<u-icon name="home"></u-icon> 
 						</span>
 						<span class="top-name">
-							{{storeName}}
+							{{name}}
 						</span>
 					</u-form-item>
 					<u-form-item label="消费金额:" prop="name">
@@ -49,8 +49,7 @@
 	export default {
 		data() {
 			return {
-				channel: "",
-				storeName: "",
+				name: "",
 				disabled: false,
 				form: {
 					totalFee: ""
@@ -58,7 +57,7 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method:'', //浏览器
+				method:'alipay', //浏览器
 			}
 		},
 		onLoad() {
@@ -66,31 +65,30 @@
 		},
 		mounted() {
 			this.hideOptionMenu() // 禁止分享
-			this.navigator()
+			// this.navigator()
 			if (this.method) {
 				this.simpleInfo()
 			}
 		},
 		methods: {
 			simpleInfo(){
-				if (!this.$route.query.store_id) {
+				if (!this.$route.query.user_id) {
 					this.show = true;
 					this.err =  "二维码错误!未找到用户信息。"
 					return
 				}
 				this.disabled = true
-				this.$u.api.SimpleInfo({ config: {
-					id: this.$route.query.store_id
+				this.$u.api.SimpleInfo({ seller: {
+					id: this.$route.query.user_id
 				}}).then(res =>{
-					if (res.config) {
+					if (res.seller) {
 						this.disabled = false
-						this.channel = res.config.channel
-						this.storeName = res.config.storeName
+						this.name = res.seller.name
 					}
 				}).catch(err => {
 					this.show = true;
-					this.err =  "获取商户支付通道信息失败。"
-					console.log(err);
+					this.err =  "获取商户简讯失败。"
+					console.log(err)
 				})
 			},
 			submit() {
@@ -101,10 +99,10 @@
 				}
 				this.disabled = true
 				this.$u.api.QRCode({
-					storeId: this.$route.query.store_id,
+					userId: this.$route.query.user_id,
 					bizContent: {
-						channel: this.channel,
-						title: "二维码支付B2C",
+						method: this.method,
+						title: "二维码支付C2B",
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100))
 					}
@@ -115,7 +113,7 @@
 					}else{
 						this.show = true
 						this.err =  "请联系管理员,下单成功未找到跳转链接！"
-					}
+					}Í
 				}).catch(err => {
 					this.show = true
 					this.err =  "下单失败："
