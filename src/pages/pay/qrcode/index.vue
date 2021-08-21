@@ -57,7 +57,7 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method:'alipay', //浏览器
+				method:'', //浏览器
 			}
 		},
 		onLoad() {
@@ -65,7 +65,7 @@
 		},
 		mounted() {
 			this.hideOptionMenu() // 禁止分享
-			// this.navigator()
+			this.navigator()
 			if (this.method) {
 				this.simpleInfo()
 			}
