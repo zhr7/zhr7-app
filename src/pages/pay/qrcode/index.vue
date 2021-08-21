@@ -57,7 +57,7 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method:'', //浏览器
+				method:'a', //浏览器
 			}
 		},
 		onLoad() {
@@ -66,9 +66,9 @@
 		mounted() {
 			this.hideOptionMenu() // 禁止分享
 			this.navigator()
-			if (this.method) {
+			// if (this.method) {
 				this.simpleInfo()
-			}
+			// }
 		},
 		methods: {
 			simpleInfo(){
@@ -163,12 +163,12 @@
 
 	.pay{
 		width: 95vw;
-		height: 110vw;
 		border-radius: 5px;
 		border: 1px solid #c8c9cc;
 		box-shadow: 5px 5px 2px #c8c9cc;
 		padding: 5vw;
 		background-color: #fff;
+		padding-bottom: 10vw;
 		z-index:200
 	}
 	.top{
