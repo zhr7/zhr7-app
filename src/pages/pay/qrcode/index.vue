@@ -113,10 +113,10 @@
 					}else{
 						this.show = true
 						this.err =  "请联系管理员,下单成功未找到跳转链接！"
-					}Í
+					}
 				}).catch(err => {
 					this.show = true
-					this.err =  "下单失败："
+					this.err =  "下单失败："+ err
 					console.log(err);
 				})
 			},
