@@ -5,7 +5,7 @@
 const install = (Vue, vm) => {
 	// 此处使用了传入的params参数，一切自定义即可
 	// pay 支付相关
-	let SimpleInfo = (params = {}) => vm.$u.post('/organize-api/sellers/simpleInfo', params);	// 获取商户简讯
+	let SimpleInfo = (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params);	// 获取商户简讯
 	let QRCode = (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params);
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = { 
