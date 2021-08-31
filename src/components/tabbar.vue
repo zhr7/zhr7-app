@@ -22,6 +22,9 @@
 				current: 0,
 			}
 		},
+		created() {
+			this.$emit('change',this.list[this.current])
+		},
 		methods: {
 			change(index) {
 				this.current = index
