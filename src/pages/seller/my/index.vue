@@ -9,7 +9,7 @@
 				<view class="u-font-14 u-tips-color">账号: {{username}}</view>
 			</view>
 			<view class="u-m-l-10 u-p-10">
-				<u-icon name="scan" color="#969799" size="28"></u-icon>
+				<u-icon name="grid" color="#969799" size="28"></u-icon>
 			</view>
 		</view>
 		
@@ -29,7 +29,7 @@
 		</view>
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<view @click="replaceLogin" class="cell-item">切换账号</view>
+				<view @click="showActionSheet = !showActionSheet" class="cell-item">切换账号</view>
 			</u-cell-group>
 		</view>
 		<view class="u-m-t-20">
@@ -37,6 +37,7 @@
 				<view @click="outLogin" class="cell-item">退出登录</view>
 			</u-cell-group>
 		</view>
+		<u-action-sheet :list="listActionSheet" v-model="showActionSheet" @click="clickActionSheet"></u-action-sheet>
 		<u-toast ref="uToast" />
 	</view>
 </template>
@@ -53,6 +54,9 @@
 		data() {
 			return {
 				title: 'My',
+				users: {},
+				listActionSheet: [],
+				showActionSheet: false,
 			}
 		},
 		created() {
@@ -63,8 +67,19 @@
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
+			this.init()
 		},
 		methods: {
+			init(){
+				this.users = uni.getStorageSync('users')
+				Object.keys(this.users).forEach((index,key) => {
+					this.listActionSheet.push({
+						text: this.users[index].username,
+						color: '#303133',
+						subText: this.users[index].name,
+					})
+				});
+			},
 			outLogin(){
 				this.$store.dispatch('user/logout')
 				this.$u.route({
@@ -72,8 +87,13 @@
 					url: 'pages/login/index'
 				})
 			},
-			replaceLogin() {
-
+			clickActionSheet(index) {
+				const usernme = this.listActionSheet[index].text
+				uni.setStorageSync('token', this.users[usernme].token)
+				this.$u.route({
+					type: 'reLaunch',
+					url: '/pages/index/index', 
+				})
 			},
 			handler() {
 				this.$refs.uToast.show({
