@@ -10,17 +10,23 @@
 	export default {
 		data() {
 			return {
-				title: 'home',
+				title: 'home2',
 			}
 		},
-		onLoad() {
-
+		created() {
+			uni.setNavigationBarTitle({
+				title: '首页'
+			})
+			uni.setNavigationBarColor({
+				frontColor: '#ffffff',  
+                backgroundColor: '#7d33ff',  
+			})
 		},
 		methods: {
+			
 		}
 	}
 </script>
-
 <style>
 	.content {
 		display: flex;
@@ -42,6 +48,6 @@
 
 	.title {
 		font-size: 36rpx;
-		color: #8f8f94;
+		color: #FFFFFF;
 	}
 </style>

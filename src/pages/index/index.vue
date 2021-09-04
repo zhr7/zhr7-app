@@ -1,11 +1,11 @@
 <template>
 	<view>
-		<seller v-if="role==='seller'"/>
-		<institution v-if="role==='institution'"/>
+		<seller v-if="roles.indexOf('seller')===0"/>
+		<institution v-if="roles.indexOf('institution')===0"/>
 	</view>
 </template>
 <script>
-
+	import {  mapGetters } from 'vuex'
 	import seller from '@/pages/seller/index.vue'
 	import institution from '@/pages/institution/index.vue'
 	export default {
@@ -13,15 +13,34 @@
 			seller,
 			institution,
 		},
+		computed: {
+			...mapGetters([
+				'roles',
+			]),
+		},
 		data() {
 			return {
-				role: "seller", // 当前使用角色
 			}
 		},
 		onLoad() {
-
+			this.login()
 		},
 		methods: {
+			login() {
+				if (!uni.getStorageSync('token')) {
+					this.$u.route({
+						type: 'reLaunch',
+						url: '/pages/login/index', 
+					});
+				}else{
+					this.userInfo()
+				}
+			},
+			userInfo(){
+				this.$store.dispatch('user/getInfo').catch(err => {
+					uni.removeStorageSync('token'); // 删除token 重新获取
+				})
+			}
 		}
 	}
 </script>

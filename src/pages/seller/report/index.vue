@@ -13,8 +13,10 @@
 				title: 'Report',
 			}
 		},
-		onLoad() {
-
+		created() {
+			uni.setNavigationBarTitle({
+				title:'日结报表'
+			})
 		},
 		methods: {
 		}

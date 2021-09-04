@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view>
 		<home v-if="path==='home'"/>
 		<order v-if="path==='order'"/>
 		<report v-if="path==='report'"/>
@@ -7,6 +7,7 @@
 		<my v-if="path==='my'"/>
 		<tabbar
 			:list="list"
+			:default="path"
 			@change="navChange"
 		/>
 	</view>
@@ -29,7 +30,7 @@
 		},
 		data() {
 			return {
-				path: "",
+				path: "my",
 				list:[	// 商家导航
 					{
 						path: "home",	// 主页
@@ -66,7 +67,6 @@
 						iconPath: "account",
 						selectedIconPath: "account-fill",
 						text: '我的',
-						count: 23,
 						isDot: false,
 						customIcon: false,
 					},

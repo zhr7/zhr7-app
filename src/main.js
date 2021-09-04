@@ -1,13 +1,18 @@
 import Vue from 'vue'
+import store from './store'
 import App from './App'
 import uView from "uview-ui";
 
+Vue.use(store);
 Vue.use(uView);
-Vue.config.productionTip = false
 
+Vue.config.productionTip = false
 App.mpType = 'app'
 
+store.dispatch('setU', Vue.prototype.$u)
+
 const app = new Vue({
+  store,
   ...App
 })
 

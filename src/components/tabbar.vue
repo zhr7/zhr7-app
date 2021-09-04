@@ -14,7 +14,11 @@
 		props: {
             list: {
                 type: Array,
-                default: 'home'
+                default: []
+            },
+			default: {
+                type: String,
+                default: ""
             },
 		},
 		data() {
@@ -23,7 +27,12 @@
 			}
 		},
 		created() {
-			this.$emit('change',this.list[this.current])
+			this.list.forEach((item,key) => {
+				if (item.path === this.default) {
+					this.$emit('change',item)
+					this.current = key
+				}
+			});
 		},
 		methods: {
 			change(index) {

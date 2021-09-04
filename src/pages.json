@@ -3,7 +3,11 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "app"
+			}
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
 			}
 		},
 		{

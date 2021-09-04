@@ -11,6 +11,9 @@ docker:
 .PHONY: run
 run:
 	yarn serve
+.PHONY: wechat
+wechat:
+	yarn dev:mp-weixin
 .PHONY: build
 build:
 	yarn build:h5

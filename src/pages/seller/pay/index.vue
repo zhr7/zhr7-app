@@ -13,8 +13,10 @@
 				title: 'Pay',
 			}
 		},
-		onLoad() {
-
+		created() {
+			uni.setNavigationBarTitle({
+				title:'收银'
+			})
 		},
 		methods: {
 		}

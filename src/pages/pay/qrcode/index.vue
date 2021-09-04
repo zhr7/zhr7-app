@@ -44,7 +44,9 @@
 </template>
 
 <script>
+	// #ifdef H5
 	import wx from 'weixin-js-sdk'
+	// #endif
     import { parseTime }  from '@/utils'
 	export default {
 		data() {
@@ -121,7 +123,9 @@
 				})
 			},
 			hideOptionMenu(){
+				// #ifdef H5
 				wx.hideOptionMenu()
+				// #endif
 			},
 			onChange(val){
 				if (Number(this.form.totalFee + val)<1000000) {
