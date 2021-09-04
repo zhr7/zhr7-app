@@ -30,7 +30,7 @@
 		},
 		data() {
 			return {
-				path: "my",
+				path: "pay",
 				list:[	// 商家导航
 					{
 						path: "home",	// 主页
