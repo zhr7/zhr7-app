@@ -2,8 +2,8 @@
 	<view>
 		<home v-if="path==='home'"/>
 		<order v-if="path==='order'"/>
-		<report v-if="path==='report'"/>
 		<pay v-if="path==='pay'"/>
+		<report v-if="path==='report'"/>
 		<my v-if="path==='my'"/>
 		<tabbar
 			:list="list"
@@ -79,6 +79,9 @@
 		methods: {
 			navChange(nav){
 				this.path = nav.path
+				// if (this.path==="pay") {
+				// 	this.list[3].midButton = false
+				// }
 			},
 		}
 	}

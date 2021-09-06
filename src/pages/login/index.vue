@@ -2,7 +2,7 @@
 	<view class="content">
 		<image class="logo" src="/static/logo-login.png"></image>
 		<view class="login">
-			<u-form ref="uForm" :model="form" border-bottom="false" :error-type="errorType" >
+			<u-form ref="uForm" :model="form" :border-bottom="false" :error-type="errorType" >
 				<u-form-item v-if="usePassword" label="账 号" prop="username">
 					<u-input v-model="form.username" :border="true" focus placeholder="请输入账号"/>
 				</u-form-item>
@@ -178,21 +178,15 @@
 		justify-content: center;
 		color: #FFFFFF;
 	}
-
 	.logo {
 		height: 20vw;
 		width: 60vw;
 		margin: 5vh auto 50rpx auto;
 	}
-
 	.login {
 		background-color: #FFFFFF;
 		width: 90vw;
 		padding: 5vh 5vw 5vh 5vw;
 		border-radius: 5px;
-	}
-
-	.title {
-		font-size: 36rpx;
 	}
 </style>

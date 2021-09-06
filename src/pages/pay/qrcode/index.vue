@@ -94,6 +94,7 @@
 				})
 			},
 			submit() {
+				uni.vibrateShort() // 震动
 				if (Math.round(this.form.totalFee*100)<=0) {
 					this.show = true
 					this.err =  "请输入下单金额"
@@ -128,6 +129,7 @@
 				// #endif
 			},
 			onChange(val){
+				uni.vibrateShort() // 震动
 				if (Number(this.form.totalFee + val)<1000000) {
 					if (this.form.totalFee === "0" && val != ".") {
 						return
@@ -137,6 +139,7 @@
 				}
 			},
 			onBackspace(e){
+				uni.vibrateShort() // 震动
 				if(this.form.totalFee.length>0){
 					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
 				}
