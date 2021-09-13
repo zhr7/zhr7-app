@@ -10,8 +10,17 @@ const install = (Vue, vm) => {
 	let UserSelfUpdate = (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params);
 	
 	// pay 支付相关
+	let AopF2F = (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params);  // 下单
+	let Query = (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params);  // 查询
+	let Refund = (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params);  // 退款
+	let RefundQuery = (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params);  // 退款查询
+
 	let SimpleInfo = (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params);	// 获取商户简讯
 	let QRCode = (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params);
+
+	let Amount = (params = {}) => vm.$u.post('/pay-api/orders/amount', params); // 订单统计
+	let List = (params = {}) => vm.$u.post('/pay-api/orders/list', params);
+
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = { 
 		Auth,
@@ -19,8 +28,17 @@ const install = (Vue, vm) => {
 		UserInfo,
 		UserSelfUpdate,
 		
+		AopF2F,
+		Query,
+		Refund,
+		RefundQuery,
 		SimpleInfo, 
 		QRCode,
+		Amount,
+		List,
+		report: { // 报表
+			Amount: (params = {}) => vm.$u.post('/pay-api/reports/amount', params) // 报表统计
+		},
 	};
 }
 

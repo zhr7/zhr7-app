@@ -1,16 +1,19 @@
 <template>
-	<view class="con">
+	<view>
 		<view class="top">
 			<span class="totalFee">
 				收款金额
 			</span>
 			<span class="input-label">{{totalFee}}</span>
 		</view>
+		<view class="content">
+			<u-button size="medium" v-if="cancel!==0" @click="cancel=-1">取消收款</u-button>
+		</view>
 		<u-keyboard 
 			ref="uKeyboard" 
 			mode="number" 
 			class="bottom safe-area-inset-bottom"
-			v-model="show"
+			:v-model="true"
 			:dot-enabled="true" 
 			:tooltip="false"
 			confirmText="收款"
@@ -24,15 +27,15 @@
 </template>
 <script>
 	import uKeyboard from '@/components/uview-ui/components/u-keyboard/u-keyboard.vue'
+	import { parseTime }  from '@/utils'
 	export default {
 		components: { 
 			uKeyboard
 		},
 		data() {
 			return {
-				show: true,
-				focus: false,
-				totalFee: ""
+				totalFee: "",
+				cancel: 0,
 			}
 		},
 		created() {
@@ -70,7 +73,104 @@
 			},
 			onConfirm(){
 				uni.vibrateShort()
-				console.log('onConfirm')
+				this.disabled = true
+				uni.scanCode({
+					scanType: ['qrCode'],
+					onlyFromCamera: true,
+					success:(res) =>{
+						this.aopF2F(res.result, Math.round(this.totalFee * 100))
+					}
+				})
+			},
+			aopF2F(code, totalFee) {
+				this.cancel = 1
+				uni.showLoading({
+					title:'收款下单中'
+				})
+				const order = {
+					bizContent: {
+						authCode: code,
+						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
+						title: "二维码收款B2C",
+						totalFee: String(totalFee),
+					}
+				}
+				this.$u.api.AopF2F(order).then(res=>{
+					if (res.content.returnCode === 'SUCCESS' && res.content.status === 'SUCCESS') {
+						uni.showToast({
+                            duration: 5000,
+                            icon:'success',
+                            title:'收款成功',
+                        })
+						this.totalFee = ""
+					} else {
+						this.Query(order)
+					}
+				}).catch(err => {
+					this.Query(order)
+				})
+			},
+			Query(order){
+				if (this.cancel==-1) {
+					uni.showToast({
+                        duration: 3000,
+                        icon:'success',
+                        title:'已取消收款',
+                    })
+					return
+				}
+				uni.showLoading({
+					title:'收款查询中'
+				})
+				this.$u.api.Query(order).then(res => {
+					if (res.content.returnCode === 'SUCCESS') {
+						switch (res.content.status) {
+							case 'SUCCESS':
+								uni.showToast({
+                                    duration: 10000,
+                                    icon:'success',
+                                    title:'收款成功',
+                                })
+								this.totalFee = ""
+								break;
+							case 'USERPAYING':
+								uni.showToast({
+                                    duration: 5000,
+                                    icon:'loading',
+                                    title:'等待用户付款',
+                                })
+								setTimeout(() => {
+									this.Query(order)
+								}, 3000)
+								break;
+							case 'WAITING':
+								uni.showToast({
+                                    duration: 5000,
+                                    icon:'loading',
+                                    title:'系统方繁忙稍后查询',
+                                })
+								setTimeout(() => {
+									this.Query(order)
+								}, 3000)
+							case 'CLOSED':
+								uni.showToast({
+                                    duration: 5000,
+                                    icon:'error',
+                                    title:'订单已关闭',
+                                })
+								break;
+							default:
+								break;
+						}
+					}
+
+				}).catch(error => {
+					uni.showToast({
+                        duration: 5000,
+						icon:'error',
+						title:'查询失败!请到流水里面查询'
+					})
+				})
 			}
 		}
 	}
@@ -81,6 +181,13 @@
 		background-color: #fff;
 		padding: 5vw;
 		font-size: 8vw;
+	}
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 5vw;
 	}
 	.bottom{
 		@include vue-flex;

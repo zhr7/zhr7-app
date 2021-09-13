@@ -50,7 +50,7 @@
 						path: "pay",	// 收银
 						iconPath: "rmb-circle",
 						selectedIconPath: "rmb-circle-fill",
-						text: '收银',
+						text: '商家',
 						midButton: true,
 						customIcon: false,
 					},

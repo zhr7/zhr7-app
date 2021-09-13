@@ -4,10 +4,10 @@
 		<view class="login">
 			<u-form ref="uForm" :model="form" :border-bottom="false" :error-type="errorType" >
 				<u-form-item v-if="usePassword" label="账 号" prop="username">
-					<u-input v-model="form.username" :border="true" focus placeholder="请输入账号"/>
+					<u-input v-model="form.username" :border="true" :focus="!passwordFocus" confirm-type="next" @confirm="confirmNext" placeholder="请输入账号"/>
 				</u-form-item>
-				<u-form-item v-if="usePassword" label="密 码" prop="password">
-					<u-input v-model="form.password" type="password" :border="true" placeholder="请输入密码"/>
+				<u-form-item v-if="usePassword" :focus="passwordFocus" label="密 码" prop="password">
+					<u-input v-model="form.password" type="password" :border="true" confirm-type="done"  @confirm="submit" placeholder="请输入密码"/>
 				</u-form-item>
 				<u-form-item v-if="!usePassword" label="账号" prop="username">
 					<u-input :border="border" type="select" :select-open="auth.show" v-model="auth.usernme" placeholder="请选择登录账号" @click="auth.show = !auth.show"></u-input>
@@ -34,6 +34,7 @@
 	export default {
 		data() {
 			return {
+				passwordFocus: false,
 				auth: {
 					usernme: '',
 					show: false,
@@ -71,6 +72,7 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		created() {
+			uni.hideHomeButton()
 			uni.setNavigationBarTitle({
 				title: ''
 			})
@@ -99,7 +101,18 @@
 			},
 			submit() {
 				if (!this.usePassword && this.auth.usernme !== '') {
-					uni.setStorageSync('token', this.users[this.auth.usernme].token)
+					const usernme = this.auth.usernme
+					// 重新排序
+					let us = {}
+					Object.keys(this.users).forEach((i,key) => {
+						if (usernme!==i) {
+							us[i] = this.users[i]
+						}
+					})
+					us[usernme] = this.users[usernme]
+					// 重新排序
+					uni.setStorageSync('users', us)
+					uni.setStorageSync('token', this.users[usernme].token)
 					this.$u.route({
 						type: 'reLaunch',
 						url: '/pages/index/index', 
@@ -125,6 +138,13 @@
 								name: res.user.name,
 								token: res.token,
 							}
+							if (Object.keys(users).length > 4) {
+								Object.keys(users).forEach((index,key) => {
+									if (key===0) {
+										delete users[index]
+									}
+								})
+							}
 							uni.setStorageSync('users', users)
 							this.$u.route({
 								type: 'reLaunch',
@@ -143,6 +163,9 @@
 			},
 			clickActionSheet(index) {
 				this.auth.usernme = this.listActionSheet[index].text
+			},
+			confirmNext() {
+				this.passwordFocus = true
 			}
 		}
 	}

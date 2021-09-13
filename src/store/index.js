@@ -2,12 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import getters from './getters'
 import user from './modules/user'
+import seller from './modules/seller'
 import healthy from './modules/healthy'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-   state: {
+  state: {
     $u:{},
     onReachBottom:false,
   },
@@ -29,6 +30,7 @@ const store = new Vuex.Store({
   },
   modules: {
     user,
+    seller,
     healthy,
   },
   getters

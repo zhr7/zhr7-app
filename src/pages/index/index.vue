@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<seller v-if="roles.indexOf('seller')===0"/>
+		<seller ref="seller" v-if="roles.indexOf('seller')===0"/>
 		<institution v-if="roles.indexOf('institution')===0"/>
 	</view>
 </template>
@@ -20,16 +20,22 @@
 		},
 		data() {
 			return {
+				show: false
 			}
 		},
 		onLoad() {
 			this.login()
 		},
+		onShow() {
+			if (this.$refs.seller) {
+				this.$refs.seller.showInit()
+			}
+		},
 		methods: {
 			login() {
 				if (!uni.getStorageSync('token')) {
 					this.$u.route({
-						type: 'reLaunch',
+						type: 'redirect',
 						url: '/pages/login/index', 
 					});
 				}else{
@@ -41,7 +47,7 @@
 					uni.removeStorageSync('token'); // 删除token 重新获取
 				})
 			}
-		}
+		},
 	}
 </script>
 

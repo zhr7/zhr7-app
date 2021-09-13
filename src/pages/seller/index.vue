@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<home v-if="path==='home'"/>
-		<order v-if="path==='order'"/>
+		<order ref="order" v-if="path==='order'"/>
 		<pay v-if="path==='pay'"/>
 		<report v-if="path==='report'"/>
 		<my v-if="path==='my'"/>
@@ -30,7 +30,8 @@
 		},
 		data() {
 			return {
-				path: "pay",
+				tabbarClick: false, // tabbar导航点击动态
+				path: "report",
 				list:[	// 商家导航
 					{
 						path: "home",	// 主页
@@ -73,16 +74,18 @@
 				],
 			}
 		},
-		onLoad() {
-
-		},
 		methods: {
 			navChange(nav){
 				this.path = nav.path
-				// if (this.path==="pay") {
-				// 	this.list[3].midButton = false
-				// }
+				if (nav.path==="order" && this.$refs.order) {
+					this.$refs.order.init()
+				}
 			},
+			showInit() {
+				if (this.path==="order" && this.$refs.order) {
+					this.$refs.order.init()
+				}
+			}
 		}
 	}
 </script>

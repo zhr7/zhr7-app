@@ -89,6 +89,16 @@
 			},
 			clickActionSheet(index) {
 				const usernme = this.listActionSheet[index].text
+				// 重新排序
+				let us = {}
+				Object.keys(this.users).forEach((i,key) => {
+					if (usernme!==i) {
+						us[i] = this.users[i]
+					}
+				})
+				us[usernme] = this.users[usernme]
+				uni.setStorageSync('users', us)
+				// 重新排序
 				uni.setStorageSync('token', this.users[usernme].token)
 				this.$u.route({
 					type: 'reLaunch',
