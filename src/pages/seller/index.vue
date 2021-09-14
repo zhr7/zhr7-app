@@ -31,7 +31,7 @@
 		data() {
 			return {
 				tabbarClick: false, // tabbar导航点击动态
-				path: "order",
+				path: "pay",
 				list:[	// 商家导航
 					{
 						path: "home",	// 主页
