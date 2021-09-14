@@ -311,7 +311,7 @@
 			},
 			getList() {
 				let where = ' true'
-				if (this.query.date) {
+				if (this.query.date.length===2) {
 					if (this.query.date[1] - this.query.date[0] > 31 * 24 * 60 * 60 * 1000) {
 						uni.showToast({
                             duration: 3000,
@@ -349,11 +349,7 @@
 				}
 
 				if (this.query.search) {
-					where = where + ` And (out_trade_no like '%` + this.query.search + `%' 
-						Or trade_no like '%` + this.query.search + `%' 
-						Or title like '%` + this.query.search + `%' 
-						Or attach like '%` + this.query.search + `%' 
-					)`
+					where = where + ` And (out_trade_no like '%` + this.query.search + `%' Or trade_no like '%` + this.query.search + `%' Or title like '%` + this.query.search + `%' Or attach like '%` + this.query.search + `%')`
 				}
 
 				if (this.query.total_fee) {
@@ -407,6 +403,8 @@
 					where: '',
 					sort: 'created_at desc'
 				}
+				this.query.search = ''
+				this.search = ''
 				this.list = []
 				this.getList()
 			},
@@ -417,6 +415,8 @@
 					where: '',
 					sort: 'created_at desc'
 				}
+				this.query.search = ''
+				this.search = ''
 				this.list = []
 				this.getList()
 				this.$refs.uDropdown.close()
@@ -454,7 +454,7 @@
 					where: '',
 					sort: 'created_at desc'
 				}
-				this.query.date = ""
+				this.query.date = []
 				this.list = []
 				this.getList()
 			},
