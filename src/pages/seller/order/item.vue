@@ -41,6 +41,10 @@
 			<view class="">凭证号</view>
 			<view>{{ item.tradeNo }}</view>
 		</view>	
+		<view class="line" v-if="item.bankTradeNo">
+			<view class="">银行单号</view>
+			<view>{{ item.bankTradeNo }}</view>
+		</view>	
 		<view class="line" v-if="item.title">
 			<view class="">订单名称</view>
 			<view>{{ item.title }}</view>
@@ -86,9 +90,9 @@
 			<view>{{replaceTime(item.createdAt)}}</view>
 		</view>	
 		<u-line />
-		<view class="bottom" >	
+		<view class="bottom" v-if="Number(item.status)===1">
 			<u-button 
-				v-if="Number(item.totalFee)>0 && Number(isFee(item.refundFee)) < Number(item.totalFee)&&Number(item.status)===1"
+				v-if="Number(item.totalFee)>0 && (Number(isFee(item.refundFee)) < Number(item.totalFee))"
 				type="warning" 
 				@click="refund"
 			>
@@ -117,7 +121,6 @@
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
-			
 		},
 		mounted() {
 			

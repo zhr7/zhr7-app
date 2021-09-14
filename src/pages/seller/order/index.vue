@@ -349,7 +349,7 @@
 				}
 
 				if (this.query.search) {
-					where = where + ` And (out_trade_no like '%` + this.query.search + `%' Or trade_no like '%` + this.query.search + `%' Or title like '%` + this.query.search + `%' Or attach like '%` + this.query.search + `%')`
+					where = where + ` And (out_trade_no like '%` + this.query.search + `%' Or trade_no like '%` + this.query.search + `%' Or bank_trade_no like '%` + this.query.search + `%' Or title like '%` + this.query.search + `%' Or attach like '%` + this.query.search + `%')`
 				}
 
 				if (this.query.total_fee) {
