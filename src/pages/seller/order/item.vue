@@ -88,7 +88,7 @@
 		<u-line />
 		<view class="bottom" >	
 			<u-button 
-				v-if="Number(item.totalFee)>0 && Number(isFee(item.refundFee)) < Number(item.totalFee)"
+				v-if="Number(item.totalFee)>0 && Number(isFee(item.refundFee)) < Number(item.totalFee)&&Number(item.status)===1"
 				type="warning" 
 				@click="refund"
 			>

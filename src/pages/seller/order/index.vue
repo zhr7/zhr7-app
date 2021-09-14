@@ -1,26 +1,85 @@
 <template>
 	<view>
-		<!-- <u-dropdown ref="uDropdown">
-			<u-dropdown-item title="日期">
-				<view class="slot-content">
-					<view class="u-text-center u-content-color u-m-t-20 u-m-b-20">
-						<u-button @click="startShow = true">打开</u-button>
-						<u-button @click="endShow = true">打开End</u-button>
-					</view>
-					<u-button type="primary" @click="closeDropdown">确定</u-button>
-				</view>
-			</u-dropdown-item>
-			<u-dropdown-item title="搜索">
-				<view class="slot-content">
-					<view class="center">其他自定义内容</view>
-					<u-button type="primary" @click="closeDropdown">确定</u-button>
-				</view>
-			</u-dropdown-item>
-			<u-dropdown-item title="筛选">
-			</u-dropdown-item>
-		</u-dropdown> -->
-		<view>
-			<view class="item"  v-for="(item, index) in list" :key="index" @click="click(item)">
+		<view class="top">
+			<view class="search">
+				<u-search placeholder="订单号/流水号/凭证号/备注" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
+			</view>	
+			<view class="uDropdown">
+				<u-dropdown ref="uDropdown" @open="deteOpen">
+					<u-dropdown-item title="日期">
+					</u-dropdown-item>
+					<u-dropdown-item title="扫码找单">
+					</u-dropdown-item>
+					<u-dropdown-item title="筛选">
+						<view class="slot-content">
+							<view class="dropdown-center">
+								<view class="type">
+									<view class="titile">
+										订单类型
+									</view>
+									<view class="order-item">
+										<view 
+											class="order-item-content" 
+											v-for="(item,index) in orderType" 
+											:class="[query.type===item.value?'selected':'']" 
+											:key="index" 
+											@click="clickOrderTYpe(item.value)"
+										>
+											{{item.label}}
+										</view>
+									</view>
+								</view>
+								<view class="method">
+									<view class="titile">
+										支付方式
+									</view>
+									<view class="order-item">
+										<view 
+											class="order-item-content" 
+											v-for="(item,index) in orderMethod" 
+											:class="[query.method===item.value?'selected':'']" 
+											:key="index" 
+											@click="clickOrderMethod(item.value)"
+										>
+											{{item.label}}
+										</view>
+									</view>
+								</view>
+								<view class="status">
+									<view class="titile">
+										支付状态
+									</view>
+									<view class="order-item">
+										<view 
+											class="order-item-content" 
+											v-for="(item,index) in orderStatus" 
+											:class="[query.status===item.value?'selected':'']" 
+											:key="index" 
+											@click="clickOrderStatus(item.value)"
+										>
+											{{item.label}}
+										</view>
+									</view>
+								</view>
+								<view class="fee">
+									<view class="titile">
+										金额范围
+									</view>
+									<view class="fee-item">
+										<u-input v-model="query.startFee" class="fee-input" type="digit" :border="true" placeholder="请输入金额"/>
+										<span>至</span>
+										<u-input v-model="query.endFee" class="fee-input" type="digit" :border="true" placeholder="请输入金额"/>
+									</view>
+								</view>
+								<u-button type="primary" class="filter" @click="clickFilter">确认</u-button>
+							</view>
+						</view>
+					</u-dropdown-item>
+				</u-dropdown>
+			</view>	
+		</view>
+		<view class="content" v-if="list.length > 0">
+			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
 					<span v-if="item.method==='alipay'">
 						<u-icon name="zhifubao" custom-prefix="colour-icon" class="icon">></u-icon><br>
@@ -79,8 +138,7 @@
 			</view>
 			<u-loadmore :status="status" />
 		</view>
-		<u-picker mode="time" v-model="startShow" :params="params" @confirm="startConfirm" :default-time="parseTime(query.date[0])" :show-time-tag="false"></u-picker>
-		<u-picker mode="time" v-model="endShow" :params="params" @confirm="endConfirm" :default-time="parseTime(query.date[1])" :show-time-tag="false"></u-picker>
+		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
 	</view>
 </template>
 <script>
@@ -99,14 +157,19 @@
 				},
 				query: {
 					date: [
-						new Date(new Date(new Date().toLocaleDateString()).getTime() - 31 * 24 * 60 * 60 * 1000),
+						new Date(new Date(new Date().toLocaleDateString()).getTime() - 30 * 24 * 60 * 60 * 1000),
 						new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1000)
 					],
-					query: '',
+					method: '',
+					status: '',
+					type: '', // 订单类型 退款订单 支付订单
+					search: '', // 搜索
+					startFee: '', 
+					endFee: '',
 					total_fee: '',
 					out_trade_no: '',
 					operator_id: '',
-					terminal_id: ''
+					terminal_id: '',
 				},
 				params: {
 					year: true,
@@ -116,8 +179,6 @@
 					minute: true,
 					second: true
 				},
-				startShow: false,
-				endShow: false,
 				tabbarList:[	// 商家导航
 					{
 						path: "home",	// 主页
@@ -157,7 +218,59 @@
 						isDot: false,
 						customIcon: false,
 					},
-				]
+				],
+				orderType: [
+					{
+						label: '支付订单',
+						value: 1,
+					},
+					{
+						label: '退款订单',
+						value: -1,
+					},
+				],
+				orderMethod: [
+					{
+						label: '微信支付',
+						value: 'wechat',
+					},
+					{
+						label: '支付宝',
+						value: 'alipay',
+					},
+					{
+						label: '银联扫码',
+						value: 'unionpay',
+					},
+					{
+						label: '信用卡',
+						value: 'credit',
+					},
+					{
+						label: '银行卡',
+						value: 'card',
+					},
+					{
+						label: '数字货币',
+						value: 'digital',
+					},
+				],
+				orderStatus: [
+					{
+						label: '订单关闭',
+						value: -1,
+					},
+					{
+						label: '等待支付',
+						value: 0,
+					},
+					{
+						label: '支付成功',
+						value: 1,
+					},
+				],
+				showDate: false,
+				search: '',
 			}
 		},
 		created() {
@@ -175,23 +288,6 @@
 		},
 		methods: {
 			init() {
-				this.listQuery = {
-					page: 1,
-					limit: 15,
-					where: '',
-					sort: 'created_at desc'
-				}
-				this.query = {
-					date: [
-						new Date(new Date(new Date().toLocaleDateString()).getTime() - 30 * 24 * 60 * 60 * 1000 - 1000),
-						new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1000)
-					],
-					query: '',
-					total_fee: '',
-					out_trade_no: '',
-					operator_id: '',
-					terminal_id: ''
-				}
 				this.list = []
 				this.getList()
 				uni.$on('uOnReachBottom',()=>{
@@ -210,12 +306,6 @@
 				time = time.replace("T", " ")
 				return time.replace("+08:00", "")
 			},
-			startConfirm(e) {
-				this.startTime = new Date(e.year+"-"+e.month+"-"+e.day+" "+e.hour+":"+e.minute+":"+e.second+"")
-			},
-			endConfirm(e) {
-				this.endTime = new Date(e.year+"-"+e.month+"-"+e.day+" "+e.hour+":"+e.minute+":"+e.second+"")
-			},
 			isFee(fee) { // 价格是否存在不存在返回0
 				return fee ? fee : 0
 			},
@@ -226,7 +316,7 @@
 						uni.showToast({
                             duration: 3000,
                             icon:'error',
-                            title:'查询时间范围不允许大于31天',
+                            title:'不允许大于31天',
                         })
 						return
 					}
@@ -234,9 +324,38 @@
 					const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
 					where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
 				}
+				if (this.query.type) {
+					if (this.query.type === 1) {
+						where = where + " And total_fee > 0"
+					} else {
+						where = where + " And total_fee < 0"
+					}
+				}
+				if (this.query.status !== '') {
+					where = where + " And status = " + this.query.status + ""
+				}
 				if (this.query.method) {
 					where = where + " And method = '" + this.query.method + "'"
 				}
+
+				if (this.query.startFee||this.query.endFee) {
+					let startFee = this.query.startFee
+					let endFee = this.query.endFee
+					if (this.query.type === -1) {
+						startFee = -this.query.endFee
+						endFee = -this.query.startFee
+					}
+					where = where + " And total_fee >= " + Number(startFee * 100) + " And total_fee <= " + Number(endFee * 100) + ""
+				}
+
+				if (this.query.search) {
+					where = where + ` And (out_trade_no like '%` + this.query.search + `%' 
+						Or trade_no like '%` + this.query.search + `%' 
+						Or title like '%` + this.query.search + `%' 
+						Or attach like '%` + this.query.search + `%' 
+					)`
+				}
+
 				if (this.query.total_fee) {
 					where = where + ' And total_fee =' + Number(this.query.total_fee * 100)
 				}
@@ -254,11 +373,90 @@
 				this.$u.api.List({
 					list_query: this.listQuery
 				}).then(res => {
-					res.orders.forEach(item => {
-						this.list.push(item)
-					});
-					this.total = Number(res.total)
+					if (res.orders) {
+						res.orders.forEach(item => {
+							this.list.push(item)
+						});
+						this.total = Number(res.total)
+						if (this.list.length>=this.total) {
+							this.status = 'nomore'
+						}
+					}
 				})
+			},
+			deteOpen(index) {
+				if (index === 0) {
+					this.showDate = true
+					this.$refs.uDropdown.close()
+				}
+				if (index === 1) {
+					uni.scanCode({
+						success:(res) =>{
+							this.handlerSearch(res.result)
+						}
+					})
+					this.$refs.uDropdown.close()
+				}
+			},
+			changeDate(e){ // 时间选择
+				this.query.date[0] = new Date(e.startDate + " 00:00:00")
+				this.query.date[1] = new Date(e.endDate + " 23:59:59")
+				this.listQuery = {
+					page: 1,
+					limit: 15,
+					where: '',
+					sort: 'created_at desc'
+				}
+				this.list = []
+				this.getList()
+			},
+			clickFilter() {
+				this.listQuery = {
+					page: 1,
+					limit: 15,
+					where: '',
+					sort: 'created_at desc'
+				}
+				this.list = []
+				this.getList()
+				this.$refs.uDropdown.close()
+			},
+			clickOrderTYpe(value) { // 点击订单支付类型
+				if (this.query.type === value) {
+					this.query.type = ''
+				}else{
+					this.query.type = value
+				}
+			},
+			clickOrderMethod(value) { // 点击订单支付方式
+				if (this.query.method === value) {
+					this.query.method = ''
+				}else{
+					this.query.method = value
+				}
+			},
+			clickOrderStatus(value) { // 点击订单支付状态
+				if (this.query.status === value) {
+					this.query.status = ''
+				}else{
+					this.query.status = value
+				}
+			},
+			handlerSearch(res) {
+				if (res) {
+					this.query.search = res
+				}else{
+					this.query.search = this.search
+				}
+				this.listQuery = {
+					page: 1,
+					limit: 15,
+					where: '',
+					sort: 'created_at desc'
+				}
+				this.query.date = ""
+				this.list = []
+				this.getList()
 			},
 			click(item){
 				this.$u.route({
@@ -273,49 +471,51 @@
 </script>
 
 <style lang="scss" scoped>
-.item {
-	height: 60px;
-	width: 100%;
-	background: #fff;
-	margin-bottom: 5px;
-	display: flex;
-	padding: 0 2vw 0 1vw ;
-	.left {
-		padding: 5px;
-		text-align: center;
-		min-width: 60px;
-		color: #909399;
-		font-size: 10px;
-	}
-	.center{
+.content{
+	.item {
+		height: 60px;
+		width: 100%;
+		background-color: #fff;
+		margin-bottom: 5px;
 		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: 5px;
-		.title {
-			font-size: 13px;
-		}
-		.time {
-			font-size: 10px;
+		padding: 0 2vw 0 1vw ;
+		.left {
+			padding: 5px;
+			text-align: center;
+			min-width: 60px;
 			color: #909399;
+			font-size: 10px;
 		}
-	}
-	.right {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		padding: 5px;
-		flex: 1;
-		text-align: right;
-		min-width: 80px;
-		.totalFee {
-			color: #000;
+		.center{
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 5px;
+			.title {
+				font-size: 13px;
+			}
+			.time {
+				font-size: 10px;
+				color: #909399;
+			}
 		}
-		.refundFee {
-			color: #FF0000;
-		}
-		.status {
-			font-size: 12px;
+		.right {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 5px;
+			flex: 1;
+			text-align: right;
+			min-width: 80px;
+			.totalFee {
+				color: #000;
+			}
+			.refundFee {
+				color: #FF0000;
+			}
+			.status {
+				font-size: 12px;
+			}
 		}
 	}
 }
@@ -336,5 +536,57 @@
 }
 .warning{
 	color: #E6A23C;
+}
+.top{
+	width: 100%;
+	background-color: #fff;
+	.search {
+		padding:0 10px 10px 10px;
+	}
+	.uDropdown{
+		background-color: #f4f4f5!important;
+	}
+}
+.dropdown-center {
+	width: 100%;
+	background-color: #fff;
+	padding: 5vw;
+	.titile {
+		margin: 5px;
+	}
+	.order-item {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		.order-item-content {
+			color: #606266;
+			background-color:#f4f4f5;
+			font-size: 12px;
+			padding: 5px;
+			width: 70px;
+			height: 28px;
+			text-align: center;
+			border-radius: 15px;
+			margin: 5px;
+		}
+	}
+	.fee-item{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		.fee-input{
+			width: 150px;
+			margin: 5px;
+		}
+	}
+	.filter{
+		margin: 10px;
+	}
+}
+.selected {
+	color: #7d33ff!important;
+	border:1px solid #7d33ff;
+	padding: 4px!important;
 }
 </style>

@@ -2,6 +2,7 @@
 	<view>
 		<seller ref="seller" v-if="roles.indexOf('seller')===0"/>
 		<institution v-if="roles.indexOf('institution')===0"/>
+		<u-back-top :scroll-top="scrollTop"></u-back-top>
 	</view>
 </template>
 <script>
@@ -20,7 +21,7 @@
 		},
 		data() {
 			return {
-				show: false
+				scrollTop: 0
 			}
 		},
 		onLoad() {
@@ -30,6 +31,9 @@
 			if (this.$refs.seller) {
 				this.$refs.seller.showInit()
 			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop
 		},
 		methods: {
 			login() {

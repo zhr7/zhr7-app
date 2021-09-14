@@ -151,7 +151,7 @@
 			<u-line />
 			<view class="center">
 				<u-icon name="yunshanfu" custom-prefix="colour-icon" class="icon">></u-icon>
-				<span>银联支付</span>
+				<span>银联扫码</span>
 			</view>
 			<view class="bottom">
 				<view class="item">
@@ -182,7 +182,7 @@
 			<u-line />
 			<view class="center">
 				<u-icon name="xinyongka" custom-prefix="colour-icon" class="icon">></u-icon>
-				<span>信用卡刷卡</span>
+				<span>信用卡</span>
 			</view>
 			<view class="bottom">
 				<view class="item">
@@ -213,7 +213,7 @@
 			<u-line />
 			<view class="center">
 				<u-icon name="yinhangka" custom-prefix="colour-icon" class="icon">></u-icon>
-				<span>储蓄卡刷卡</span>
+				<span>银行卡</span>
 			</view>
 			<view class="bottom">
 				<view class="item">
