@@ -23,7 +23,7 @@
 			</view>
 		</view>
 		<u-line />
-		<view class="line" v-if="item.refundFee">
+		<view class="line" v-if="item.refundFee>0">
 			<view class="">已退款金额</view>
 			<view class="refundFee">￥{{(item.refundFee/100).toFixed(2) }}</view>
 		</view>	
@@ -140,25 +140,25 @@
 						}
 					}).then(res => {
 						if (res.content.totalFee) {
-							this.item.totalFee = res.content.totalFee
+							this.$set(this.item,'totalFee', res.content.totalFee)
 						}
 						if (res.content.refundFee) {
-							this.item.refundFee = res.content.refundFee
+							this.$set(this.item,'refundFee', res.content.refundFee)
 						}
 						if (res.content.status) {
 							switch (res.content.status) {
 								case "SUCCESS":
-									this.item.status = 1
+									this.$set(this.item,'status', 1)
 									break;
-							
 								case "USERPAYING":
 									this.item.status = 0
+									this.$set(this.item,'status', 0)
 									break;
 								case "WAITING":
-									this.item.status = 0
+									this.$set(this.item,'status', 0)
 									break;
 								case "CLOSED":
-									this.item.status = -1
+									this.$set(this.item,'status', -1)
 									break;
 							}
 						}
@@ -193,9 +193,6 @@
 									this.item.status = -1
 									break;
 							}
-						}
-						if (res.content.buyerPayFee) {
-							this.item.buyerPayFee = res.content.buyerPayFee
 						}
 						uni.stopPullDownRefresh()
 					}).catch(err =>{
