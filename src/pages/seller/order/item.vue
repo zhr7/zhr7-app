@@ -183,7 +183,6 @@
 								case "SUCCESS":
 									this.item.status = 1
 									break;
-							
 								case "USERPAYING":
 									this.item.status = 0
 									break;
@@ -194,6 +193,9 @@
 									this.item.status = -1
 									break;
 							}
+						}
+						if (res.content.buyerPayFee) {
+							this.item.buyerPayFee = res.content.buyerPayFee
 						}
 						uni.stopPullDownRefresh()
 					}).catch(err =>{
