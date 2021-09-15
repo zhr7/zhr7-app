@@ -111,25 +111,25 @@
 						{{(item.totalFee/100).toFixed(2) }}
 					</view>
 					<view class="status">
-						<view class="error" v-if="Number(item.status)===-1">
+						<view class="error" v-if="isNumber(item.status)===-1">
 							已关闭
 						</view>
-						<view class="warning" v-if="(!item.status || Number(item.status)===0)&&Number(item.totalFee)>0">
+						<view class="warning" v-if="isNumber(item.status)===0&&isNumber(item.totalFee)>0">
 							等付款
 						</view>
-						<view v-if="Number(item.status)===1">
-							<view v-if="Number(item.totalFee)>0">
-								<view class="primary" v-if="Number(isFee(item.refundFee)) < Number(item.totalFee) && Number(isFee(item.refundFee))!==0">
+						<view v-if="isNumber(item.status)===1">
+							<view v-if="isNumber(item.totalFee)>0">
+								<view class="primary" v-if="isNumber(item.refundFee) < isNumber(item.totalFee) && isNumber(item.refundFee)!==0">
 									转入退款
 								</view>
-								<view class="warning" v-if="Number(isFee(item.refundFee)) === Number(item.totalFee)">
+								<view class="warning" v-if="isNumber(item.refundFee) === isNumber(item.totalFee)">
 									全额退款
 								</view>
 								<view class="success">
 									支付成功
 								</view>
 							</view>
-							<view class="success" v-if="Number(item.totalFee)<0">
+							<view class="success" v-if="isNumber(item.totalFee)<0">
 								退款成功
 							</view>
 						</view>
@@ -288,6 +288,12 @@
 		},
 		methods: {
 			init() {
+				this.listQuery = {
+					page: 1,
+					limit: 15,
+					where: '',
+					sort: 'created_at desc'
+				}
 				this.list = []
 				this.getList()
 				uni.$on('uOnReachBottom',()=>{
@@ -306,8 +312,8 @@
 				time = time.replace("T", " ")
 				return time.replace("+08:00", "")
 			},
-			isFee(fee) { // 价格是否存在不存在返回0
-				return fee ? fee : 0
+			isNumber(fee) { // 价格是否存在不存在返回0
+				return fee ? Number(fee)  : 0
 			},
 			getList() {
 				let where = ' true'

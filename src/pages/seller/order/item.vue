@@ -49,30 +49,30 @@
 			<view class="">订单名称</view>
 			<view>{{ item.title }}</view>
 		</view>	
-		<view class="line" v-if="item.status">
+		<view class="line">
 			<view class="">订单状态</view>
-			<view  v-if="(!item.status || Number(item.status)===0)&&Number(item.totalFee)>0">
+			<view class="warning"  v-if="(isNumber(item.status)===0)&&isNumber(item.totalFee)>0">
 				等付款
 			</view>
-			<view  v-if="(!item.status || Number(item.status)===0)&&Number(item.totalFee)<0">
+			<view class="warning"  v-if="(isNumber(item.status)===0)&&isNumber(item.totalFee)<0">
 				等退款
 			</view>
-			<view class="error" v-if="Number(item.status)===-1">
+			<view class="error" v-if="isNumber(item.status)===-1">
 				已关闭
 			</view>
-			<view v-if="Number(item.status)===1">
-				<view v-if="Number(item.totalFee)>0">
-					<view class="primary" v-if="Number(isFee(item.refundFee)) < Number(item.totalFee) && Number(isFee(item.refundFee))!==0">
+			<view v-if="isNumber(item.status)===1">
+				<view v-if="isNumber(item.totalFee)>0">
+					<view class="primary" v-if="isNumber(item.refundFee) < isNumber(item.totalFee) && isNumber(item.refundFee)!==0">
 						转入退款
 					</view>
-					<view class="warning" v-if="Number(isFee(item.refundFee)) === Number(item.totalFee)">
+					<view class="warning" v-if="isNumber(item.refundFee) === isNumber(item.totalFee)">
 						全额退款
 					</view>
 					<view class="success">
 						支付成功
 					</view>
 				</view>
-				<view class="success" v-if="Number(item.totalFee)<0">
+				<view class="success" v-if="isNumber(item.totalFee)<0">
 					退款成功
 				</view>
 			</view>
@@ -90,9 +90,9 @@
 			<view>{{replaceTime(item.createdAt)}}</view>
 		</view>	
 		<u-line />
-		<view class="bottom" v-if="Number(item.status)===1">
+		<view class="bottom" v-if="isNumber(item.status)===1">
 			<u-button 
-				v-if="Number(item.totalFee)>0 && (Number(isFee(item.refundFee)) < Number(item.totalFee))"
+				v-if="isNumber(item.totalFee)>0 && (isNumber(item.refundFee) < isNumber(item.totalFee))"
 				type="warning" 
 				@click="refund"
 			>
@@ -206,7 +206,7 @@
 					})
 				}
 			},
-			isFee(fee) { // 价格是否存在不存在返回0
+			isNumber(fee) { // 价格是否存在不存在返回0
 				return fee ? fee : 0
 			},
 			replaceTime(time){
