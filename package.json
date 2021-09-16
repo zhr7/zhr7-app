@@ -63,7 +63,6 @@
     "regenerator-runtime": "^0.12.1",
     "uview-ui": "^1.8.4",
     "vue": "^2.6.11",
-    "vue-qr": "^2.5.0",
     "vuex": "^3.2.0",
     "weixin-js-sdk": "^1.6.0"
   },

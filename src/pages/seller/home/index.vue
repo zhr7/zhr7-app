@@ -56,14 +56,29 @@
 				</view>
 			</view>
 			<u-line/>
+			<view class="qrcode">
+				<view class="title">收款二维码</view>
+				<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="qrcode" :size="400" :show="true" :loadMake="true" @result="qrR"/>
+				<u-button type="info" @click="saveQrcodeToPhotosAlbum">保存二维码</u-button>
+			</view>
 		</view>
 	</view>
 </template>
 <script>
-	import VueQr from 'vue-qr'
+	import {  mapGetters } from 'vuex'
 	import { parseTime } from '@/utils'
+	import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
 	export default {
-		components: {VueQr},
+		components: { 
+			tkiQrcode
+		},
+		computed: {
+			...mapGetters([
+				'name',
+				'userId',
+				'avatar',
+			]),
+		},
 		data() {
 			return {
 				query: {
@@ -81,6 +96,8 @@
 					refundFee: 0,
 					refundCount: 0
 				},
+				qrcode: 'https://wap.bichengbituo.com/#/pages/pay/qrcode/index?user_id='+this.userId,
+				qrcodeSrc: ''
 			}
 		},
 		created() {
@@ -91,12 +108,26 @@
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
-			
 		},
 		mounted() {
 			this.init()
 		},
 		methods: {
+			qrR(res) {
+				this.qrcodeSrc = res
+			},
+			saveQrcodeToPhotosAlbum(){
+				uni.saveImageToPhotosAlbum({
+                    filePath: this.qrcodeSrc,
+                    success() {
+                      	// 5 提示保存成功
+						uni.showToast({
+							title: "保存成功",
+							duration: 3000
+						})
+                    }
+				})
+			},
 			init() {
 				this.query = {
 					date: [
@@ -158,7 +189,7 @@
 <style lang="scss" scoped>
 .top {
 	background-color: #fff;
-	height: 100vh;
+	height: 100%;
 	padding: 5vw;
 	.line {
 		display: flex;
@@ -179,6 +210,20 @@
 		.totalFee {
 			font-size: 27px;
 			color: #F56C6C;
+		}
+	}
+	.qrcode {
+		width:200px;
+		margin:0 auto;
+		text-align:center;
+		.title{
+			margin-top: 20px;
+			font-size: 16px;
+		}
+		.qrcode {
+			margin: 10px;
+			width:200px;
+			height: 200px;
 		}
 	}
 }
