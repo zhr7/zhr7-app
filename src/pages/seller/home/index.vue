@@ -60,8 +60,10 @@
 	</view>
 </template>
 <script>
+	import VueQr from 'vue-qr'
 	import { parseTime } from '@/utils'
 	export default {
+		components: {VueQr},
 		data() {
 			return {
 				query: {

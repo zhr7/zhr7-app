@@ -14,7 +14,7 @@
 						<view class="slot-content">
 							<view class="dropdown-center">
 								<view class="type">
-									<view class="titile">
+									<view class="title">
 										订单类型
 									</view>
 									<view class="order-item">
@@ -30,7 +30,7 @@
 									</view>
 								</view>
 								<view class="method">
-									<view class="titile">
+									<view class="title">
 										支付方式
 									</view>
 									<view class="order-item">
@@ -46,7 +46,7 @@
 									</view>
 								</view>
 								<view class="status">
-									<view class="titile">
+									<view class="title">
 										支付状态
 									</view>
 									<view class="order-item">
@@ -62,7 +62,7 @@
 									</view>
 								</view>
 								<view class="fee">
-									<view class="titile">
+									<view class="title">
 										金额范围
 									</view>
 									<view class="fee-item">
@@ -557,7 +557,7 @@
 	width: 100%;
 	background-color: #fff;
 	padding: 5vw;
-	.titile {
+	.title {
 		margin: 5px;
 	}
 	.order-item {

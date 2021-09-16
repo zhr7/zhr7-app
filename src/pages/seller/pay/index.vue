@@ -8,6 +8,11 @@
 		</view>
 		<view class="content">
 			<u-button size="medium" v-if="cancel!==0" @click="cancel=-1">取消收款</u-button>
+			<view v-if="successTotalFee" class="success">
+				<u-icon class="icon" name="checkbox-mark"></u-icon>
+				<view class="title">支付成功</view>
+				<view class="fee">￥{{fee(successTotalFee)}}</view>
+			</view>	
 		</view>
 		<u-keyboard 
 			ref="uKeyboard" 
@@ -36,6 +41,7 @@
 			return {
 				totalFee: "",
 				cancel: 0,
+				successTotalFee: 0,
 			}
 		},
 		created() {
@@ -50,7 +56,12 @@
 		mounted() {
 		},
 		methods: {
+			fee(value) {
+				return ((value?value:0)/100).toFixed(2)
+			},
 			onChange(val){
+				this.cancel = 0
+				this.successTotalFee = 0
 				uni.vibrateShort() // 震动
 				if (Number(this.totalFee + val)<1000000) {
 					if (this.totalFee === "0" && val != ".") {
@@ -66,12 +77,16 @@
 				}
 			},
 			onBackspace(){
+				this.cancel = 0
+				this.successTotalFee = 0
 				uni.vibrateShort()
 				if(this.totalFee.length>0){
 					this.totalFee = this.totalFee.substring(0,this.totalFee.length-1);
 				}
 			},
 			onConfirm(){
+				this.cancel = 0
+				this.successTotalFee = 0
 				uni.vibrateShort()
 				this.disabled = true
 				uni.scanCode({
@@ -102,6 +117,7 @@
                             icon:'success',
                             title:'收款成功',
                         })
+						this.successTotalFee = this.totalFee
 						this.totalFee = ""
 					} else {
 						this.Query(order)
@@ -188,6 +204,24 @@
 		align-items: center;
 		justify-content: center;
 		padding: 5vw;
+		.success{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			.icon {
+				color: #67C23A;
+				font-size: 60px;
+			}
+			.title{
+				color: #67C23A;
+				font-size: 20px;
+				margin: 10px;
+			}
+			.fee{
+				font-size: 30px;
+			}
+		}
 	}
 	.bottom{
 		@include vue-flex;
