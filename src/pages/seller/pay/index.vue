@@ -7,11 +7,11 @@
 			<span class="input-label">{{totalFee}}</span>
 		</view>
 		<view class="content">
-			<u-button size="medium" v-if="cancel!==0" @click="cancel=-1">取消收款</u-button>
+			<u-button size="medium" v-if="cancel!==0&&successTotalFee===0" @click="cancel=-1">取消收款</u-button>
 			<view v-if="successTotalFee" class="success">
 				<u-icon class="icon" name="checkbox-mark"></u-icon>
 				<view class="title">支付成功</view>
-				<view class="fee">￥{{fee(successTotalFee)}}</view>
+				<view class="fee">￥{{successTotalFee}}</view>
 			</view>	
 		</view>
 		<u-keyboard 
@@ -56,9 +56,6 @@
 		mounted() {
 		},
 		methods: {
-			fee(value) {
-				return ((value?value:0)/100).toFixed(2)
-			},
 			onChange(val){
 				this.cancel = 0
 				this.successTotalFee = 0
