@@ -148,17 +148,17 @@
 						if (res.content.status) {
 							switch (res.content.status) {
 								case "SUCCESS":
-									this.$set(this.item,'status', 1)
+									this.$set(this.item,'status', "1")
 									break;
 								case "USERPAYING":
 									this.item.status = 0
-									this.$set(this.item,'status', 0)
+									this.$set(this.item,'status', "0")
 									break;
 								case "WAITING":
-									this.$set(this.item,'status', 0)
+									this.$set(this.item,'status', "0")
 									break;
 								case "CLOSED":
-									this.$set(this.item,'status', -1)
+									this.$set(this.item,'status', "-1")
 									break;
 							}
 						}
@@ -181,16 +181,17 @@
 						if (res.content.status) {
 							switch (res.content.status) {
 								case "SUCCESS":
-									this.item.status = 1
+									this.$set(this.item,'status', "1")
 									break;
 								case "USERPAYING":
 									this.item.status = 0
+									this.$set(this.item,'status', "0")
 									break;
 								case "WAITING":
-									this.item.status = 0
+									this.$set(this.item,'status', "0")
 									break;
 								case "CLOSED":
-									this.item.status = -1
+									this.$set(this.item,'status', "-1")
 									break;
 							}
 						}
@@ -207,7 +208,7 @@
 				}
 			},
 			isNumber(fee) { // 价格是否存在不存在返回0
-				return fee ? fee : 0
+				return fee ? Number(fee) : 0
 			},
 			replaceTime(time){
 				time = time.replace("T", " ")
