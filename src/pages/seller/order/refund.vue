@@ -107,6 +107,11 @@
                             icon:'success',
                             title:'退款成功',
                         })
+					} else if(res.content.returnCode === "SUCCESS" && res.content.status == "USERPAYING" ) {
+						this.$refs.uToast.show({
+							title: "正在退款中。",
+							duration: 3000
+						})
 					} else {
 						this.$refs.uToast.show({
 							title: res.content.returnMsg,
