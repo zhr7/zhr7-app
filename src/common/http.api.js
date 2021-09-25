@@ -15,9 +15,7 @@ const install = (Vue, vm) => {
 	let Refund = (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params);  // 退款
 	let RefundQuery = (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params);  // 退款查询
 
-	let SimpleInfo = (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params);	// 获取商户简讯
 	let QRCode = (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params);
-
 	let Amount = (params = {}) => vm.$u.post('/pay-api/orders/amount', params); // 订单统计
 	let List = (params = {}) => vm.$u.post('/pay-api/orders/list', params);
 
@@ -32,13 +30,23 @@ const install = (Vue, vm) => {
 		Query,
 		Refund,
 		RefundQuery,
-		SimpleInfo, 
 		QRCode,
 		Amount,
 		List,
-		report: { // 报表
-			Amount: (params = {}) => vm.$u.post('/pay-api/reports/amount', params) // 报表统计
+
+		institution: {
+			seller: {
+				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
+			},
 		},
+		pay: {
+			config: {
+				SimpleInfo: (params = {}) => vm.$u.post('/pay-api/configs/simpleInfo', params),	// 获取商户简讯
+			},
+			report: { // 报表
+				Amount: (params = {}) => vm.$u.post('/pay-api/reports/amount', params) // 报表统计
+			},
+		}
 	};
 }
 

@@ -44,6 +44,7 @@
 </template>
 
 <script>
+	import urlencode from "urlencode"
 	// #ifdef H5
 	import wx from 'weixin-js-sdk'
 	// #endif
@@ -60,6 +61,15 @@
 				show: false,
 				err: "",
 				method:'wechat', //浏览器
+				online: "qrcode", // 调用接口方式
+				channel: {
+					wechatAppId: "",
+					alipayAppId: "",
+				},
+				url:{
+					wechat: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri="+urlencode("http://bcwap.xilewanggou.com/?user_id=123")+"&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect",
+					// wechat: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri="+urlencode(window.location.href)+"&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect",
+				}
 			}
 		},
 		onLoad() {
@@ -92,6 +102,40 @@
 					this.err =  "获取商户简讯失败。"
 					console.log(err)
 				})
+				this.$u.api.pay.config.SimpleInfo({ config: {
+					id: this.$route.query.user_id
+				}}).then(res =>{
+					if (res.config.online) {
+						this.online = res.config.online
+					}
+					if (res.channel.wechatAppId) {
+						this.channel.wechatAppId = res.channel.wechatAppId
+					}
+					if (res.channel.wechatSubAppId) {
+						this.channel.wechatAppId = res.channel.wechatSubAppId
+					}
+					if (res.channel.alipayAppId) {
+						this.channel.alipayAppId = res.channel.alipayAppId
+					}
+					this.init()
+				})
+			},
+			init() {
+				if (this.online === "jsapi") {
+					if (!this.$route.query.code) {
+						if (this.method === "wechat") {
+							if (this.channel.wechatAppId === "") {
+								this.show = true;
+								this.err =  "未找到WechatAppId"
+							}else {
+								let URL = this.url.wechat.replace("APPID", this.channel.wechatAppId)
+								window.location.href = URL
+							}
+						}
+					} else {
+						console.log(123);
+					}
+				}
 			},
 			submit() {
 				uni.vibrateShort() // 震动
@@ -111,11 +155,11 @@
 					}
 				}).then(res=>{
 					this.disabled = false
-					if (res.content.returnCode === "SUCCESS") {
+					if (res.content.qrcode) {
 						window.location.href = res.content.qrcode
-					} else {
+					}else{
 						this.show = true
-						this.err =  res.content.returnMsg
+						this.err =  "请联系管理员,下单成功未找到跳转链接！"
 					}
 				}).catch(err => {
 					this.show = true
@@ -217,3 +261,5 @@
 		}
 	}
 </style>
+
+

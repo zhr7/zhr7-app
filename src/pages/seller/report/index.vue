@@ -442,7 +442,7 @@
 				} else {
 					where = where + " And date = '" + parseTime(this.date,'{y}{m}{d}') + "'"
 				}
-				this.$u.api.report.Amount({
+				this.$u.api.pay.report.Amount({
 					listQuery: {
 						where: where
 					}
