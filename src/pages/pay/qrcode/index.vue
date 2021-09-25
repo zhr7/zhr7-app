@@ -112,8 +112,13 @@
 				}).then(res=>{
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
-						window.location.href = res.content.qrcode
+						if (res.content.qrcode) {
+							window.location.href = res.content.qrcode
+						} else {
+							console.log(res)
+						}
 					} else {
+						console.log(res)
 						this.show = true
 						this.err =  res.content.returnMsg
 					}
