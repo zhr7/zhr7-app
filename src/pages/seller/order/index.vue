@@ -71,6 +71,15 @@
 										<u-input v-model="query.endFee" class="fee-input" type="digit" :border="true" placeholder="请输入金额"/>
 									</view>
 								</view>
+								<view class="fee">
+									<view class="title">
+										终端ID
+									</view>
+									<view class="fee-item">
+										<u-input v-model="query.terminalId" class="terminal-input" :border="true" placeholder="请输入终端ID"/>
+										<u-button type="info" size="mini" @click="clickTerminalId">本设备ID</u-button>
+									</view>
+								</view>
 								<u-button type="primary" class="filter" @click="clickFilter">确认</u-button>
 							</view>
 						</view>
@@ -169,7 +178,7 @@
 					total_fee: '',
 					out_trade_no: '',
 					operator_id: '',
-					terminal_id: '',
+					terminalId: '',
 				},
 				params: {
 					year: true,
@@ -315,6 +324,13 @@
 			isNumber(fee) { // 价格是否存在不存在返回0
 				return fee ? Number(fee)  : 0
 			},
+			clickTerminalId() {
+				uni.getSystemInfo({
+					success:(res) => {
+						this.query.terminalId = res.deviceId
+					}
+				})
+			},
 			getList() {
 				let where = ' true'
 				if (this.query.date.length===2) {
@@ -367,8 +383,8 @@
 				if (this.query.operator_id) {
 					where = where + " And operator_id = '" + this.query.operator_id + "'"
 				}
-				if (this.query.terminal_id) {
-					where = where + " And terminal_id = '" + this.query.terminal_id + "'"
+				if (this.query.terminalId) {
+					where = where + " And terminal_id = '" + this.query.terminalId + "'"
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
@@ -583,7 +599,9 @@
 		align-items: center;
 		.fee-input{
 			width: 150px;
-			margin: 5px;
+		}
+		.terminal-input{
+			width: 70vw;
 		}
 	}
 	.filter{
