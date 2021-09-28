@@ -13,6 +13,9 @@
 				<view class="title">支付成功</view>
 				<view class="fee">￥{{successTotalFee}}</view>
 			</view>	
+			<view>	
+				设备ID: {{ deviceId }}
+			</view>	
 		</view>
 		<u-keyboard 
 			ref="uKeyboard" 
@@ -42,6 +45,7 @@
 				totalFee: "",
 				cancel: 0,
 				successTotalFee: 0,
+				deviceId: "",
 			}
 		},
 		created() {
@@ -54,6 +58,11 @@
 			})
 		},
 		mounted() {
+			uni.getSystemInfo({
+				success:(res) => {
+					this.deviceId = res.deviceId
+				}
+			})
 		},
 		methods: {
 			onChange(val){
@@ -105,6 +114,7 @@
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						title: "二维码收款B2C",
 						totalFee: String(totalFee),
+						terminalId: this.deviceId,
 					}
 				}
 				this.$u.api.AopF2F(order).then(res=>{

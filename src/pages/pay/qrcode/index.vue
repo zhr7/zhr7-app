@@ -18,6 +18,7 @@
 						<span class="input-label totalFee">{{form.totalFee}}</span>
 					</u-form-item>
 					<u-form-item>
+						设备ID: {{ deviceId }}
 					</u-form-item>
 				</u-form>
 				<u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button>
@@ -56,21 +57,26 @@
 				form: {
 					totalFee: ""
 				},
+				deviceId: "",
 				keyboard: true,
 				show: false,
 				err: "",
-				method:'wechat', //浏览器
+				method:'', //浏览器
 			}
 		},
 		onLoad() {
-
 		},
 		mounted() {
 			this.hideOptionMenu() // 禁止分享
 			this.navigator()
-			// if (this.method) {
+			if (this.method) {
 				this.simpleInfo()
-			// }
+			}
+			uni.getSystemInfo({
+				success:(res) => {
+					this.deviceId = res.deviceId
+				}
+			})
 		},
 		methods: {
 			simpleInfo(){
@@ -107,7 +113,8 @@
 						method: this.method,
 						title: "二维码支付C2B",
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
-						totalFee: String(Math.round(this.form.totalFee*100))
+						totalFee: String(Math.round(this.form.totalFee*100)),
+						terminalId: this.deviceId
 					}
 				}).then(res=>{
 					this.disabled = false
