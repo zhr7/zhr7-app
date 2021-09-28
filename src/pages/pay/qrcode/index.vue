@@ -61,7 +61,7 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method:'', //浏览器
+				method:'wechat', //浏览器
 			}
 		},
 		onLoad() {
