@@ -96,7 +96,7 @@
 					refundFee: 0,
 					refundCount: 0
 				},
-				qrcode: 'https://wap.bichengbituo.com/#/pages/pay/qrcode/index?user_id='+this.userId,
+				qrcode: '',
 				qrcodeSrc: ''
 			}
 		},
@@ -108,6 +108,7 @@
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
+			this.qrcode = 'https://wap.bichengbituo.com/#/pages/pay/qrcode/index?user_id=' + this.userId
 		},
 		mounted() {
 			this.init()
