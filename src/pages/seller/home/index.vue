@@ -56,9 +56,9 @@
 				</view>
 			</view>
 			<u-line/>
-			<view class="qrcode">
+			<view class="qrcode" v-if="userId">
 				<view class="title">收款二维码</view>
-				<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="qrcode" :size="400" :show="true" :loadMake="true" @result="qrR"/>
+				<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="'https://wap.bichengbituo.com/#/pages/pay/qrcode/index?user_id='+userId" :size="400" :show="true" :loadMake="true" @result="qrR"/>
 				<u-button type="info" @click="saveQrcodeToPhotosAlbum">保存二维码</u-button>
 			</view>
 		</view>
@@ -96,7 +96,6 @@
 					refundFee: 0,
 					refundCount: 0
 				},
-				qrcode: '',
 				qrcodeSrc: ''
 			}
 		},
@@ -108,7 +107,6 @@
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
-			this.qrcode = 'https://wap.bichengbituo.com/#/pages/pay/qrcode/index?user_id=' + this.userId
 		},
 		mounted() {
 			this.init()
