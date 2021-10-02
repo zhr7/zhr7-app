@@ -3,6 +3,7 @@
 		<seller ref="seller" v-if="roles.indexOf('seller')===0"/>
 		<institution v-if="roles.indexOf('institution')===0"/>
 		<u-back-top :scroll-top="scrollTop"></u-back-top>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
@@ -48,7 +49,16 @@
 			},
 			userInfo(){
 				this.$store.dispatch('user/getInfo').catch(err => {
-					uni.removeStorageSync('token'); // 删除token 重新获取
+					if (err.data.detail.indexOf("token is expired") != -1) {
+						this.$u.route({
+							type: 'redirect',
+							url: '/pages/login/index', 
+						})
+					} else {
+						this.$refs.uToast.show({
+							title: err.data.detail
+						})
+					}
 				})
 			}
 		},

@@ -112,54 +112,52 @@
 					us[usernme] = this.users[usernme]
 					// 重新排序
 					uni.setStorageSync('users', us)
-					uni.setStorageSync('token', this.users[usernme].token)
-					this.$u.route({
-						type: 'reLaunch',
-						url: '/pages/index/index', 
-					})
-					return
+					this.form.username = this.users[usernme].username
+					this.form.password = this.users[usernme].password
 				}
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						this.$store.dispatch('user/login',{
-							user: {
-								username: this.form.username,
-								password: this.form.password,
-							},
-							type: 'username'
-						}).then(res =>{
-							uni.setStorageSync('token', res.token)
-							let users = uni.getStorageSync('users')
-							if (!users) {
-								users = {}
-							}
-							users[this.form.username] = {
-								username: this.form.username,
-								name: res.user.name,
-								token: res.token,
-							}
-							if (Object.keys(users).length > 7) {
-								Object.keys(users).forEach((index,key) => {
-									if (key===0) {
-										delete users[index]
-									}
+				setTimeout(() => {
+					this.$refs.uForm.validate(valid => {
+						if (valid) {
+							this.$store.dispatch('user/login',{
+								user: {
+									username: this.form.username,
+									password: this.form.password,
+								},
+								type: 'username'
+							}).then(res =>{
+								uni.setStorageSync('token', res.token)
+								let users = uni.getStorageSync('users')
+								if (!users) {
+									users = {}
+								}
+								users[this.form.username] = {
+									username: this.form.username,
+									password: this.form.password,
+									name: res.user.name,
+									token: res.token,
+								}
+								if (Object.keys(users).length > 7) {
+									Object.keys(users).forEach((index,key) => {
+										if (key===0) {
+											delete users[index]
+										}
+									})
+								}
+								uni.setStorageSync('users', users)
+								this.$u.route({
+									type: 'reLaunch',
+									url: '/pages/index/index', 
+								});
+							}).catch(err => {
+								this.$refs.uToast.show({
+									title: err.data.detail
 								})
-							}
-							uni.setStorageSync('users', users)
-							this.$u.route({
-								type: 'reLaunch',
-								url: '/pages/index/index', 
-							});
-						}).catch(err => {
-							console.log(err)
-							this.$refs.uToast.show({
-								title: err.data.detail
 							})
-						})
-					} else {
-						console.log('验证失败');
-					}
-				});
+						} else {
+							console.log('验证失败');
+						}
+					})
+				}, 0)
 			},
 			clickActionSheet(index) {
 				this.auth.usernme = this.listActionSheet[index].text
