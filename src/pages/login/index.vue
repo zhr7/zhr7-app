@@ -136,7 +136,7 @@
 									name: res.user.name,
 									token: res.token,
 								}
-								if (Object.keys(users).length > 7) {
+								if (Object.keys(users).length > 8) {
 									Object.keys(users).forEach((index,key) => {
 										if (key===0) {
 											delete users[index]

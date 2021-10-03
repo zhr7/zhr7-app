@@ -4,42 +4,36 @@
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const install = (Vue, vm) => {
 	// 此处使用了传入的params参数，一切自定义即可
-	let Auth = (params = {}) => vm.$u.post('/user-api/auth/auth', params);
-	let MobileAuth = (params = {}) => vm.$u.post('/user-api/auth/mobile', params);
-	let UserInfo = (params = {}) => vm.$u.post('/user-api/users/info', params);
-	let UserSelfUpdate = (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params);
-	
-	// pay 支付相关
-	let AopF2F = (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params);  // 下单
-	let Query = (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params);  // 查询
-	let Refund = (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params);  // 退款
-	let RefundQuery = (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params);  // 退款查询
-
-	let QRCode = (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params);
-	let Amount = (params = {}) => vm.$u.post('/pay-api/orders/amount', params); // 订单统计
-	let List = (params = {}) => vm.$u.post('/pay-api/orders/list', params);
-
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = { 
-		Auth,
-		MobileAuth,
-		UserInfo,
-		UserSelfUpdate,
-		
-		AopF2F,
-		Query,
-		Refund,
-		RefundQuery,
-		QRCode,
-		Amount,
-		List,
-
+		user: {
+			auth: {
+				Auth: (params = {}) => vm.$u.post('/user-api/auth/auth', params),
+				MobileAuth: (params = {}) => vm.$u.post('/user-api/auth/mobile', params),
+			},
+			user: {
+				UserInfo: (params = {}) => vm.$u.post('/user-api/users/info', params),
+				UserSelfUpdate: (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params),
+				SelfUpdate: (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params),
+			}
+		},
 		institution: {
 			seller: {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
 			},
 		},
 		pay: {
+			tradeAuth: {
+				AopF2F: (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params),  // 下单
+				Query: (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params),  // 查询
+				Refund: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params),  // 退款
+				RefundQuery: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params),  // 退款查询
+				QRCode: (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params),
+			},
+			order: {
+				Amount: (params = {}) => vm.$u.post('/pay-api/orders/amount', params),
+				List: (params = {}) => vm.$u.post('/pay-api/orders/list', params),
+			},
 			config: {
 				SimpleInfo: (params = {}) => vm.$u.post('/pay-api/configs/simpleInfo', params),	// 获取商户简讯
 			},

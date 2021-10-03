@@ -117,7 +117,7 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       const Api = store.state.$u.api
-      Api.UserInfo().then(res => {
+      Api.user.user.UserInfo().then(res => {
         // 用户相关信息设置
         const { username, name, avatar, id } = res.user
         commit('SET_NAME', name)

@@ -151,7 +151,7 @@
 					const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
 					where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
 				}
-				this.$u.api.Amount({
+				this.$u.api.pay.order.Amount({
 					list_query: {
 						where: where
 					}

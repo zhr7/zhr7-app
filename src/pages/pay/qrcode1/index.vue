@@ -145,7 +145,7 @@
 					return
 				}
 				this.disabled = true
-				this.$u.api.QRCode({
+				this.$u.api.pay.tradeAuth.QRCode({
 					userId: this.$route.query.user_id,
 					bizContent: {
 						method: this.method,

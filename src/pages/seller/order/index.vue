@@ -388,7 +388,7 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.List({
+				this.$u.api.pay.order.List({
 					list_query: this.listQuery
 				}).then(res => {
 					if (res.orders) {

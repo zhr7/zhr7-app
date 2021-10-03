@@ -25,6 +25,7 @@
 				<u-cell-item @click="handler" icon="coupon" title="云打印机"></u-cell-item>
 				<u-cell-item @click="handler" icon="tags" title="门店"></u-cell-item>
 				<u-cell-item @click="handler" icon="server-man" title="收银员/终端"></u-cell-item>
+				<u-cell-item @click="handler('password')" icon="eye-fill" title="修改密码"></u-cell-item>
 			</u-cell-group>
 		</view>
 		<view class="u-m-t-20">
@@ -105,10 +106,19 @@
 					url: '/pages/index/index', 
 				})
 			},
-			handler() {
-				this.$refs.uToast.show({
-					title: "正在努力开发中。。"
-				})
+			handler(path) {
+				switch (path) {
+					case 'password':
+						this.$u.route({
+							url: '/pages/my/password', 
+						})
+						break;
+					default:
+						this.$refs.uToast.show({
+							title: "正在努力开发中。。"
+						})
+						break;
+				}
 			}
 		}
 	}

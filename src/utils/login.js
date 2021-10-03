@@ -6,7 +6,7 @@ const login = {
     api : store.state.$u.api,
     Auth(user) {
         return new Promise((resolve, reject) => {
-            this.api.Auth({ user }).then(res => {
+            this.api.user.auth.Auth({ user }).then(res => {
                 resolve(res)
             }).catch(err => {
                 reject(err)
@@ -15,7 +15,7 @@ const login = {
     },
     Mobile(mobile,code){
         return new Promise((resolve, reject) => {
-            this.api.MobileAuth({ user:{
+            this.api.user.auth.MobileAuth({ user:{
                 mobile: mobile
             }, captcha: code }).then(res => {
                 resolve(res)
