@@ -10,12 +10,10 @@ Vue.config.productionTip = false
 App.mpType = 'app'
 
 store.dispatch('setU', Vue.prototype.$u)
-
 const app = new Vue({
   store,
   ...App
 })
-
 
 // http拦截器，将此部分放在new Vue()和app.$mount()之间，才能App.vue中正常使用
 import httpInterceptor from '@/common/http.interceptor.js';
@@ -28,4 +26,5 @@ Vue.use(httpApi, app);
 // import routeIntercept from '@/common/route.interceptor.js';
 // Vue.use(routeIntercept, app);
 
+store.dispatch('settings/initConfig')
 app.$mount()

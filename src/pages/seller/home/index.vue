@@ -58,7 +58,7 @@
 			<u-line/>
 			<view class="qrcode" v-if="userId">
 				<view class="title">收款二维码</view>
-				<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="'https://wap.bichengbituo.com/#/pages/pay/qrcode/index?user_id='+userId" :size="400" :show="true" :loadMake="true" @result="qrR"/>
+				<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="payQrcodeUrl+'?user_id='+userId" :size="400" :show="true" :loadMake="true" @result="qrR"/>
 				<u-button type="info" @click="saveQrcodeToPhotosAlbum">保存二维码</u-button>
 			</view>
 		</view>
@@ -66,6 +66,7 @@
 </template>
 <script>
 	import {  mapGetters } from 'vuex'
+	import { mapState } from 'vuex'
 	import { parseTime } from '@/utils'
 	import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
 	export default {
@@ -73,6 +74,9 @@
 			tkiQrcode
 		},
 		computed: {
+			...mapState({
+				payQrcodeUrl: state => state.settings.payQrcodeUrl
+			}),
 			...mapGetters([
 				'name',
 				'userId',
