@@ -61,7 +61,8 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method:'wechat', //浏览器
+				method: "alipay", //浏览器
+				alipayUserId: "",
 			}
 		},
 		onLoad() {
@@ -69,6 +70,11 @@
 		mounted() {
 			this.hideOptionMenu() // 禁止分享
 			this.navigator()
+			if (this.$route.query.auth_code) {
+				this.oauthToken()
+			}else{
+				this.oauthAppId()
+			}
 			if (this.method) {
 				this.simpleInfo()
 			}
@@ -107,6 +113,59 @@
 					return
 				}
 				this.disabled = true
+				if (this.alipayUserId) {
+					this.payJsApi()
+				} else {
+					this.payQRCode()
+				}
+			},
+			tradePay(prepayId) {
+				if (window.AlipayJSBridge) { 
+					window.AlipayJSBridge.call("tradePay", {
+						tradeNO: prepayId
+					}, (data) => {
+						log(JSON.stringify(data));
+						if ("9000" == data.resultCode) {
+							uni.showToast({
+								duration: 10000,
+								icon:'success',
+								title:'支付成功',
+							})
+						}
+					})
+				}else{
+					this.show = true
+					this.err =  "未找到AlipayJSBridge请用支付宝扫码"
+				}
+			},
+			payJsApi() {
+				console.log(123);
+				let openId = ""
+				if (this.alipayUserId) {
+					openId = this.alipayUserId
+				}
+				this.$u.api.pay.tradeAuth.JsApi({
+					userId: this.$route.query.user_id,
+					bizContent: {
+						method: this.method,
+						title: "二维码支付C2B",
+						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
+						totalFee: String(Math.round(this.form.totalFee*100)),
+						terminalId: this.deviceId,
+						openId: openId,
+					}
+				}).then(res=>{
+					this.disabled = false
+					if (res.content.prepayId) {
+						this.tradePay(res.content.prepayId)
+					}
+				}).catch(err => {
+					this.show = true
+					this.err =  "下单失败："+ err
+					console.log(err);
+				})
+			},
+			payQRCode() {
 				this.$u.api.pay.tradeAuth.QRCode({
 					userId: this.$route.query.user_id,
 					bizContent: {
@@ -155,6 +214,38 @@
 				if(this.form.totalFee.length>0){
 					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
 				}
+			},
+			oauthAppId() {
+				this.$u.api.pay.tradeAuth.OauthAppId({
+					userId: this.$route.query.user_id,
+					bizContent: {
+						method: this.method,
+					}
+				}).then(res=>{
+					if (res.content.oauthAppId) {
+						const redirect_uri = encodeURIComponent(window.location.href)
+						window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
+						res.content.oauthAppId + "&scope=auth_base&redirect_uri=" + redirect_uri
+						
+					}
+				}).catch(err => {
+					this.show = true
+					this.err =  "下单失败："+ err
+					console.log(err);
+				})
+			},
+			oauthToken() {
+				this.$u.api.pay.tradeAuth.OauthToken({
+					userId: this.$route.query.user_id,
+					bizContent: {
+						method: this.method,
+						oauthCode: this.$route.query.auth_code,
+					}
+				}).then(res=>{
+					if (res.content.alipayUserId) {
+						this.alipayUserId = res.content.alipayUserId
+					}
+				})
 			},
 			navigator(){
 				if (/MicroMessenger/.test(window.navigator.userAgent)) { 

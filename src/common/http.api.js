@@ -32,6 +32,9 @@ const install = (Vue, vm) => {
 				Refund: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params),  // 退款
 				RefundQuery: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params),  // 退款查询
 				QRCode: (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params),
+				JsApi: (params = {}) => vm.$u.post('/pay-api/TradeAuth/JsApi', params),
+				OauthAppId: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthAppId', params),
+				OauthToken: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthToken', params),
 			},
 			order: {
 				Amount: (params = {}) => vm.$u.post('/pay-api/orders/amount', params),

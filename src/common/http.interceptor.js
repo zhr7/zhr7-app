@@ -2,7 +2,7 @@ let baseUrl = 'https://rpc.bichengbituo.com'
 // #ifdef H5
 	baseUrl = document.getElementsByTagName('meta')['baseUrl'].getAttribute('content')
 	if (process.env.NODE_ENV === 'development') {
-		baseUrl = 'http://127.0.0.1:8080'
+		baseUrl = 'http://172.16.0.2:8080'
 	}
 // #endif
 // 这里的vm，就是我们在vue文件里面的this，所以我们能在这里获取vuex的变量，比如存放在里面的token

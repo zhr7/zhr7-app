@@ -34,13 +34,6 @@
 				"navigationBarTitleText": "快速买单",
 				"navigationStyle":"custom"
 			}
-		},
-		{
-			"path": "pages/pay/qrcode1/index",
-			"style": {
-				"navigationBarTitleText": "快速买单测试",
-				"navigationStyle":"custom"
-			}
 		}
 	],
 	"globalStyle": {
