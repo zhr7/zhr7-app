@@ -63,6 +63,7 @@
 				err: "",
 				method: "alipay", //浏览器
 				alipayUserId: "",
+				brandId: "",
 			}
 		},
 		onLoad() {
@@ -97,6 +98,7 @@
 				}}).then(res =>{
 					if (res.seller) {
 						this.disabled = false
+						this.brandId = res.seller.brandId
 						this.name = res.seller.name
 					}
 				}).catch(err => {
@@ -146,6 +148,7 @@
 				}
 				this.$u.api.pay.tradeAuth.JsApi({
 					userId: this.$route.query.user_id,
+					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
 						title: "二维码支付C2B",
@@ -168,6 +171,7 @@
 			payQRCode() {
 				this.$u.api.pay.tradeAuth.QRCode({
 					userId: this.$route.query.user_id,
+					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
 						title: "二维码支付C2B",
