@@ -378,7 +378,7 @@
 					where = where + ' And total_fee =' + Number(this.query.total_fee * 100)
 				}
 				if (this.query.out_trade_no) {
-					where = where + " And out_trade_no like '%" + this.query.out_trade_no + "%'"
+					where = where + " And (out_trade_no like '%" + this.query.out_trade_no + "%' OR trade_no like '%" + this.query.out_trade_no + "%' OR bank_trade_no like '%" + this.query.out_trade_no + "%')"
 				}
 				if (this.query.operator_id) {
 					where = where + " And operator_id = '" + this.query.operator_id + "'"
