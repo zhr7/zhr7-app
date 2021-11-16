@@ -36,6 +36,9 @@ const install = (Vue, vm) => {
 				OauthAppId: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthAppId', params),
 				OauthToken: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthToken', params),
 			},
+			oauth: {
+				Token: (params = {}) => vm.$u.post('/pay-api/oauths/token', params),
+			},
 			order: {
 				Amount: (params = {}) => vm.$u.post('/pay-api/orders/amount', params),
 				List: (params = {}) => vm.$u.post('/pay-api/orders/list', params),

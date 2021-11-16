@@ -61,20 +61,24 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method: "alipay", //浏览器
-				alipayUserId: "",
+				method: "", //浏览器
 				brandId: "",
+				qrcodeType: "qrcode",
+				code: "",
+				openId: "",
 			}
 		},
 		onLoad() {
-		},
-		mounted() {
-			this.hideOptionMenu() // 禁止分享
-			this.navigator()
+			// this.hideOptionMenu() // 禁止分享
+			this.navigator() // 识别浏览器
 			if (this.$route.query.auth_code) {
+				this.code = this.$route.query.auth_code
+			}
+			if (this.$route.query.code) {
+				this.code = this.$route.query.code
+			}
+			if (this.code) {
 				this.oauthToken()
-			}else{
-				this.oauthAppId()
 			}
 			if (this.method) {
 				this.simpleInfo()
@@ -84,6 +88,8 @@
 					this.deviceId = res.deviceId
 				}
 			})
+		},
+		mounted() {
 		},
 		methods: {
 			simpleInfo(){
@@ -101,6 +107,19 @@
 						this.brandId = res.seller.brandId
 						this.name = res.seller.name
 					}
+					if (res.config) {
+						if (!res.config.status) {
+							this.show = true;
+							this.err =  "商户支付功能关闭。"
+							return
+						}
+						this.qrcodeType = res.config.qrcodeType
+						if (res.oauth) {
+							if (this.qrcodeType == "jsapi" && this.code == "") {
+								this.oauthAppId(res.oauth)
+							}
+						}
+					}
 				}).catch(err => {
 					this.show = true;
 					this.err =  "获取商户简讯失败。"
@@ -115,36 +134,69 @@
 					return
 				}
 				this.disabled = true
-				if (this.alipayUserId) {
+				if (this.qrcodeType == "jsapi") {
 					this.payJsApi()
-				} else {
+				} 
+				if (this.qrcodeType == "qrcode") {
 					this.payQRCode()
 				}
 			},
-			tradePay(prepayId) {
-				if (window.AlipayJSBridge) { 
-					window.AlipayJSBridge.call("tradePay", {
-						tradeNO: prepayId
-					}, (data) => {
-						log(JSON.stringify(data));
-						if ("9000" == data.resultCode) {
-							uni.showToast({
-								duration: 10000,
-								icon:'success',
-								title:'支付成功',
+			tradePay(prepayId, wechatPackage) {
+				switch (this.method) {
+					case "alipay":
+						if (typeof AlipayJSBridge !== "undefined") { 
+							AlipayJSBridge.call("tradePay", {
+								tradeNO: prepayId
+							}, (data) => {
+								log(JSON.stringify(data));
+								if ("9000" == data.resultCode) {
+									uni.showToast({
+										duration: 10000,
+										icon:'success',
+										title:'支付成功',
+									})
+								}
 							})
+						}else{
+							this.show = true
+							this.err =  "未找到AlipayJSBridge请用支付宝扫码"
 						}
-					})
-				}else{
-					this.show = true
-					this.err =  "未找到AlipayJSBridge请用支付宝扫码"
+						break;
+					case "wechat":
+						if (typeof WeixinJSBridge !== "undefined") { 
+							WeixinJSBridge.invoke(
+								'getBrandWCPayRequest', {
+									"appId": wechatPackage.appid,     //公众号ID，由商户传入     
+									"timeStamp": wechatPackage.timestamp,         //时间戳，自1970年以来的秒数     
+									"nonceStr": wechatPackage.noncestr, //随机串     
+									"package": wechatPackage.package,     
+									"signType": wechatPackage.signType,         //微信签名方式：     
+									"paySign": wechatPackage.sign //微信签名 
+								},
+								res => {
+									console.log(res)
+									if(res.err_msg == "get_brand_wcpay_request:ok" ){
+										uni.showToast({
+											duration: 10000,
+											icon:'success',
+											title:'支付成功',
+										})
+									} 
+								}
+							)
+						}else{
+							this.show = true
+							this.err =  "未找到WeixinJSBridge请用微信扫码"
+						}
+						break;
+					default:
+						break;
 				}
 			},
 			payJsApi() {
-				console.log(123);
-				let openId = ""
-				if (this.alipayUserId) {
-					openId = this.alipayUserId
+				if (!this.openId) {
+					this.show = true
+					this.err =  "获取openid失败"
 				}
 				this.$u.api.pay.tradeAuth.JsApi({
 					userId: this.$route.query.user_id,
@@ -155,12 +207,16 @@
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
 						terminalId: this.deviceId,
-						openId: openId,
+						openId: this.openId,
 					}
 				}).then(res=>{
 					this.disabled = false
 					if (res.content.prepayId) {
-						this.tradePay(res.content.prepayId)
+						let wechatPackage = {}
+						if (res.content.wechatPackage) {
+							wechatPackage = JSON.parse(res.content.wechatPackage)
+						}
+						this.tradePay(res.content.prepayId, wechatPackage)
 					}
 				}).catch(err => {
 					this.show = true
@@ -219,36 +275,40 @@
 					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
 				}
 			},
-			oauthAppId() {
-				this.$u.api.pay.tradeAuth.OauthAppId({
-					userId: this.$route.query.user_id,
-					bizContent: {
-						method: this.method,
-					}
+			oauthAppId(oauth) {
+				// const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + oauth.id)
+				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id=d53c5ab0-9072-4b4f-a301-db31bf0e1692" + "&oauth_id=" + oauth.id)
+				switch (this.method) {
+					case "alipay":
+							window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
+							oauth.alipay.appId + "&scope=auth_base&redirect_uri=" + redirect_uri	
+						break;
+					case "wechat":
+							window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+							oauth.wechat.appId + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+						break;
+					default:
+						break;
+				}
+			},
+			oauthToken() {
+				this.$u.api.pay.oauth.Token({
+					oauth: {
+						id: this.$route.query.oauth_id,
+					},
+					method: this.method,
+					code: this.code,
 				}).then(res=>{
-					if (res.content.oauthAppId) {
-						const redirect_uri = encodeURIComponent(window.location.href)
-						window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
-						res.content.oauthAppId + "&scope=auth_base&redirect_uri=" + redirect_uri
-						
+					if (res.openid) {
+						this.openId = res.openid
+					} else {
+						this.show = true
+						this.err =  "获取openid失败"
 					}
 				}).catch(err => {
 					this.show = true
-					this.err =  "下单失败："+ err
+					this.err =  "获取openid失败:"+ err
 					console.log(err);
-				})
-			},
-			oauthToken() {
-				this.$u.api.pay.tradeAuth.OauthToken({
-					userId: this.$route.query.user_id,
-					bizContent: {
-						method: this.method,
-						oauthCode: this.$route.query.auth_code,
-					}
-				}).then(res=>{
-					if (res.content.alipayUserId) {
-						this.alipayUserId = res.content.alipayUserId
-					}
 				})
 			},
 			navigator(){
@@ -324,3 +384,4 @@
 		}
 	}
 </style>
+
