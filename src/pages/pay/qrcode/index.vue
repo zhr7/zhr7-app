@@ -1,6 +1,6 @@
 <template>
-	<view class="content">
-		<template v-if="loading">
+	<view class="content" v-if="loading">
+		<template v-if="method">
 			<view class="pay">
 				<u-form :model="form" ref="uForm" label-width="190">
 					<u-form-item>
