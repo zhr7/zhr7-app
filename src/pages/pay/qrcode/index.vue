@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<template v-if="method">
+		<template v-if="loading">
 			<view class="pay">
 				<u-form :model="form" ref="uForm" label-width="190">
 					<u-form-item>
@@ -52,6 +52,7 @@
 	export default {
 		data() {
 			return {
+				loading: false,
 				name: "",
 				disabled: false,
 				form: {
@@ -117,6 +118,8 @@
 						if (res.oauth) {
 							if (this.qrcodeType == "jsapi" && this.code == "") {
 								this.oauthAppId(res.oauth)
+							} else {
+								this.loading = true
 							}
 						}
 					}
@@ -134,11 +137,17 @@
 					return
 				}
 				this.disabled = true
-				if (this.qrcodeType == "jsapi") {
-					this.payJsApi()
-				} 
-				if (this.qrcodeType == "qrcode") {
-					this.payQRCode()
+				switch (this.qrcodeType) {
+					case "jsapi":
+						this.payJsApi()
+						break;
+					case "qrcode":
+						this.payQRCode()
+						break;
+					default:
+						this.show = true;
+						this.err =  "未知支付方式"
+						break;
 				}
 			},
 			tradePay(prepayId, wechatPackage) {
