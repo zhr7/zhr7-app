@@ -276,8 +276,8 @@
 				}
 			},
 			oauthAppId(oauth) {
-				// const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + oauth.id)
-				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id=d53c5ab0-9072-4b4f-a301-db31bf0e1692" + "&oauth_id=" + oauth.id)
+				const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + oauth.id)
+				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id=d53c5ab0-9072-4b4f-a301-db31bf0e1692" + "&oauth_id=" + oauth.id)
 				switch (this.method) {
 					case "alipay":
 							window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
