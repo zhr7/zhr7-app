@@ -286,6 +286,7 @@
 			},
 			oauthAppId(oauth) {
 				const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + oauth.id)
+				console.log(redirect_uri)
 				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id=d53c5ab0-9072-4b4f-a301-db31bf0e1692" + "&oauth_id=" + oauth.id)
 				switch (this.method) {
 					case "alipay":
@@ -301,6 +302,9 @@
 				}
 			},
 			oauthToken() {
+				if (this.$route.query.oauth_id instanceof Array) {
+					this.$route.query.oauth_id = this.$route.query.oauth_id[0]
+				}
 				this.$u.api.pay.oauth.Token({
 					oauth: {
 						id: this.$route.query.oauth_id,
