@@ -1,12 +1,13 @@
 <template>
 	<view class="content">
 		<home v-if="path==='home'"/>
-		<order v-if="path==='order'"/>
+		<seller v-if="path==='seller'"/>
 		<report v-if="path==='report'"/>
 		<pay v-if="path==='pay'"/>
 		<my v-if="path==='my'"/>
 		<tabbar
 			:list="list"
+			:default="path"
 			@change="navChange"
 		/>
 	</view>
@@ -14,7 +15,7 @@
 <script>
 	import tabbar from '@/components/tabbar'
 	import home from './home'
-	import order from './order'
+	import seller from './seller'
 	import report from './report'
 	import pay from './pay'
 	import my from './my'
@@ -22,14 +23,14 @@
 		components: { 
 			tabbar,
 			home,
-			order,
+			seller,
 			report,
 			pay,
 			my,
 		},
 		data() {
 			return {
-				path: "",
+				path: "seller",
 				list:[	// 商家导航
 					{
 						path: "home",	// 主页
@@ -47,7 +48,7 @@
 						customIcon: false,
 					},
 					{
-						path: "pay",	// 收银
+						path: "seller",	// 收银
 						iconPath: "rmb-circle",
 						selectedIconPath: "rmb-circle-fill",
 						text: '商家',

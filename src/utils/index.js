@@ -103,3 +103,9 @@ export function addPreZero(num, length) {
 export function Sleep(time) {
   return new Promise((resolve) => setTimeout(resolve, time))
 }
+
+// RouteParams 获取路由参数
+export function RouteParams() {
+    const routes = getCurrentPages()
+    return routes[routes.length - 1].options; //获取路由参数
+}

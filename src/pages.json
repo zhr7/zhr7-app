@@ -19,6 +19,12 @@
 			}
 		},
 		{
+			"path": "pages/institution/seller/item",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/my/password",
 			"style": {
 			}

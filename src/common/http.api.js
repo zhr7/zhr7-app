@@ -23,6 +23,7 @@ const install = (Vue, vm) => {
 		institution: {
 			seller: {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
+				List: (params = {}) => vm.$u.post('/institution-api/sellers/list', params),	// 获取商户简讯
 			},
 		},
 		pay: {
