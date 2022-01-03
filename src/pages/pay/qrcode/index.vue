@@ -5,7 +5,7 @@
 				<u-form :model="form" ref="uForm" label-width="190">
 					<u-form-item>
 						<span class="top">
-							<u-icon name="home"></u-icon> 
+							<u-icon name="home"></u-icon>
 						</span>
 						<span class="top-name">
 							{{name}}
@@ -17,21 +17,18 @@
 						</span>
 						<span class="input-label totalFee">{{form.totalFee}}</span>
 					</u-form-item>
-					<u-form-item>
-						设备ID: {{ deviceId }}
-					</u-form-item>
 				</u-form>
 				<u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button>
 			</view>
-			<u-keyboard 
-				ref="uKeyboard" 
-				mode="number" 
+			<u-keyboard
+				ref="uKeyboard"
+				mode="number"
 				v-model="keyboard"
 				:mask="false"
 				:tooltip="false"
 				:mask-close-able="false"
 				:safe-area-inset-bottom="true"
-				:dot-enabled="true" 
+				:dot-enabled="true"
 				:z-index="100"
 				@change="onChange"
 				@backspace="onBackspace"
@@ -58,7 +55,7 @@
 				form: {
 					totalFee: ""
 				},
-				deviceId: "",
+        operatorId: "",
 				keyboard: true,
 				show: false,
 				err: "",
@@ -78,17 +75,15 @@
 			if (this.$route.query.code) {
 				this.code = this.$route.query.code
 			}
+      if (this.$route.query.operator_id) {
+        this.operatorId = this.$route.query.operator_id
+      }
 			if (this.code) {
 				this.oauthToken()
 			}
 			if (this.method) {
 				this.simpleInfo()
 			}
-			uni.getSystemInfo({
-				success:(res) => {
-					this.deviceId = res.deviceId
-				}
-			})
 		},
 		mounted() {
 		},
@@ -115,13 +110,17 @@
 							return
 						}
 						this.qrcodeType = res.config.qrcodeType
-						if (res.oauth) {
-							if (this.qrcodeType == "jsapi" && this.code == "") {
-								this.oauthAppId(res.oauth)
-							} else {
-								this.loading = true
-							}
-						}
+            if (this.qrcodeType == "jsapi" && this.code == "") {
+              if (res.oauth) {
+                this.oauthAppId(res.oauth)
+              } else {
+                this.show = true;
+                this.err =  "未找到Oauth授权配置"
+                return
+              }
+            } else {
+              this.loading = true
+            }
 					}
 				}).catch(err => {
 					this.show = true;
@@ -153,7 +152,7 @@
 			tradePay(prepayId, wechatPackage) {
 				switch (this.method) {
 					case "alipay":
-						if (typeof AlipayJSBridge !== "undefined") { 
+						if (typeof AlipayJSBridge !== "undefined") {
 							AlipayJSBridge.call("tradePay", {
 								tradeNO: prepayId
 							}, (data) => {
@@ -172,15 +171,15 @@
 						}
 						break;
 					case "wechat":
-						if (typeof WeixinJSBridge !== "undefined") { 
+						if (typeof WeixinJSBridge !== "undefined") {
 							WeixinJSBridge.invoke(
 								'getBrandWCPayRequest', {
-									"appId": wechatPackage.appid,     //公众号ID，由商户传入     
-									"timeStamp": wechatPackage.timestamp,         //时间戳，自1970年以来的秒数     
-									"nonceStr": wechatPackage.noncestr, //随机串     
-									"package": wechatPackage.package,     
-									"signType": wechatPackage.signType,         //微信签名方式：     
-									"paySign": wechatPackage.sign //微信签名 
+									"appId": wechatPackage.appid,     //公众号ID，由商户传入
+									"timeStamp": wechatPackage.timestamp,         //时间戳，自1970年以来的秒数
+									"nonceStr": wechatPackage.noncestr, //随机串
+									"package": wechatPackage.package,
+									"signType": wechatPackage.signType,         //微信签名方式：
+									"paySign": wechatPackage.sign //微信签名
 								},
 								res => {
 									console.log(res)
@@ -190,7 +189,7 @@
 											icon:'success',
 											title:'支付成功',
 										})
-									} 
+									}
 								}
 							)
 						}else{
@@ -215,7 +214,7 @@
 						title: "二维码支付C2B",
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
-						terminalId: this.deviceId,
+            operatorId: this.operatorId,
 						openId: this.openId,
 					}
 				}).then(res=>{
@@ -242,7 +241,7 @@
 						title: "二维码支付C2B",
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
-						terminalId: this.deviceId
+            operatorId: this.operatorId
 					}
 				}).then(res=>{
 					this.disabled = false
@@ -291,7 +290,7 @@
 				switch (this.method) {
 					case "alipay":
 							window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
-							oauth.alipay.appId + "&scope=auth_base&redirect_uri=" + redirect_uri	
+							oauth.alipay.appId + "&scope=auth_base&redirect_uri=" + redirect_uri
 						break;
 					case "wechat":
 							window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
@@ -325,13 +324,13 @@
 				})
 			},
 			navigator(){
-				if (/MicroMessenger/.test(window.navigator.userAgent)) { 
+				if (/MicroMessenger/.test(window.navigator.userAgent)) {
 					this.method = "wechat"
-				} 
-				if (/AlipayClient/.test(window.navigator.userAgent)) { 
+				}
+				if (/AlipayClient/.test(window.navigator.userAgent)) {
 					this.method = "alipay"
 				}
-				if (/UnionPay/.test(window.navigator.userAgent)) { 
+				if (/UnionPay/.test(window.navigator.userAgent)) {
 					this.method = "unionpay"
 				}
 			}
