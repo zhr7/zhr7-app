@@ -21,6 +21,10 @@ const install = (Vue, vm) => {
 			}
 		},
 		institution: {
+			tradeAuth: {
+				QRCode: (params = {}) => vm.$u.post('/institution-api/TradeAuth/QRCode', params),
+				JsApi: (params = {}) => vm.$u.post('/institution-api/TradeAuth/JsApi', params),
+			},
 			seller: {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
 				List: (params = {}) => vm.$u.post('/institution-api/sellers/list', params),	// 获取商户简讯

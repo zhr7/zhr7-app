@@ -4,6 +4,7 @@ let baseUrl = 'https://rpc.bichengbituo.com'
 	if (process.env.NODE_ENV === 'development') {
 		baseUrl = 'http://172.16.0.2:8080'
 	}
+// baseUrl = 'https://rpc.bichengbituo.com'
 // #endif
 // 这里的vm，就是我们在vue文件里面的this，所以我们能在这里获取vuex的变量，比如存放在里面的token
 // 同时，我们也可以在此使用getApp().globalData，如果你把token放在getApp().globalData的话，也是可以使用的

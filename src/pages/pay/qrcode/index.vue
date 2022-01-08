@@ -206,7 +206,7 @@
 					this.show = true
 					this.err =  "获取openid失败"
 				}
-				this.$u.api.pay.tradeAuth.JsApi({
+				this.$u.api.institution.tradeAuth.JsApi({
 					userId: this.$route.query.user_id,
 					brandId: this.brandId,
 					bizContent: {
@@ -233,7 +233,7 @@
 				})
 			},
 			payQRCode() {
-				this.$u.api.pay.tradeAuth.QRCode({
+				this.$u.api.institution.tradeAuth.QRCode({
 					userId: this.$route.query.user_id,
 					brandId: this.brandId,
 					bizContent: {
