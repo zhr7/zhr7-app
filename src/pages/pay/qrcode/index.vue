@@ -172,20 +172,8 @@
 						break;
 					case "wechat":
 						if (typeof WeixinJSBridge !== "undefined") {
-							if (Object.prototype.hasOwnProperty.call(wechatPackage, 'sign')) {
-								if (!Object.prototype.hasOwnProperty.call(wechatPackage, 'paySign')) {
-									wechatPackage.paySign = wechatPackage.sign
-								}
-							}
 							WeixinJSBridge.invoke(
-								'getBrandWCPayRequest', {
-									"appId": wechatPackage.appid,     //公众号ID，由商户传入
-									"timeStamp": wechatPackage.timestamp,         //时间戳，自1970年以来的秒数
-									"nonceStr": wechatPackage.noncestr, //随机串
-									"package": wechatPackage.package,
-									"signType": wechatPackage.signType,         //微信签名方式：
-									"paySign": wechatPackage.paySign //微信签名
-								},
+								'getBrandWCPayRequest', wechatPackage,
 								res => {
 									console.log(res)
 									if(res.err_msg == "get_brand_wcpay_request:ok" ){
