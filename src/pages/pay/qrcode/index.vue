@@ -75,9 +75,9 @@
 			if (this.$route.query.code) {
 				this.code = this.$route.query.code
 			}
-      if (this.$route.query.operator_id) {
-        this.operatorId = this.$route.query.operator_id
-      }
+			if (this.$route.query.operator_id) {
+				this.operatorId = this.$route.query.operator_id
+			}
 			if (this.code) {
 				this.oauthToken()
 			}
@@ -111,15 +111,15 @@
 						}
 						this.qrcodeType = res.config.qrcodeType
             if (this.qrcodeType == "jsapi" && this.code == "") {
-              if (res.oauth) {
-                this.oauthAppId(res.oauth)
-              } else {
-                this.show = true;
-                this.err =  "未找到Oauth授权配置"
-                return
-              }
+				if (res.oauth) {
+					this.oauthAppId(res.oauth)
+        		} else {
+					this.show = true;
+					this.err =  "未找到Oauth授权配置"
+					return
+        		}
             } else {
-              this.loading = true
+            	this.loading = true
             }
 					}
 				}).catch(err => {
@@ -172,6 +172,7 @@
 						break;
 					case "wechat":
 						if (typeof WeixinJSBridge !== "undefined") {
+							console.log(wechatPackage)
 							WeixinJSBridge.invoke(
 								'getBrandWCPayRequest', wechatPackage,
 								res => {
@@ -284,8 +285,8 @@
 			},
 			oauthAppId(oauth) {
 				const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + oauth.id)
-				console.log(redirect_uri)
-				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id=d53c5ab0-9072-4b4f-a301-db31bf0e1692" + "&oauth_id=" + oauth.id)
+				// console.log(redirect_uri)
+				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id="+ this.$route.query.user_id + "&oauth_id=" + oauth.id)
 				switch (this.method) {
 					case "alipay":
 							window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
