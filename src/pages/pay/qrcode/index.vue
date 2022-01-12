@@ -214,13 +214,11 @@
 				}).then(res=>{
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
-						if (res.content.prepayId) {
-							let wechatPackage = {}
-							if (res.content.wechatPackage) {
-								wechatPackage = JSON.parse(res.content.wechatPackage)
-							}
-							this.tradePay(res.content.prepayId, wechatPackage)
+						let wechatPackage = {}
+						if (res.content.wechatPackage) {
+							wechatPackage = JSON.parse(res.content.wechatPackage)
 						}
+						this.tradePay(res.content.prepayId, wechatPackage)
 					} else {
 						console.log(res)
 						this.show = true
