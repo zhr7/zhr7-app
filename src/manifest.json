@@ -1,6 +1,6 @@
 {
-    "name" : "",
-    "appid" : "",
+    "name" : "必诚付",
+    "appid" : "__UNI__1F7E318",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
@@ -47,7 +47,9 @@
             },
             "ios" : {},
             /* ios打包配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         }
     },
     /* SDK配置 */
