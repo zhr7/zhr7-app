@@ -1,20 +1,24 @@
 <template>
 	<view class="content">
-		<home v-if="path==='home'"/>
+		<home v-if="path==='home'" @handlerPath="handlerPath"/>
+		<institution v-if="path==='institution'"/>
 		<seller v-if="path==='seller'"/>
-		<report v-if="path==='report'"/>
+		<report v-if="path==='institutionReport'"/>
 		<pay v-if="path==='pay'"/>
-		<my v-if="path==='my'"/>
+		<my v-if="path==='my'" @handlerPath="handlerPath"/>
 		<tabbar
+			ref="tabbar"
 			:list="list"
 			:default="path"
 			@change="navChange"
 		/>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
 	import tabbar from '@/components/tabbar'
 	import home from './home'
+	import institution from './institution'
 	import seller from './seller'
 	import report from './report'
 	import pay from './pay'
@@ -23,6 +27,7 @@
 		components: { 
 			tabbar,
 			home,
+			institution,
 			seller,
 			report,
 			pay,
@@ -30,7 +35,7 @@
 		},
 		data() {
 			return {
-				path: "seller",
+				path: "home",
 				list:[	// 商家导航
 					{
 						path: "home",	// 主页
@@ -41,25 +46,25 @@
 						customIcon: false,
 					},
 					{
-						path: "order",	// 订单
-						iconPath: "file-text",
-						selectedIconPath: "file-text-fill",
-						text: '订单',
+						path: "institution",	// 机构
+						iconPath: "moments",
+						selectedIconPath: "moments-circel-fill",
+						text: '机构',
 						customIcon: false,
 					},
 					{
-						path: "seller",	// 收银
-						iconPath: "rmb-circle",
-						selectedIconPath: "rmb-circle-fill",
-						text: '商家',
+						path: "institutionReport",	// 报表
+						iconPath: "more-circle",
+						selectedIconPath: "more-circle-fill",
+						text: '报表',
 						midButton: true,
 						customIcon: false,
 					},
 					{
-						path: "report",	// 报表
-						iconPath: "edit-pen",
-						selectedIconPath: "edit-pen-fill",
-						text: '报表',
+						path: "seller",	// 商家
+						iconPath: "grid",
+						selectedIconPath: "grid-fill",
+						text: '商家',
 						customIcon: false,
 					},
 					{
@@ -67,7 +72,7 @@
 						iconPath: "account",
 						selectedIconPath: "account-fill",
 						text: '我的',
-						count: 23,
+						// count: 23,
 						isDot: false,
 						customIcon: false,
 					},
@@ -81,9 +86,30 @@
 			navChange(nav){
 				this.path = nav.path
 			},
+			handlerPath(e){
+				switch (e) {
+					case "sellerAdd":
+						break;
+					case "institutionAdd":
+						break;
+					case "sellerBrand":
+						break;
+					case "sellerReport":
+						break;
+					case "sellerQrcode":
+						break;
+					case "sellerOrder":
+						break;
+					case "sellerDevice":
+						break;
+					default:
+						this.path = e
+						break;
+				}
+			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>

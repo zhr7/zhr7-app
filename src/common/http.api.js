@@ -25,10 +25,17 @@ const install = (Vue, vm) => {
 				QRCode: (params = {}) => vm.$u.post('/institution-api/TradeAuth/QRCode', params),
 				JsApi: (params = {}) => vm.$u.post('/institution-api/TradeAuth/JsApi', params),
 			},
+			institution: {
+				List: (params = {}) => vm.$u.post('/institution-api/institutions/list', params),	// 获取商户简讯
+			},
 			seller: {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
 				List: (params = {}) => vm.$u.post('/institution-api/sellers/list', params),	// 获取商户简讯
 			},
+			institutionReport: {
+				Amount: (params = {}) => vm.$u.post('/institution-api/institutionReports/amount', params), // 报表统计
+				List: (params = {}) => vm.$u.post('/institution-api/institutionReports/list', params) // 报表统计
+			}
 		},
 		pay: {
 			tradeAuth: {

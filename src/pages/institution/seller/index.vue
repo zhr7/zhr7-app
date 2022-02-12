@@ -4,7 +4,7 @@
 			<view class="search">
 				<u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
-			<view class="uDropdown">
+			<!-- <view class="uDropdown">
 				<u-dropdown ref="uDropdown" @open="deteOpen">
 					<u-dropdown-item title="日期">
 					</u-dropdown-item>
@@ -13,7 +13,7 @@
 					<u-dropdown-item title="筛选">
 					</u-dropdown-item>
 				</u-dropdown>
-			</view>	
+			</view>	 -->
 		</view>
 		<view class="content" v-if="list.length > 0">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
@@ -47,6 +47,7 @@
 			<u-loadmore :status="status" />
 		</view>
 		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
@@ -148,11 +149,14 @@
 				this.getList()
 			},
 			click(item){
-				this.$u.route({
-					type: 'to',
-					url: '/pages/institution/seller/item', 
-					params: item
+				this.$refs.uToast.show({
+					title: "努力开发中"
 				})
+				// this.$u.route({
+				// 	type: 'to',
+				// 	url: '/pages/institution/seller/item', 
+				// 	params: item
+				// })
 			}
 			
 		},

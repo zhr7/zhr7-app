@@ -44,9 +44,9 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#7d33ff",
+		"backgroundColor": "#7d33ff"
 	},
 	"easycom": {
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"

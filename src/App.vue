@@ -19,4 +19,24 @@
 	body {
 		background-color: #f4f4f5;
 	}
+	.border-top-style{
+		border-color:#f4f4f5;
+		border-width:1px;
+		border-top-style:solid;
+	}
+	.border-bottom-style{
+		border-color:#f4f4f5;
+		border-width:1px;
+		border-bottom-style:solid;
+	}
+	.border-right-style{
+		border-color:#f4f4f5;
+		border-width:1px;
+		border-right-style:solid;
+	}
+	.border-left-style{
+		border-color:#f4f4f5;
+		border-width:1px;
+		border-left-style:solid;
+	}
 </style>

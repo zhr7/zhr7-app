@@ -2,7 +2,7 @@
 	<view>
 		<view class="top">
 			<view class="search">
-				<u-search placeholder="商家品牌/门店名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
+				<u-search placeholder="机构名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
 			<!-- <view class="uDropdown">
 				<u-dropdown ref="uDropdown" @open="deteOpen">
@@ -17,42 +17,37 @@
 		</view>
 		<view class="content" v-if="list.length > 0">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
-				<!-- <view class="left">
+				<view class="left">
 					<span v-if="item.brandId===item.id">
 						<u-icon name="brand" custom-prefix="colour-icon" class="icon">></u-icon><br>
 						品牌
 					</span>
 					<span v-else>
-						<u-icon name="seller" custom-prefix="colour-icon" class="icon">></u-icon><br>
+						<u-icon name="institution" custom-prefix="colour-icon" class="icon">></u-icon><br>
 						门店
 					</span>
-				</view> -->
+				</view>
 				<view class="center">
 					<view class="title">
-						{{item.userName}}
+						{{item.name}}
 					</view>
 					<view class="time">
-						品牌:{{item.brandName}}
-					</view>
-					<view class="time">
-						笔:{{item.count}} <span v-if="item.rebate">预估佣金:{{fee(item.rebate/10000)}}</span>
+						{{item.mobile}}
 					</view>
 				</view>
 				<view class="right">
 					<view>
-						{{fee(item.totalFee)}}
-					</view>
-					<view class="fee">
-						手续费:{{fee(item.fee)}}
+						{{item.username}}
 					</view>
 					<view class="status">
-						{{replaceTime(item.date)}}
+						{{replaceTime(item.updatedAt)}}
 					</view>
 				</view>
 			</view>
 			<u-loadmore :status="status" />
 		</view>
 		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
@@ -77,7 +72,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'机构报表'
+				title:'机构管理'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -111,26 +106,24 @@
 				return parseTime(time)
 			},
 			replaceTime(time){
-				return time.substr(0,4)+"-"+time.substr(4,2)+"-"+time.substr(6,2)
+				time = time.replace("T", " ")
+				return time.replace("+08:00", "")
 			},
-			isNumber(number) { // 是否存在不存在返回0
-				return number ? number : 0
-			},
-			fee(number) { // 是否存在不存在返回0
-				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+			isNumber(fee) { // 价格是否存在不存在返回0
+				return fee ? Number(fee)  : 0
 			},
 			getList() {
 				let where = ' true'
 				if (this.query.search) {
-					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
+					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.institutionReport.List({
-					listQuery: this.listQuery
+				this.$u.api.institution.institution.List({
+					list_query: this.listQuery
 				}).then(res => {
-					if (res.institutionReports) {
-						res.institutionReports.forEach(item => {
+					if (res.institutions) {
+						res.institutions.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -156,11 +149,14 @@
 				this.getList()
 			},
 			click(item){
-				this.$u.route({
-					type: 'to',
-					url: '/pages/institution/seller/item', 
-					params: item
+				this.$refs.uToast.show({
+					title: "努力开发中"
 				})
+				// this.$u.route({
+				// 	type: 'to',
+				// 	url: '/pages/institution/institution/item', 
+				// 	params: item
+				// })
 			}
 			
 		},
@@ -206,10 +202,6 @@
 			min-width: 80px;
 			.totalFee {
 				color: #000;
-			}
-			.fee{
-				font-size: 3vw;
-				color: #909399;
 			}
 			.refundFee {
 				color: #FF0000;

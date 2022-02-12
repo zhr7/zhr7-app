@@ -13,18 +13,18 @@
 			</view>
 		</view>
 		
-		<view class="u-m-t-20">
+		<!-- <view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item @click="handler" icon="rmb-circle" title="我的机构"></u-cell-item>
+				<u-cell-item @click="handler('institution')" icon="rmb-circle" title="机构管理"></u-cell-item>
 			</u-cell-group>
-		</view>
+		</view> -->
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item @click="handler" icon="volume" title="机构日结报表"></u-cell-item>
-				<u-cell-item @click="handler" icon="coupon" title="商家日结报表"></u-cell-item>
-				<u-cell-item @click="handler" icon="tags" title="商家列表"></u-cell-item>
-				<u-cell-item @click="handler" icon="server-man" title="机构列表"></u-cell-item>
+				<u-cell-item @click="handler('institutionReport')" icon="volume" title="机构报表"></u-cell-item>
+				<u-cell-item @click="handler('sellerReport')" icon="coupon" title="商家报表"></u-cell-item>
+				<u-cell-item @click="handler('seller')" icon="tags" title="商家管理"></u-cell-item>
+				<u-cell-item @click="handler('institution')" icon="server-man" title="机构管理"></u-cell-item>
 			</u-cell-group>
 		</view>
 		<view class="u-m-t-20">
@@ -105,9 +105,10 @@
 					url: '/pages/index/index', 
 				})
 			},
-			handler() {
+			handler(e) {
+				this.$emit('handlerPath', e)
 				this.$refs.uToast.show({
-					title: "正在努力开发中。。"
+					title: "努力开发中"
 				})
 			}
 		}

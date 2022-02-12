@@ -10,13 +10,13 @@
 					<u-input v-model="form.password" type="password" :border="true" confirm-type="done"  @confirm="submit" placeholder="请输入密码"/>
 				</u-form-item>
 				<u-form-item v-if="!usePassword" label="账号" prop="username">
-					<u-input :border="border" type="select" :select-open="auth.show" v-model="auth.usernme" placeholder="请选择登录账号" @click="auth.show = !auth.show"></u-input>
+					<u-input :border="false" type="select" :select-open="auth.show" v-model="auth.usernme" placeholder="请选择登录账号" @click="auth.show = !auth.show"></u-input>
 				</u-form-item>
 				<u-form-item label="账号密码登录" prop="usePassword" label-width="200">
 					<u-switch v-model="usePassword" slot="right"></u-switch>
 				</u-form-item>
 				<u-form-item >
-					<u-button type="warning" shape="square" :disabled="disabled" :ripple="true" @click="submit">登录</u-button>
+					<u-button type="warning" shape="square" :disabled="disabled" class="submit" :ripple="true" @click="submit">登录</u-button>
 				</u-form-item>
 			</u-form>
 			<u-action-sheet :list="listActionSheet" v-model="auth.show" @click="clickActionSheet"></u-action-sheet>
@@ -72,15 +72,26 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		created() {
+			// #ifdef MP-WEIXIN  
 			uni.hideHomeButton()
-			uni.setNavigationBarTitle({
-				title: ''
-			})
+			// #endif
 			uni.setNavigationBarColor({
 				frontColor: '#ffffff',  
                 backgroundColor: '#7d33ff',  
 			})
 			this.init()
+		},
+		beforeCreate () {
+			// #ifdef H5
+			// 修复h5页面背景色不正常问题
+			document.querySelector('body').setAttribute('style', 'background-color:#7d33ff')
+			// #endif
+		},
+		beforeDestroy () {
+			// #ifdef H5
+			// 修复h5页面背景色不正常问题
+			document.querySelector('body').setAttribute('style', 'background-color:#f4f4f5')
+			// #endif			
 		},
 		methods: {
 			init(){
@@ -189,6 +200,9 @@
 	.custom-style {
 		color: #7d33ff;
 		width: 400rpx;
+	}
+	.submit{
+		width: 100%;
 	}
 </style>
 <style scoped>
