@@ -22,10 +22,10 @@
 		},
 		data() {
 			return {
-				scrollTop: 0
+				scrollTop: 0,
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			this.login()
 		},
 		onShow() {

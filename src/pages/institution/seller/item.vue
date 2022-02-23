@@ -23,138 +23,79 @@
 			>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
 						name="seller" 
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('seller')"
 					></u-icon>
-					<text class="grid-text">商家门店</text>
+					<text class="grid-text">相关门店</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="order"
+						name="order-list" 
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="order"
-						@click="handler('order')"
+						@click="handler('sellerOrder')"
 					></u-icon>
 					<text class="grid-text">交易明细</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="edit-pen"
+						name="seller-report" 
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="report"
-						@click="handler('report')"
+						@click="handler('sellerReport')"
 					></u-icon>
 					<text class="grid-text">日结报表</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="rmb-circle"
+						name="password"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="pay"
-						@click="handler('pay')"
+						@click="handler('sellerPassword')"
+					></u-icon>
+					<text class="grid-text">密码重置</text>
+				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="pay"
+						custom-prefix="colour-icon" 
+						:size="100"
+						@click="handler('sellerPay')"
 					></u-icon>
 					<text class="grid-text">支付配置</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
 						name="setting"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="setting"
-						@click="handler('setting')"
+						@click="handler('sellerSetting')"
 					></u-icon>
 					<text class="grid-text">商家配置</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="eye-off"
+						name="device" 
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="password"
-						@click="handler('password')"
+						@click="handler('sellerDevice')"
 					></u-icon>
-					<text class="grid-text">密码重置</text>
+					<text class="grid-text">设备管理</text>
+				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="qrcode" 
+						custom-prefix="colour-icon" 
+						:size="100"
+						@click="handler('sellerQrcode')"
+					></u-icon>
+					<text class="grid-text">收款码</text>
 				</u-grid-item>
 			</u-grid>
 		</view>	
-		<!-- <u-line />
-		<view class="line" v-if="item.buyerPayFee">
-			<view class="">买家支付金额</view>
-			<view>￥{{(item.buyerPayFee/100).toFixed(2) }}</view>
-		</view>	
-		<u-line />
-		<view class="line" v-if="item.outTradeNo">
-			<view class="">订单编号</view>
-			<view>{{ item.outTradeNo }}</view>
-		</view>	
-		<view class="line" v-if="item.tradeNo">
-			<view class="">凭证号</view>
-			<view>{{ item.tradeNo }}</view>
-		</view>	
-		<view class="line" v-if="item.bankTradeNo">
-			<view class="">银行单号</view>
-			<view>{{ item.bankTradeNo }}</view>
-		</view>	
-		<view class="line" v-if="item.title">
-			<view class="">订单名称</view>
-			<view>{{ item.title }}</view>
-		</view>	
-		<view class="line">
-			<view class="">订单状态</view>
-			<view class="warning"  v-if="(isNumber(item.status)===0)&&isNumber(item.totalFee)>0">
-				等付款
-			</view>
-			<view class="warning"  v-if="(isNumber(item.status)===0)&&isNumber(item.totalFee)<0">
-				等退款
-			</view>
-			<view class="error" v-if="isNumber(item.status)===-1">
-				已关闭
-			</view>
-			<view v-if="isNumber(item.status)===1">
-				<view v-if="isNumber(item.totalFee)>0">
-					<view class="primary" v-if="isNumber(item.refundFee) < isNumber(item.totalFee) && isNumber(item.refundFee)!==0">
-						转入退款
-					</view>
-					<view class="warning" v-if="isNumber(item.refundFee) === isNumber(item.totalFee)">
-						全额退款
-					</view>
-					<view class="success">
-						支付成功
-					</view>
-				</view>
-				<view class="success" v-if="isNumber(item.totalFee)<0">
-					退款成功
-				</view>
-			</view>
-		</view>	
-		<view class="line" v-if="item.attach">
-			<view class="">备注</view>
-			<view>{{item.attach}}</view>
-		</view>	
-		<view class="line" v-if="item.date">
-			<view class="">账单日期</view>
-			<view>{{item.date}}</view>
-		</view>	
-		<view class="line" v-if="item.createdAt">
-			<view class="">订单时间</view>
-			<view>{{replaceTime(item.createdAt)}}</view>
-		</view>	
-		<u-line />
-		<view class="bottom" v-if="isNumber(item.status)===1">
-			<u-button 
-				v-if="isNumber(item.totalFee)>0 && (isNumber(item.refundFee) < isNumber(item.totalFee))"
-				type="warning" 
-				@click="refund"
-			>
-				订单退款
-			</u-button>
-		</view>	 -->
+		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
@@ -197,8 +138,56 @@
 					url: '/pages/seller/order/refund', 
 				})
 			},
-			handler(path){
-				console.log(path)
+			handler(e){
+				switch (e) {
+					case "seller":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/index?brandId=' + this.item.brandId
+						})
+						break;
+					case "sellerOrder":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/order/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+						})
+						break;
+					case "sellerReport":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/report/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+						})
+						break;
+					case "sellerPassword":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/password/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+						})
+						break;
+					case "sellerSetting":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/setting/index?id=' + this.item.id 
+						})
+						break;
+					case "sellerDevice":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/device/index?id=' + this.item.id + '&name=' + this.item.name
+						})
+						break;
+					case "sellerQrcode":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/qrcode/index?id=' + this.item.id + '&name=' + this.item.name
+						})
+						break;
+					default:
+						this.$refs.uToast.show({
+							title: "努力开发中"
+						})
+						break;
+				}
 			}
 		},
 	}
@@ -225,8 +214,8 @@
 		text-align: right;
 	}
 	.name {
-		font-size: 20px;
-		color: #ff0000;
+		font-size: 4vw;
+		color: #dd6161;
 	}
 }
 .icon{

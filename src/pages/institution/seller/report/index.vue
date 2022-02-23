@@ -1,9 +1,9 @@
 <template>
 	<view>
 		<view class="top">
-			<view class="search">
+			<!-- <view class="search">
 				<u-search placeholder="商家品牌/门店名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
-			</view>	
+			</view>	 -->
 			<!-- <view class="uDropdown">
 				<u-dropdown ref="uDropdown" @open="deteOpen">
 					<u-dropdown-item title="日期">
@@ -60,7 +60,6 @@
 	export default {
 		data() {
 			return {
-				options: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -78,7 +77,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'机构报表'
+				title:'商家报表'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -86,8 +85,13 @@
 			})
 			
 		},
-		onShow() {
-			this.options = RouteParams()
+		onLoad(options) {
+			this.routes = options
+			uni.setNavigationBarTitle({
+				title: this.routes.sellerName
+			})
+		},
+		mounted() {
 			this.init()
 		},
 		methods: {
@@ -128,11 +132,14 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.institutionReport.List({
-					listQuery: this.listQuery
+				this.$u.api.institution.sellerReport.List({
+					listQuery: this.listQuery,
+					sellerReport: {
+						userId: this.routes.sellerId
+					}
 				}).then(res => {
-					if (res.institutionReports) {
-						res.institutionReports.forEach(item => {
+					if (res.sellerReports) {
+						res.sellerReports.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -154,7 +161,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'date desc'
+					sort: 'created_at desc'
 				}
 				this.list = []
 				this.getList()

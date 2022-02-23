@@ -1,13 +1,9 @@
 <template>
 	<view class="item">
 		<view class="line">
-			<span v-if="item.brandId===item.id" class="info">
-				<u-icon name="brand" custom-prefix="colour-icon" class="icon"></u-icon><br>
-				品牌
-			</span>
-			<span v-else class="info">
-				<u-icon name="seller" custom-prefix="colour-icon" class="icon"></u-icon><br>
-				门店
+			<span class="info">
+				<u-icon name="institution" custom-prefix="colour-icon" class="icon"></u-icon><br>
+				{{item.level}}级机构
 			</span>
 			<view>
 				<view class="right name">{{item.name}}</view>
@@ -23,138 +19,97 @@
 			>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="seller" 
+						name="institution" 
+						custom-prefix="colour-icon" 
+						:size="100"
+						@click="handler('institution')"
+					></u-icon>
+					<text class="grid-text">下级机构</text>
+				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="seller"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('seller')"
 					></u-icon>
-					<text class="grid-text">商家门店</text>
+					<text class="grid-text">下级商户</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="order"
+						name="provider"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="order"
-						@click="handler('order')"
+						@click="handler('provider')"
 					></u-icon>
-					<text class="grid-text">交易明细</text>
+					<text class="grid-text">软件服务商</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="edit-pen"
+						name="seller-report"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="report"
 						@click="handler('report')"
 					></u-icon>
 					<text class="grid-text">日结报表</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="rmb-circle"
+						name="pay"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="pay"
-						@click="handler('pay')"
+						@click="handler('report')"
 					></u-icon>
-					<text class="grid-text">支付配置</text>
+					<text class="grid-text">支付通道</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="setting"
+						name="oauth"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="setting"
-						@click="handler('setting')"
+						@click="handler('oauth')"
 					></u-icon>
-					<text class="grid-text">商家配置</text>
+					<text class="grid-text">授权通道</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
-						:customStyle="{paddingTop:20+'rpx'}"
-						name="eye-off"
+						name="secret-key"
+						custom-prefix="colour-icon" 
 						:size="100"
-						class="password"
+						@click="handler('secret-key')"
+					></u-icon>
+					<text class="grid-text">密钥库</text>
+				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="secretKey"
+						custom-prefix="colour-icon" 
+						:size="100"
+						@click="handler('secretKey')"
+					></u-icon>
+					<text class="grid-text">密钥管理</text>
+				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="password"
+						custom-prefix="colour-icon" 
+						:size="100"
 						@click="handler('password')"
 					></u-icon>
 					<text class="grid-text">密码重置</text>
 				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="setting"
+						custom-prefix="colour-icon" 
+						:size="100"
+						@click="handler('setting')"
+					></u-icon>
+					<text class="grid-text">机构配置</text>
+				</u-grid-item>
 			</u-grid>
 		</view>	
-		<!-- <u-line />
-		<view class="line" v-if="item.buyerPayFee">
-			<view class="">买家支付金额</view>
-			<view>￥{{(item.buyerPayFee/100).toFixed(2) }}</view>
-		</view>	
-		<u-line />
-		<view class="line" v-if="item.outTradeNo">
-			<view class="">订单编号</view>
-			<view>{{ item.outTradeNo }}</view>
-		</view>	
-		<view class="line" v-if="item.tradeNo">
-			<view class="">凭证号</view>
-			<view>{{ item.tradeNo }}</view>
-		</view>	
-		<view class="line" v-if="item.bankTradeNo">
-			<view class="">银行单号</view>
-			<view>{{ item.bankTradeNo }}</view>
-		</view>	
-		<view class="line" v-if="item.title">
-			<view class="">订单名称</view>
-			<view>{{ item.title }}</view>
-		</view>	
-		<view class="line">
-			<view class="">订单状态</view>
-			<view class="warning"  v-if="(isNumber(item.status)===0)&&isNumber(item.totalFee)>0">
-				等付款
-			</view>
-			<view class="warning"  v-if="(isNumber(item.status)===0)&&isNumber(item.totalFee)<0">
-				等退款
-			</view>
-			<view class="error" v-if="isNumber(item.status)===-1">
-				已关闭
-			</view>
-			<view v-if="isNumber(item.status)===1">
-				<view v-if="isNumber(item.totalFee)>0">
-					<view class="primary" v-if="isNumber(item.refundFee) < isNumber(item.totalFee) && isNumber(item.refundFee)!==0">
-						转入退款
-					</view>
-					<view class="warning" v-if="isNumber(item.refundFee) === isNumber(item.totalFee)">
-						全额退款
-					</view>
-					<view class="success">
-						支付成功
-					</view>
-				</view>
-				<view class="success" v-if="isNumber(item.totalFee)<0">
-					退款成功
-				</view>
-			</view>
-		</view>	
-		<view class="line" v-if="item.attach">
-			<view class="">备注</view>
-			<view>{{item.attach}}</view>
-		</view>	
-		<view class="line" v-if="item.date">
-			<view class="">账单日期</view>
-			<view>{{item.date}}</view>
-		</view>	
-		<view class="line" v-if="item.createdAt">
-			<view class="">订单时间</view>
-			<view>{{replaceTime(item.createdAt)}}</view>
-		</view>	
-		<u-line />
-		<view class="bottom" v-if="isNumber(item.status)===1">
-			<u-button 
-				v-if="isNumber(item.totalFee)>0 && (isNumber(item.refundFee) < isNumber(item.totalFee))"
-				type="warning" 
-				@click="refund"
-			>
-				订单退款
-			</u-button>
-		</view>	 -->
+		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
@@ -179,26 +134,52 @@
 			})
 		},
 		mounted() {
-			this.item = RouteParams()
 		},
 		onShow() {
+			this.item = RouteParams()
 		},
 		methods: {
-			isNumber(fee) { // 价格是否存在不存在返回0
-				return fee ? Number(fee) : 0
-			},
-			replaceTime(time){
-				time = time.replace("T", " ")
-				return time.replace("+08:00", "")
-			},
-			refund() {
-				this.$u.route({
-					type: 'to',
-					url: '/pages/seller/order/refund', 
-				})
-			},
-			handler(path){
-				console.log(path)
+			handler(e){
+				switch (e) {
+					case "institution":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/institution/index',
+							params: this.item
+						})
+						break;
+					case "seller":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/index?institutionId='+this.item.id,
+						})
+						break;
+					case "report":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/report/index?institutionId='+this.item.id,
+						})
+						break;
+					case "password":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/institution/password/index',
+							params: this.item
+						})
+						break;
+					case "setting":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/institution/setting/index',
+							params: this.item
+						})
+						break;
+					default:
+						this.$refs.uToast.show({
+							title: "努力开发中"
+						})
+						break;
+				}
 			}
 		},
 	}
@@ -243,21 +224,6 @@
     /* #ifndef APP-PLUS */
     box-sizing: border-box;
     /* #endif */
-}
-.order{
-	color: #409EFF;
-}
-.report{
-	color: #19be6b;
-}
-.pay{
-	color: #67C23A;
-}
-.setting {
-	color: #F56C6C;
-}
-.password {
-	color: #E6A23C;
 }
 </style>
 

@@ -63,7 +63,7 @@
 						custom-prefix="colour-icon" 
 						:size="60"
 					></u-icon>
-					<text class="grid-text">商户管理</text>
+					<text class="grid-text">门店管理</text>
 				</view>
 				<view @click="handler('institutionReport')" class="item border-bottom-style border-left-style">
 					<u-icon
@@ -73,7 +73,7 @@
 					></u-icon>
 					<text class="grid-text">机构报表</text>
 				</view>
-				<view @click="handler('sellerReport')" class="item border-bottom-style">
+				<!-- <view @click="handler('sellerReport')" class="item border-bottom-style">
 					<u-icon
 						name="seller-report" 
 						custom-prefix="colour-icon" 
@@ -104,7 +104,7 @@
 						:size="60"
 					></u-icon>
 					<text class="grid-text">设备管理</text>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<u-toast ref="uToast" />
@@ -119,7 +119,7 @@
 				dateRange: [],
 				report: {},
 				currentReport: {},
-				lastReport: {}
+				lastReport: {},
 			}
 		},
 		onLoad() {
@@ -138,6 +138,9 @@
 			this.init()
 		},
 		methods: {
+			clickclick(e) {
+				console.log(e);
+			},
 			init() {
 				this.getAmount('report')
 				this.getAmount('currentReport')

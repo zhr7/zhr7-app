@@ -4,27 +4,13 @@
 			<view class="search">
 				<u-search placeholder="机构名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
-			<!-- <view class="uDropdown">
-				<u-dropdown ref="uDropdown" @open="deteOpen">
-					<u-dropdown-item title="日期">
-					</u-dropdown-item>
-					<u-dropdown-item title="扫码找单">
-					</u-dropdown-item>
-					<u-dropdown-item title="筛选">
-					</u-dropdown-item>
-				</u-dropdown>
-			</view>	 -->
 		</view>
-		<view class="content" v-if="list.length > 0">
+		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
-					<span v-if="item.brandId===item.id">
-						<u-icon name="brand" custom-prefix="colour-icon" class="icon">></u-icon><br>
-						品牌
-					</span>
-					<span v-else>
+					<span>
 						<u-icon name="institution" custom-prefix="colour-icon" class="icon">></u-icon><br>
-						门店
+						{{item.level}}级机构
 					</span>
 				</view>
 				<view class="center">
@@ -51,7 +37,7 @@
 	</view>
 </template>
 <script>
-	import { parseTime } from '@/utils'
+	import { parseTime, RouteParams } from '@/utils'
 	export default {
 		data() {
 			return {
@@ -68,6 +54,15 @@
 				},
 				showDate: false,
 				search: '',
+				institution: {
+					id: '',
+					institutionId: '',
+					level: '',
+					mobile: '',
+					name: '',
+					rebate: '',
+					username: '',
+				}
 			}
 		},
 		created() {
@@ -81,6 +76,7 @@
 			
 		},
 		mounted() {
+			this.institution = JSON.parse(JSON.stringify(RouteParams()))
 			this.init()
 		},
 		methods: {
@@ -120,18 +116,23 @@
 				this.listQuery.where = where
 				this.status = 'loading';
 				this.$u.api.institution.institution.List({
-					list_query: this.listQuery
-				}).then(res => {
-					if (res.institutions) {
-						res.institutions.forEach(item => {
-							this.list.push(item)
-						});
-						this.total = Number(res.total)
-						if (this.list.length>=this.total) {
+						list_query: this.listQuery,
+						institution: {
+							id: this.institution.id,
+						},
+					}).then(res => {
+						if (res.institutions) {
+							res.institutions.forEach(item => {
+								this.list.push(item)
+							});
+							this.total = Number(res.total)
+							if (this.list.length>=this.total) {
+								this.status = 'nomore'
+							}
+						}else{
 							this.status = 'nomore'
 						}
-					}
-				})
+					})
 			},
 			handlerSearch(res) {
 				if (res) {
@@ -149,14 +150,11 @@
 				this.getList()
 			},
 			click(item){
-				this.$refs.uToast.show({
-					title: "努力开发中"
+				this.$u.route({
+					type: 'to',
+					url: '/pages/institution/institution/item', 
+					params: item
 				})
-				// this.$u.route({
-				// 	type: 'to',
-				// 	url: '/pages/institution/institution/item', 
-				// 	params: item
-				// })
 			}
 			
 		},

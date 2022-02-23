@@ -15,15 +15,15 @@
 				</u-dropdown>
 			</view>	 -->
 		</view>
-		<view class="content" v-if="list.length > 0">
+		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
 					<span v-if="item.brandId===item.id">
-						<u-icon name="brand" custom-prefix="colour-icon" class="icon">></u-icon><br>
+						<u-icon name="brand" custom-prefix="colour-icon" class="icon"></u-icon><br>
 						品牌
 					</span>
 					<span v-else>
-						<u-icon name="seller" custom-prefix="colour-icon" class="icon">></u-icon><br>
+						<u-icon name="seller" custom-prefix="colour-icon" class="icon"></u-icon><br>
 						门店
 					</span>
 				</view>
@@ -51,10 +51,11 @@
 	</view>
 </template>
 <script>
-	import { parseTime } from '@/utils'
+	import { parseTime, RouteParams } from '@/utils'
 	export default {
 		data() {
 			return {
+				options: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -68,19 +69,31 @@
 				},
 				showDate: false,
 				search: '',
+				title: '',
 			}
 		},
+		props: {
+		},
 		created() {
+		},
+		onShow() {
+			this.options = RouteParams()
+		},
+		mounted() {
+			this.title = '门店管理'
+			if (!this.options.seller) {
+				this.title = '品牌管理'
+			}
+			if (this.options.brandId) {
+				this.title = '门店管理'
+			}
 			uni.setNavigationBarTitle({
-				title:'商家管理'
+				title:this.title
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
-			
-		},
-		mounted() {
 			this.init()
 		},
 		methods: {
@@ -114,13 +127,23 @@
 			},
 			getList() {
 				let where = ' true'
+				if (!this.options.brandId) {
+					where = where + ` And brand_id=id`
+				}
+				if (this.options.seller) {
+					where = ' true'
+				}
 				if (this.query.search) {
 					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
 				this.$u.api.institution.seller.List({
-					list_query: this.listQuery
+					list_query: this.listQuery,
+					seller: {
+						brandId: this.options.brandId,
+						institutionId: this.options.institutionId
+					}
 				}).then(res => {
 					if (res.sellers) {
 						res.sellers.forEach(item => {
@@ -130,6 +153,8 @@
 						if (this.list.length>=this.total) {
 							this.status = 'nomore'
 						}
+					}else{
+						this.status = 'nomore'
 					}
 				})
 			},
@@ -149,14 +174,11 @@
 				this.getList()
 			},
 			click(item){
-				this.$refs.uToast.show({
-					title: "努力开发中"
+				this.$u.route({
+					type: 'to',
+					url: '/pages/institution/seller/item', 
+					params: item
 				})
-				// this.$u.route({
-				// 	type: 'to',
-				// 	url: '/pages/institution/seller/item', 
-				// 	params: item
-				// })
 			}
 			
 		},

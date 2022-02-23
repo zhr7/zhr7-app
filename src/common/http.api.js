@@ -26,11 +26,43 @@ const install = (Vue, vm) => {
 				JsApi: (params = {}) => vm.$u.post('/institution-api/TradeAuth/JsApi', params),
 			},
 			institution: {
-				List: (params = {}) => vm.$u.post('/institution-api/institutions/list', params),	// 获取商户简讯
+				Password: (params = {}) => vm.$u.post('/institution-api/institutions/password', params),
+				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/institutions/simpleInfo', params),	// 
+				Get: (params = {}) => vm.$u.post('/institution-api/institutions/get', params),	// 
+				List: (params = {}) => vm.$u.post('/institution-api/institutions/list', params),	// 
+				Update: (params = {}) => vm.$u.post('/institution-api/institutions/update', params),	// 
+				SelfChildren: (params = {}) => vm.$u.post('/institution-api/institutions/selfChildren', params),
+				SelfInfo: (params = {}) => vm.$u.post('/institution-api/institutions/selfInfo', params),
 			},
 			seller: {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
-				List: (params = {}) => vm.$u.post('/institution-api/sellers/list', params),	// 获取商户简讯
+				List: (params = {}) => vm.$u.post('/institution-api/sellers/list', params),	// 
+				Password: (params = {}) => vm.$u.post('/institution-api/sellers/password', params),
+				Update: (params = {}) => vm.$u.post('/institution-api/sellers/update', params),
+				Get: (params = {}) => vm.$u.post('/institution-api/sellers/get', params),
+				SimpleList: (params = {}) => vm.$u.post('/institution-api/sellers/simpleList', params),	// 
+			},
+			order: {
+				List: (params = {}) => vm.$u.post('/institution-api/orders/list', params),	
+			},
+			provider: {
+				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/providers/simpleInfo', params),	// 
+			},
+			device: {
+				List: (params = {}) => vm.$u.post('/institution-api/devices/list', params),	
+				Update: (params = {}) => vm.$u.post('/institution-api/devices/update', params),
+				Create: (params = {}) => vm.$u.post('/institution-api/devices/create', params),
+				Delete: (params = {}) => vm.$u.post('/institution-api/devices/delete', params),
+			},
+			qrcode: {
+				List: (params = {}) => vm.$u.post('/institution-api/qrcodes/list', params),	
+				Update: (params = {}) => vm.$u.post('/institution-api/qrcodes/update', params),
+				Create: (params = {}) => vm.$u.post('/institution-api/qrcodes/create', params),
+				Delete: (params = {}) => vm.$u.post('/institution-api/qrcodes/delete', params),
+			},
+			sellerReport: {
+				Amount: (params = {}) => vm.$u.post('/institution-api/sellerReports/amount', params), // 报表统计
+				List: (params = {}) => vm.$u.post('/institution-api/sellerReports/list', params) // 报表统计
 			},
 			institutionReport: {
 				Amount: (params = {}) => vm.$u.post('/institution-api/institutionReports/amount', params), // 报表统计

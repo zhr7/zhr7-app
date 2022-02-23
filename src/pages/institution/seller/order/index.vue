@@ -155,6 +155,7 @@
 	export default {
 		data() {
 			return {
+				routes: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -292,6 +293,12 @@
 			})
 			
 		},
+		onLoad(options) {
+			this.routes = options
+			uni.setNavigationBarTitle({
+				title: this.routes.sellerName
+			})
+		},
 		mounted() {
 			this.init()
 		},
@@ -388,8 +395,11 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.pay.order.List({
-					list_query: this.listQuery
+				this.$u.api.institution.order.List({
+					listQuery: this.listQuery,
+					order: {
+						userId: this.routes.sellerId,
+					}
 				}).then(res => {
 					if (res.orders) {
 						res.orders.forEach(item => {
@@ -485,9 +495,9 @@
 			click(item){
 				this.$u.route({
 					type: 'to',
-					url: '/pages/seller/order/item', 
+					url: '/pages/institution/seller/order/item', 
 				})
-				this.$store.dispatch('seller/setOrderInfoCache',item)
+				this.$store.dispatch('institution/setOrderInfoCache',item)
 			}
 			
 		},

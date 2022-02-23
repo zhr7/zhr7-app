@@ -57,7 +57,7 @@
 			</view>
 			<u-line/>
 			<view class="qrcode" v-if="userId">
-				<view class="title">收款二维码</view>
+				<view class="title">商家收款码</view>
 				<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="payQrcodeUrl+'?user_id='+userId" :size="400" :show="true" :loadMake="true" @result="qrR"/>
 				<u-button type="info" @click="saveQrcodeToPhotosAlbum">保存二维码</u-button>
 			</view>
@@ -65,8 +65,7 @@
 	</view>
 </template>
 <script>
-	import {  mapGetters } from 'vuex'
-	import { mapState } from 'vuex'
+	import {  mapGetters, mapState } from 'vuex'
 	import { parseTime } from '@/utils'
 	import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
 	export default {

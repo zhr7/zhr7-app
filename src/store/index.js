@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import getters from './getters'
 import user from './modules/user'
 import seller from './modules/seller'
+import institution from './modules/institution'
 import healthy from './modules/healthy'
 import settings from './modules/settings'
 
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
     seller,
     healthy,
     settings,
+    institution,
   },
   getters
 })

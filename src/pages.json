@@ -1,5 +1,5 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [ 
 		
 		{
 			"path": "pages/index/index",
@@ -19,9 +19,84 @@
 			}
 		},
 		{
+			"path": "pages/institution/institution/index",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/institution/institution/item",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/institution/institution/password/index",
+			"style": {
+			}
+		},{
+			"path": "pages/institution/institution/setting/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/institution/seller/index",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/institution/seller/item",
 			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/institution/seller/order/index",
+			"style": {
 				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/institution/seller/order/item",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/institution/seller/report/index",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/institution/seller/password/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/institution/seller/setting/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/institution/seller/device/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/institution/seller/device/item",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/institution/seller/qrcode/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/institution/seller/qrcode/item",
+			"style": {
 			}
 		},
 		{
@@ -45,10 +120,11 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
-		"navigationBarBackgroundColor": "#7d33ff",
-		"backgroundColor": "#7d33ff"
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#ffffff"
 	},
 	"easycom": {
-		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+		"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
 	}
 }

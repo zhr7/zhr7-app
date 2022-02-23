@@ -2,7 +2,7 @@
 	<view class="content">
 		<home v-if="path==='home'" @handlerPath="handlerPath"/>
 		<institution v-if="path==='institution'"/>
-		<seller v-if="path==='seller'"/>
+		<seller v-if="path==='sellerBrand'"/>
 		<report v-if="path==='institutionReport'"/>
 		<pay v-if="path==='pay'"/>
 		<my v-if="path==='my'" @handlerPath="handlerPath"/>
@@ -33,6 +33,8 @@
 			pay,
 			my,
 		},
+		props: {
+		},
 		data() {
 			return {
 				path: "home",
@@ -61,7 +63,7 @@
 						customIcon: false,
 					},
 					{
-						path: "seller",	// 商家
+						path: "sellerBrand",	// 商家
 						iconPath: "grid",
 						selectedIconPath: "grid-fill",
 						text: '商家',
@@ -80,7 +82,6 @@
 			}
 		},
 		onLoad() {
-
 		},
 		methods: {
 			navChange(nav){
@@ -92,15 +93,16 @@
 						break;
 					case "institutionAdd":
 						break;
-					case "sellerBrand":
-						break;
 					case "sellerReport":
 						break;
-					case "sellerQrcode":
+					case "sellerBrand":
+						this.path = "sellerBrand"
 						break;
-					case "sellerOrder":
-						break;
-					case "sellerDevice":
+					case "seller":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/index?seller=true'
+						})
 						break;
 					default:
 						this.path = e
