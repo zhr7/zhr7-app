@@ -123,9 +123,6 @@
 			})
 		},
 		mounted() {
-			
-		},
-		onShow() {
 			this.init()
 		},
 		onPullDownRefresh() {

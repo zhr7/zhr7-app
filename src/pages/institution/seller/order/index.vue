@@ -144,6 +144,9 @@
 						</view>
 					</view>
 				</view>
+				<view class="arrow-right">
+					<u-icon name="arrow-right" size="30"></u-icon>
+				</view>
 			</view>
 			<u-loadmore :status="status" />
 		</view>
@@ -151,11 +154,11 @@
 	</view>
 </template>
 <script>
-	import { parseTime } from '@/utils'
+	import { parseTime,RouteParams } from '@/utils'
 	export default {
 		data() {
 			return {
-				routes: {},
+				options: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -293,13 +296,11 @@
 			})
 			
 		},
-		onLoad(options) {
-			this.routes = options
+		onShow() {
+			this.options = JSON.parse(JSON.stringify(RouteParams()))
 			uni.setNavigationBarTitle({
-				title: this.routes.sellerName
+				title: this.options.sellerName
 			})
-		},
-		mounted() {
 			this.init()
 		},
 		methods: {
@@ -398,7 +399,7 @@
 				this.$u.api.institution.order.List({
 					listQuery: this.listQuery,
 					order: {
-						userId: this.routes.sellerId,
+						userId: this.options.sellerId,
 					}
 				}).then(res => {
 					if (res.orders) {
@@ -550,6 +551,10 @@
 			.status {
 				font-size: 12px;
 			}
+		}
+		.arrow-right {
+			height: 60px;
+			line-height: 60px;
 		}
 	}
 }

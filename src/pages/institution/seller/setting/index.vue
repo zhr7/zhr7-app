@@ -93,7 +93,7 @@
 			})
 			
 		},
-		mounted() {
+		onShow() {
             this.formData = JSON.parse(JSON.stringify(RouteParams()))
             this.init()    
 		},

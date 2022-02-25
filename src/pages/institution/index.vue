@@ -104,6 +104,22 @@
 							url: '/pages/institution/seller/index?seller=true'
 						})
 						break;
+					case "institutionSecretKey":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/secretKey/index'
+						})
+						break;
+					case "institution-secret-key":
+						break;
+					case "institutionPay":
+						break;
+					case "institutionOauth":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/oauth/index'
+						})
+						break;
 					default:
 						this.path = e
 						break;

@@ -58,7 +58,7 @@
 						name="pay"
 						custom-prefix="colour-icon" 
 						:size="100"
-						@click="handler('report')"
+						@click="handler('pay')"
 					></u-icon>
 					<text class="grid-text">支付通道</text>
 				</u-grid-item>
@@ -78,7 +78,7 @@
 						:size="100"
 						@click="handler('secret-key')"
 					></u-icon>
-					<text class="grid-text">密钥库</text>
+					<text class="grid-text">密钥仓库</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
@@ -134,8 +134,6 @@
 			})
 		},
 		mounted() {
-		},
-		onShow() {
 			this.item = RouteParams()
 		},
 		methods: {
@@ -157,7 +155,8 @@
 					case "report":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/report/index?institutionId='+this.item.id,
+							url: '/pages/institution/report/index',
+							params: this.item
 						})
 						break;
 					case "password":
@@ -171,6 +170,13 @@
 						this.$u.route({
 							type: 'to',
 							url: '/pages/institution/institution/setting/index',
+							params: this.item
+						})
+						break;
+					case "secretKey":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/institution/secretKey/index',
 							params: this.item
 						})
 						break;

@@ -73,6 +73,38 @@
 					></u-icon>
 					<text class="grid-text">机构报表</text>
 				</view>
+				<view @click="handler('institutionSecretKey')" class="item border-bottom-style">
+					<u-icon
+						name="secretKey" 
+						custom-prefix="colour-icon" 
+						:size="60"
+					></u-icon>
+					<text class="grid-text">密钥管理</text>
+				</view>
+				<view @click="handler('institutionPay')" class="item border-bottom-style border-left-style">
+					<u-icon
+						name="pay" 
+						custom-prefix="colour-icon" 
+						:size="60"
+					></u-icon>
+					<text class="grid-text">支付通道</text>
+				</view>
+				<view @click="handler('institution-secret-key')" class="item border-bottom-style">
+					<u-icon
+						name="secret-key" 
+						custom-prefix="colour-icon" 
+						:size="60"
+					></u-icon>
+					<text class="grid-text">密钥仓库</text>
+				</view>
+				<view @click="handler('institutionOauth')" class="item border-bottom-style border-left-style">
+					<u-icon
+						name="oauth" 
+						custom-prefix="colour-icon" 
+						:size="60"
+					></u-icon>
+					<text class="grid-text">授权通道</text>
+				</view>
 				<!-- <view @click="handler('sellerReport')" class="item border-bottom-style">
 					<u-icon
 						name="seller-report" 

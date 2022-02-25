@@ -91,7 +91,7 @@
 				title: this.routes.sellerName
 			})
 		},
-		mounted() {
+		onShow() {
 			this.init()
 		},
 		methods: {

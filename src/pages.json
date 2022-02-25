@@ -29,6 +29,18 @@
 			"style": {
 				"enablePullDownRefresh": false
 			}
+		},{
+			"path": "pages/institution/secretKey/index",
+			"style": {
+			}
+		},{
+			"path": "pages/institution/oauth/index",
+			"style": {
+			}
+		},{
+			"path": "pages/institution/oauth/item",
+			"style": {
+			}
 		},
 		{
 			"path": "pages/institution/institution/password/index",
@@ -36,6 +48,10 @@
 			}
 		},{
 			"path": "pages/institution/institution/setting/index",
+			"style": {
+			}
+		},{
+			"path": "pages/institution/institution/secretKey/index",
 			"style": {
 			}
 		},

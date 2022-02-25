@@ -85,11 +85,8 @@
                 backgroundColor: '#ffffff',  
 			})
 		},
-        onShow() {
-			this.options = JSON.parse(JSON.stringify(RouteParams()))
-		},
 		mounted() {
-            
+            this.options = JSON.parse(JSON.stringify(RouteParams()))
 		},
 		methods: {
             submitForm(formName) {

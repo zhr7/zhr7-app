@@ -119,10 +119,8 @@
                 backgroundColor: '#ffffff',  
 			})
 		},
-		mounted() {
-			this.item = RouteParams()
-		},
 		onShow() {
+			this.item = RouteParams()
 		},
 		methods: {
 			isNumber(fee) { // 价格是否存在不存在返回0

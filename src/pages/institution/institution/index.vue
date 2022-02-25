@@ -29,6 +29,9 @@
 						{{replaceTime(item.updatedAt)}}
 					</view>
 				</view>
+				<view class="arrow-right">
+					<u-icon name="arrow-right" size="30"></u-icon>
+				</view>
 			</view>
 			<u-loadmore :status="status" />
 		</view>
@@ -207,6 +210,10 @@
 			.status {
 				font-size: 12px;
 			}
+		}
+		.arrow-right {
+			height: 60px;
+			line-height: 60px;
 		}
 	}
 }

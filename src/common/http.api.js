@@ -18,6 +18,10 @@ const install = (Vue, vm) => {
 				UserInfo: (params = {}) => vm.$u.post('/user-api/users/info', params),
 				UserSelfUpdate: (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params),
 				SelfUpdate: (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params),
+			},
+			secretKey: {
+				SelfGet: (params = {}) => vm.$u.post('/user-api/secret-keys/self-get', params),
+				SelfUpdate: (params = {}) => vm.$u.post('/user-api/secret-keys/self-update', params)
 			}
 		},
 		institution: {
@@ -82,6 +86,10 @@ const install = (Vue, vm) => {
 			},
 			oauth: {
 				Token: (params = {}) => vm.$u.post('/pay-api/oauths/token', params),
+				List: (params = {}) => vm.$u.post('/pay-api/oauths/list', params),
+				Update: (params = {}) => vm.$u.post('/pay-api/oauths/update', params),
+				Create: (params = {}) => vm.$u.post('/pay-api/oauths/create', params),
+				Delete: (params = {}) => vm.$u.post('/pay-api/oauths/delete', params),
 			},
 			order: {
 				Amount: (params = {}) => vm.$u.post('/pay-api/orders/amount', params),

@@ -22,6 +22,9 @@
                         <u-icon v-if="isExist(item.driveType,'play')" name="play" custom-prefix="colour-icon" class="icon"></u-icon>
                         <u-icon v-if="isExist(item.driveType,'print')" name="print" custom-prefix="colour-icon" class="icon"></u-icon>
                     </view>
+					<view class="arrow-right">
+						<u-icon name="arrow-right" size="30"></u-icon>
+					</view>
                 </view>
                 <u-loadmore :status="status" />
             </view>
@@ -68,8 +71,6 @@
 			
 		},
 		mounted() {
-		},
-		onShow() {
 			this.seller = JSON.parse(JSON.stringify(RouteParams()))
             this.init()
 		},
@@ -220,6 +221,10 @@
 			flex: 1;
 			text-align: right;
 			max-width: 70px;
+		}
+		.arrow-right {
+			height: 50px;
+			line-height: 50px;
 		}
 	}
 }

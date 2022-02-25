@@ -2,21 +2,20 @@
 	<view>
 		<view>
             <view class="top">
-                <span class="name">{{seller.name}}</span>
-				<span class="add"><u-button type="primary" @click="click(false)">新增收款码</u-button></span>
+                <span class="name">{{options.name}}</span>
+				<span class="add"><u-button type="primary" @click="click(false)">新增授权通道</u-button></span>
             </view>
             <view class="content">
                 <view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
+                    <!-- <view class="left">
+                        <span>{{ item.id }}</span>
+                    </view> -->
                     <view class="center">
-                        <view class="title">
-                            {{item.name}}
-                        </view>
-                        <!-- <view class="time">
-                            门店:{{item.userName}}
-                        </view> -->
+                        {{item.name}}
                     </view>
-					<view class="left">
-                        <span>{{ item.userName }}</span>
+                    <view class="right">
+                        <u-icon v-if="item.alipay" name="zhifubao" custom-prefix="colour-icon" class="icon"></u-icon>
+                        <u-icon v-if="item.wechat" name="weixinzhifu" custom-prefix="colour-icon" class="icon"></u-icon>
                     </view>
 					<view class="arrow-right">
 						<u-icon name="arrow-right" size="30"></u-icon>
@@ -30,9 +29,18 @@
 </template>
 <script>
     import { RouteParams } from '@/utils'
+	import {  mapGetters } from 'vuex'
     export default {
+		computed: {
+			...mapGetters([
+				'name',
+				'username',
+				'avatar',
+			]),
+		},
 		data() {
 			return {
+				options: {},
                 status: 'loadmore',
 				list: [],
 				total: 0,
@@ -42,23 +50,11 @@
 					where: '',
 					sort: 'created_at desc'
 				},
-                seller: {
-                    id: '',
-                    institutionId: '',
-                    brandId: '',
-                    providerId: '',
-                    username: '',
-                    password: '',
-                    name: '',
-                    mobile: '',
-                    addressCode: '0',
-                    address: '',
-                },
 			}
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'收款码管理'
+				title:'授权通道'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -67,11 +63,14 @@
 			
 		},
 		onShow() {
-			this.seller = JSON.parse(JSON.stringify(RouteParams()))
-            this.init()
+			this.init()
 		},
 		methods: {
             init() {
+				this.options = RouteParams()
+				if (!this.options.name) {
+					this.options.name = this.name
+				}
 				this.listQuery = {
 					page: 1,
 					limit: 15,
@@ -90,17 +89,14 @@
 				})
 			},
             getList() {
-				let where = `user_id='` + this.seller.id + `'`
+				let where = `true`
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.qrcode.List({
+				this.$u.api.pay.oauth.List({
 					listQuery: this.listQuery,
-					qrcode: {
-						userId: this.seller.id
-					}
 				}).then(res => {
-					if (res.qrcodes) {
-						res.qrcodes.forEach(item => {
+					if (res.oauths) {
+						res.oauths.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -113,21 +109,11 @@
 				})
 			},
 			click(item){
-				if (item) {
-					this.$u.route({
-						type: 'to',
-						url: '/pages/institution/seller/qrcode/item?id='+item.id
-						+ '&name=' + item.name
-						+ '&userId=' + item.userId
-						+ '&userName=' + item.userName
-					})
-				}else{
-					this.$u.route({
-						type: 'to',
-						url: '/pages/institution/seller/qrcode/item?userId='+this.seller.id
-						+ '&userName=' + this.seller.name
-					})
-				}
+				this.$u.route({
+					type: 'to',
+					url: '/pages/institution/oauth/item',
+					params: item
+				})
 			}
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
@@ -161,33 +147,27 @@
 }
 .content{
 	.item {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
 		height: 50px;
 		width: 100%;
 		background-color: #fff;
 		margin-bottom: 5px;
 		display: flex;
 		padding: 0 2vw 0 1vw ;
-		.left {
-			padding: 5px;
-			text-align: center;
-			color: #909399;
-			font-size: 12px;
-		}
 		.center{
+			margin-left: 3vw;
+            min-width: 70vw;
+			font-size: 18px;
+			height: 50px;
+			line-height: 50px;
+		}
+		.right {
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
 			justify-content: space-between;
 			padding: 5px;
-			.title {
-				font-size: 18px;
-			}
-			.time {
-				font-size: 10px;
-				color: #909399;
-			}
+			flex: 1;
+			text-align: right;
+			max-width: 70px;
 		}
 		.arrow-right {
 			height: 50px;

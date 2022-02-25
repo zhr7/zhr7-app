@@ -28,7 +28,7 @@
 		onLoad(options) {
 			this.login()
 		},
-		onShow() {
+		mounted() {
 			if (this.$refs.seller) {
 				this.$refs.seller.showInit()
 			}

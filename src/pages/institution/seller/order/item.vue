@@ -114,10 +114,8 @@
 			})
 		},
 		mounted() {
-			
-		},
-		onShow() {
 			this.init()
+			
 		},
 		onPullDownRefresh() {
 			this.init()
