@@ -93,7 +93,7 @@
 					></u-icon>
 					<text class="grid-text">收款码</text>
 				</u-grid-item>
-				<!-- <u-grid-item>
+				<u-grid-item>
 					<u-icon
 						name="delete"
 						custom-prefix="colour-icon" 
@@ -101,10 +101,14 @@
 						@click="handler('delete')"
 					></u-icon>
 					<text class="grid-text">删除商家</text>
-				</u-grid-item> -->
+				</u-grid-item>
 			</u-grid>
 		</view>	
-		<u-modal v-model="modalShow" :content="modalContent" :show-cancel-button="true" @confirm="submitDelete()"></u-modal>
+		<u-modal v-model="modalShow" :show-cancel-button="true" @confirm="submitDelete()">
+			<view class="slot-content">
+				<u-input v-model="modalContent" placeholder="请输入【我确认删除】"/>
+			</view>
+		</u-modal>
 		<u-toast ref="uToast" />
 	</view>
 </template>
@@ -116,7 +120,7 @@
 		data() {
 			return {
 				modalShow: false,
-				modalContent: '此操作将永久删除授权通道, 是否继续?',
+				modalContent: '',
 				item: {},
 			}
 		},
@@ -201,38 +205,46 @@
 				}
 			},
 			submitDelete() {
-				this.$u.api.institution.seller.Delete({
-                    seller: {
-						id: this.item.id
-					}
-                }).then(res => {
-                    if (res.valid) {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'success',
-                            title:'删除商家成功',
-                        })
-						this.$store.dispatch('seller/changeInitCache') // 通知商家首页更新
-                        setTimeout(()=>{ 
-                            this.$u.route({
-                                type: 'back', 
-                            })
-                        }, 3000);
-                    } else {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title:'删除商家失败',
-                        })
-                    }
-                }).catch(err => {
-                    console.log(err);
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title: err.data.detail,
-                    })
-                })
+				if (this.modalContent === '我确认删除') {
+					this.$u.api.institution.seller.Delete({
+						seller: {
+							id: this.item.id
+						}
+					}).then(res => {
+						if (res.valid) {
+							uni.showToast({
+								duration: 3000,
+								icon:'success',
+								title:'删除商家成功',
+							})
+							this.$store.dispatch('seller/changeInitCache') // 通知商家首页更新
+							setTimeout(()=>{ 
+								this.$u.route({
+									type: 'back', 
+								})
+							}, 3000);
+						} else {
+							uni.showToast({
+								duration: 3000,
+								icon:'error',
+								title:'删除商家失败',
+							})
+						}
+					}).catch(err => {
+						console.log(err);
+						uni.showToast({
+							duration: 3000,
+							icon:'error',
+							title: err.data.detail,
+						})
+					})
+				}else{
+					uni.showToast({
+						duration: 3000,
+						icon:'error',
+						title:'删除失败',
+					})
+				}
 			}
 		},
 	}
@@ -292,6 +304,9 @@
 }
 .password {
 	color: #E6A23C;
+}
+.slot-content{
+	padding: 5vw;
 }
 </style>
 

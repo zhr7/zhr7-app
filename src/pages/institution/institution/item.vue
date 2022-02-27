@@ -118,7 +118,11 @@
 				</u-grid-item>
 			</u-grid>
 		</view>	
-		<u-modal v-model="modalShow" :content="modalContent" :show-cancel-button="true" @confirm="submitDelete()"></u-modal>
+		<u-modal v-model="modalShow" :show-cancel-button="true" @confirm="submitDelete()">
+			<view class="slot-content">
+				<u-input v-model="modalContent" placeholder="请输入【我确认删除】"/>
+			</view>
+		</u-modal>
 		<u-toast ref="uToast" />
 	</view>
 </template>
@@ -130,7 +134,7 @@
 		data() {
 			return {
 				modalShow: false,
-				modalContent: '此操作将永久删除授权通道, 是否继续?',
+				modalContent: '',
 				item: {},
 			}
 		},
@@ -201,38 +205,46 @@
 				}
 			},
 			submitDelete() {
-				this.$u.api.institution.institution.Delete({
-                    institution: {
-						id: this.item.id
-					}
-                }).then(res => {
-                    if (res.valid) {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'success',
-                            title:'删除机构成功',
-                        })
-						this.$store.dispatch('institution/changeInitCache') // 通知机构首页更新
-                        setTimeout(()=>{ 
-                            this.$u.route({
-                                type: 'back', 
-                            })
-                        }, 3000);
-                    } else {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title:'删除机构失败',
-                        })
-                    }
-                }).catch(err => {
-                    console.log(err);
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title: err.data.detail,
-                    })
-                })
+				if (this.modalContent === '我确认删除') {
+					this.$u.api.institution.institution.Delete({
+						institution: {
+							id: this.item.id
+						}
+					}).then(res => {
+						if (res.valid) {
+							uni.showToast({
+								duration: 3000,
+								icon:'success',
+								title:'删除机构成功',
+							})
+							this.$store.dispatch('institution/changeInitCache') // 通知机构首页更新
+							setTimeout(()=>{ 
+								this.$u.route({
+									type: 'back', 
+								})
+							}, 3000);
+						} else {
+							uni.showToast({
+								duration: 3000,
+								icon:'error',
+								title:'删除机构失败',
+							})
+						}
+					}).catch(err => {
+						console.log(err);
+						uni.showToast({
+							duration: 3000,
+							icon:'error',
+							title: err.data.detail,
+						})
+					})
+				}else{
+					uni.showToast({
+						duration: 3000,
+						icon:'error',
+						title:'删除失败',
+					})
+				}
 			}
 		},
 	}
@@ -277,6 +289,9 @@
     /* #ifndef APP-PLUS */
     box-sizing: border-box;
     /* #endif */
+}
+.slot-content{
+	padding: 5vw;
 }
 </style>
 
