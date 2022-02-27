@@ -93,7 +93,7 @@
 					></u-icon>
 					<text class="grid-text">收款码</text>
 				</u-grid-item>
-				<u-grid-item>
+				<!-- <u-grid-item>
 					<u-icon
 						name="delete"
 						custom-prefix="colour-icon" 
@@ -101,7 +101,7 @@
 						@click="handler('delete')"
 					></u-icon>
 					<text class="grid-text">删除商家</text>
-				</u-grid-item>
+				</u-grid-item> -->
 			</u-grid>
 		</view>	
 		<u-modal v-model="modalShow" :content="modalContent" :show-cancel-button="true" @confirm="submitDelete()"></u-modal>
