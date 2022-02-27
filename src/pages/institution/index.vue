@@ -89,9 +89,17 @@
 			},
 			handlerPath(e){
 				switch (e) {
-					case "sellerAdd":
+					case "sellerCreate":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/seller/create/index?item=0'
+						})
 						break;
-					case "institutionAdd":
+					case "institutionCreate":
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/institution/create/index?item=0'
+						})
 						break;
 					case "sellerReport":
 						break;

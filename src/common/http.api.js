@@ -15,6 +15,7 @@ const install = (Vue, vm) => {
 				MobileAuth: (params = {}) => vm.$u.post('/user-api/auth/mobile', params),
 			},
 			user: {
+				Exist: (params = {}) => vm.$u.post('/user-api/users/exist', params),
 				UserInfo: (params = {}) => vm.$u.post('/user-api/users/info', params),
 				UserSelfUpdate: (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params),
 				SelfUpdate: (params = {}) => vm.$u.post('/user-api/users/selfUpdate', params),
@@ -32,9 +33,11 @@ const install = (Vue, vm) => {
 			institution: {
 				Password: (params = {}) => vm.$u.post('/institution-api/institutions/password', params),
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/institutions/simpleInfo', params),	// 
+				Create: (params = {}) => vm.$u.post('/institution-api/institutions/create', params),	// 
 				Get: (params = {}) => vm.$u.post('/institution-api/institutions/get', params),	// 
 				List: (params = {}) => vm.$u.post('/institution-api/institutions/list', params),	// 
 				Update: (params = {}) => vm.$u.post('/institution-api/institutions/update', params),	// 
+				Delete: (params = {}) => vm.$u.post('/institution-api/institutions/delete', params),	// 
 				SelfChildren: (params = {}) => vm.$u.post('/institution-api/institutions/selfChildren', params),
 				SelfInfo: (params = {}) => vm.$u.post('/institution-api/institutions/selfInfo', params),
 			},
@@ -42,7 +45,9 @@ const install = (Vue, vm) => {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/sellers/simpleInfo', params),	// 获取商户简讯
 				List: (params = {}) => vm.$u.post('/institution-api/sellers/list', params),	// 
 				Password: (params = {}) => vm.$u.post('/institution-api/sellers/password', params),
+				Create: (params = {}) => vm.$u.post('/institution-api/sellers/create', params),	// 
 				Update: (params = {}) => vm.$u.post('/institution-api/sellers/update', params),
+				Delete: (params = {}) => vm.$u.post('/institution-api/sellers/delete', params),	// 
 				Get: (params = {}) => vm.$u.post('/institution-api/sellers/get', params),
 				SimpleList: (params = {}) => vm.$u.post('/institution-api/sellers/simpleList', params),	// 
 			},

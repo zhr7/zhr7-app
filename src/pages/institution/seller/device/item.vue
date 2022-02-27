@@ -121,7 +121,7 @@
 				isPrintTemplate: false
 			}
 		},
-		 watch: {
+		watch: {
 			formData: {
 				handler(val, oldVal) {
 					let valid = false

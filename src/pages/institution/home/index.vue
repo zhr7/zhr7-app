@@ -25,7 +25,7 @@
 				</span>
 			</view>
 			<view class="list">
-				<view @click="handler('sellerAdd')" class="item border-bottom-style">
+				<view @click="handler('sellerCreate')" class="item border-bottom-style">
 					<u-icon
 						name="add-seller" 
 						custom-prefix="colour-icon" 
@@ -33,7 +33,7 @@
 					></u-icon>
 					<text class="grid-text">新增商户</text>
 				</view>
-				<view @click="handler('institutionAdd')" class="item border-bottom-style border-left-style">
+				<view @click="handler('institutionCreate')" class="item border-bottom-style border-left-style">
 					<u-icon
 						name="add-institution" 
 						custom-prefix="colour-icon" 

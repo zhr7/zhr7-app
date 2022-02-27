@@ -41,7 +41,13 @@
 </template>
 <script>
 	import { parseTime, RouteParams } from '@/utils'
+	import {  mapState } from 'vuex'
 	export default {
+		computed: {
+			...mapState({
+				initCache: state => state.institution.initCache
+			}),
+		},
 		data() {
 			return {
 				status: 'loadmore',
@@ -68,6 +74,14 @@
 				}
 			}
 		},
+		watch: {
+			initCache: {
+				handler(val, oldVal) {
+					this.init()
+				},
+				deep: true
+			}
+		},
 		created() {
 			uni.setNavigationBarTitle({
 				title:'机构管理'
@@ -76,7 +90,6 @@
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
-			
 		},
 		mounted() {
 			this.institution = JSON.parse(JSON.stringify(RouteParams()))

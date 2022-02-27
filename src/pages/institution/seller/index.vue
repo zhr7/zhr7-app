@@ -55,7 +55,13 @@
 </template>
 <script>
 	import { parseTime, RouteParams } from '@/utils'
+	import {  mapState } from 'vuex'
 	export default {
+		computed: {
+			...mapState({
+				initCache: state => state.seller.initCache
+			}),
+		},
 		data() {
 			return {
 				options: {},
@@ -76,6 +82,14 @@
 			}
 		},
 		props: {
+		},
+		watch: {
+			initCache: {
+				handler(val, oldVal) {
+					this.init()
+				},
+				deep: true
+			}
 		},
 		created() {
 		},

@@ -21,7 +21,6 @@
 		{
 			"path": "pages/institution/institution/index",
 			"style": {
-				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -41,6 +40,10 @@
 			"path": "pages/institution/oauth/item",
 			"style": {
 			}
+		},{
+			"path": "pages/institution/institution/create/index",
+			"style": {
+			}
 		},
 		{
 			"path": "pages/institution/institution/password/index",
@@ -52,6 +55,10 @@
 			}
 		},{
 			"path": "pages/institution/institution/secretKey/index",
+			"style": {
+			}
+		},{
+			"path": "pages/institution/seller/create/index",
 			"style": {
 			}
 		},

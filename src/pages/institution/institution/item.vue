@@ -69,7 +69,7 @@
 						:size="100"
 						@click="handler('oauth')"
 					></u-icon>
-					<text class="grid-text">授权通道</text>
+					<text class="grid-text">机构</text>
 				</u-grid-item>
 				<u-grid-item>
 					<u-icon
@@ -107,8 +107,18 @@
 					></u-icon>
 					<text class="grid-text">机构配置</text>
 				</u-grid-item>
+				<u-grid-item>
+					<u-icon
+						name="delete"
+						custom-prefix="colour-icon" 
+						:size="100"
+						@click="handler('delete')"
+					></u-icon>
+					<text class="grid-text">删除机构</text>
+				</u-grid-item>
 			</u-grid>
 		</view>	
+		<u-modal v-model="modalShow" :content="modalContent" :show-cancel-button="true" @confirm="submitDelete()"></u-modal>
 		<u-toast ref="uToast" />
 	</view>
 </template>
@@ -119,9 +129,9 @@
 		},
 		data() {
 			return {
-				item: {
-
-				}
+				modalShow: false,
+				modalContent: '此操作将永久删除授权通道, 是否继续?',
+				item: {},
 			}
 		},
 		created() {
@@ -180,12 +190,49 @@
 							params: this.item
 						})
 						break;
+					case "delete":
+						this.modalShow = true
+						break;
 					default:
 						this.$refs.uToast.show({
 							title: "努力开发中"
 						})
 						break;
 				}
+			},
+			submitDelete() {
+				this.$u.api.institution.institution.Delete({
+                    institution: {
+						id: this.item.id
+					}
+                }).then(res => {
+                    if (res.valid) {
+                        uni.showToast({
+                            duration: 3000,
+                            icon:'success',
+                            title:'删除机构成功',
+                        })
+						this.$store.dispatch('institution/changeInitCache') // 通知机构首页更新
+                        setTimeout(()=>{ 
+                            this.$u.route({
+                                type: 'back', 
+                            })
+                        }, 3000);
+                    } else {
+                        uni.showToast({
+                            duration: 3000,
+                            icon:'error',
+                            title:'删除机构失败',
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title: err.data.detail,
+                    })
+                })
 			}
 		},
 	}

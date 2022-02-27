@@ -2,12 +2,17 @@
 	<view>
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="150">
-                <u-form-item label="机构名称" prop="name">
-                    <u-input v-model="formData.name" placeholder="请输入机构名称"/>
+                <u-form-item prop="brandId">
+                    <uni-combox label="品牌商家" :candidates="queryBrands" placeholder="请选择品牌" v-model="formData.brandId" @input="inputCombox"></uni-combox>
                 </u-form-item>
-                <u-form-item label="佣金比例" prop="rebate">
-                    <template slot="right">%</template>
-                    <u-input v-model="formData.rebate" placeholder="请输入佣金比例百分比"/>
+                <u-form-item label="商家账号" prop="username">
+                    <u-input v-model="formData.username" placeholder="请输入商家名称"/>
+                </u-form-item>
+                <u-form-item label="商家密码" prop="password">
+                    <u-input v-model="formData.password" placeholder="请输入商家密码" type="password" password-icon/>
+                </u-form-item>
+                <u-form-item label="商家名称" prop="name">
+                    <u-input v-model="formData.name" placeholder="请输入商家名称"/>
                 </u-form-item>
                 <u-form-item label="联系手机" prop="mobile">
                     <u-input v-model="formData.mobile" placeholder="请输入联系手机"/>
@@ -33,24 +38,70 @@
 	</view>
 </template>
 <script>
-    import { RouteParams } from '@/utils'
+	import { RouteParams } from '@/utils'
+    import uniCombox from '@/components/uni-combox/uni-combox.vue'
     export default {
+        components: { 
+			uniCombox
+		},
 		data() {
 			return {
+                options: {},
                 formData: {
-                    id: '',
-                    rebate: '',
+                    username: '',
+                    password: '',
+                    brandId: '',
                     name: '',
+                    rebate: '0',
                     mobile: '',
                     addressCode: '0',
-                    address: '',
+                    address: ''
                 },
-                institutionName: '',
-                brandName: '',
-                providerName: '',
+                queryBrands: [
+                    {
+                        name:'默认品牌商家',
+                        lable:''
+                    }
+                ],
                 rules: {
+                    username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { min: 4, max: 16, message: '长度在 4 到 16 个字符', trigger: 'blur' },
+                    {
+                        validator: (rule, value, callback) => {
+                            // 去后端验证是否存在
+                           this.$u.api.user.user.Exist({
+                               user:{ 
+                                   username: value 
+                                }
+                            }).then(res => {
+                                if (res.valid) {
+                                    callback('用户名已存在')
+                                }else{
+                                    callback()
+                                }
+                            })
+                        }, trigger: 'blur'
+                    }
+                    ],
+                    password: [
+                    {
+                        required: true,
+                        validator: (rule, value, callback) => {
+                        if (value === undefined) {
+                            callback()
+                        } else {
+                            if (!/^.{6,16}$/.test(value)) {
+                            callback('密码长度请控制在 6 到 16 个字符')
+                            }
+                            callback()
+                        }
+                        },
+                        trigger: 'blur'
+                    }
+                    ],
                     name: [
-                        { required: true, message: '请输入机构名称', trigger: 'blur' },
+                        { required: true, message: '请输入商家名称', trigger: 'blur' },
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
 					rebate: [
@@ -95,7 +146,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'商户编辑'
+				title:'添加商家'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -103,78 +154,70 @@
 			})
 			
 		},
-		mounted() {
-            this.formData = JSON.parse(JSON.stringify(RouteParams()))
-            this.init()    
+		mounted() { 
+            this.options = RouteParams()
 		},
 		methods: {
             // 获取选择的地区
             handleGetRegion(region){
                 this.formData.addressCode = region[2].code
             },
-            init() {
-                this.$u.api.institution.institution.Get({
-                    'institution': {
-                        id: this.formData.id
-                    }
-                }).then(res => {
-                    if (res.institution) {
-                        this.formData = res.institution
-                        if (this.formData.name == 'undefined') {
-                            this.formData.name = ''
+            inputCombox(v) {
+                if (v) {
+                    this.$u.api.institution.seller.SimpleList({
+                        list_query:{
+                            page: 1,
+                            limit: 100,
+                            where: 'id=brand_id And name LIKE \'%' + v + '%\''
                         }
-                        if (this.formData.rebate == 'undefined') {
-                            this.formData.rebate = ''
+                    }).then(res => {
+                        if (res.sellers) {
+                            this.queryBrands = res.sellers
                         }
-                        if (this.formData.mobile == 'undefined') {
-                            this.formData.mobile = ''
-                        }
-                        if (this.formData.addressCode == 'undefined') {
-                            this.formData.addressCode = "110101"
-                        }
-                        if (this.formData.address == 'undefined') {
-                            this.formData.address = ''
-                        }
-                        delete this.formData.updatedAt
-                        delete this.formData.createdAt
-                    } else {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title:'获取机构信息',
-                        })
-                    }
-                }).catch(err => {
-                    console.log(err);
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title: err.data.detail,
                     })
-                })
+                }
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.institution.institution.Update({
-                            'institution': this.formData
+                        this.$u.api.institution.seller.Create({
+                            user: {
+                                username: this.formData.username,
+                                password: this.formData.password
+                            },
+                            seller: {
+                                brandId: this.formData.brandId,
+                                name: this.formData.name,
+                                username: this.formData.username,
+                                mobile: this.formData.mobile,
+                                addressCode: this.formData.addressCode,
+                                address: this.formData.address
+                            }
                         }).then(res => {
                             if (res.valid) {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'success',
-                                    title:'更新机构成功',
+                                    title:'添加商家成功',
                                 })
                                 setTimeout(()=>{ 
-                                    this.$u.route({
-                                        type: 'back', 
-                                    })
+                                    if (this.options.item === "1") {
+                                        this.$u.route({
+                                            type: 'back', 
+                                        })
+                                    }else{
+                                        this.$u.route({
+                                            type: 'to',
+                                            url: '/pages/institution/seller/index'
+                                        })
+
+                                    }
                                 }, 3000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title:'机构修改失败',
+                                    title:'添加商家失败',
                                 })
                             }
                         }).catch(err => {
