@@ -14,6 +14,9 @@ run:
 .PHONY: wechat
 wechat:
 	yarn dev:mp-weixin
+.PHONY: alipay
+alipay:
+	yarn dev:mp-alipay
 .PHONY: build
 build:
 	yarn build:h5

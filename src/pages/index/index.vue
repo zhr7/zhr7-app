@@ -7,7 +7,7 @@
 	</view>
 </template>
 <script>
-	import {  mapGetters } from 'vuex'
+	import { mapGetters } from 'vuex'
 	import seller from '@/pages/seller/index.vue'
 	import institution from '@/pages/institution/index.vue'
 	export default {

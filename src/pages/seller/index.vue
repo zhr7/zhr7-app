@@ -13,6 +13,7 @@
 	</view>
 </template>
 <script>
+	import { mapState } from 'vuex'
 	import tabbar from '@/components/tabbar'
 	import home from './home'
 	import order from './order'
@@ -27,6 +28,11 @@
 			report,
 			pay,
 			my,
+		},
+		computed: {
+			...mapState({
+				facePayCont: state => state.seller.facePayCont
+			}),
 		},
 		data() {
 			return {
@@ -72,11 +78,23 @@
 						customIcon: false,
 					},
 				],
+				facePay: ''
+			}
+		},
+		mounted() {
+			if (typeof my !== "undefined") {
+				this.facePay = 'alipay'
+				if (this.facePayCont===0) {
+					this.startFacePay()
+				}
 			}
 		},
 		methods: {
 			navChange(nav){
 				this.path = nav.path
+				if (this.facePay!=='') {
+					this.startFacePay()
+				}
 				if (nav.path==="order" && this.$refs.order) {
 					this.$refs.order.init()
 				}
@@ -85,6 +103,13 @@
 				if (this.path==="order" && this.$refs.order) {
 					this.$refs.order.init()
 				}
+			},
+			startFacePay() {
+				this.$store.dispatch('seller/addFacePayCont')
+				this.$u.route({
+					type: 'redirectTo',
+					url: '/pages/facepay/'+this.facePay+'/index'
+				})
 			}
 		}
 	}

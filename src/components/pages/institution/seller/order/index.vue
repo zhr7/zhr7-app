@@ -144,6 +144,9 @@
 						</view>
 					</view>
 				</view>
+				<view class="arrow-right">
+					<u-icon name="arrow-right" size="30"></u-icon>
+				</view>
 			</view>
 			<u-loadmore :status="status" />
 		</view>
@@ -151,10 +154,11 @@
 	</view>
 </template>
 <script>
-	import { parseTime } from '@/utils'
+	import { parseTime,RouteParams } from '@/utils'
 	export default {
 		data() {
 			return {
+				options: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -292,7 +296,11 @@
 			})
 			
 		},
-		mounted() {
+		onShow() {
+			this.options = JSON.parse(JSON.stringify(RouteParams()))
+			uni.setNavigationBarTitle({
+				title: this.options.sellerName
+			})
 			this.init()
 		},
 		methods: {
@@ -388,8 +396,11 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.pay.order.List({
-					list_query: this.listQuery
+				this.$u.api.institution.order.List({
+					listQuery: this.listQuery,
+					order: {
+						userId: this.options.sellerId,
+					}
 				}).then(res => {
 					if (res.orders) {
 						res.orders.forEach(item => {
@@ -485,16 +496,15 @@
 			click(item){
 				this.$u.route({
 					type: 'to',
-					url: '/pages/seller/order/item', 
+					url: '/pages/institution/seller/order/item', 
 				})
-				this.$store.dispatch('seller/setOrderInfoCache',item)
+				this.$store.dispatch('institution/setOrderInfoCache',item)
 			}
 			
 		},
 	}
 </script>
-<style lang="scss" >
-</style>
+
 <style lang="scss" scoped>
 .content{
 	.item {
@@ -541,6 +551,10 @@
 			.status {
 				font-size: 12px;
 			}
+		}
+		.arrow-right {
+			height: 60px;
+			line-height: 60px;
 		}
 	}
 }

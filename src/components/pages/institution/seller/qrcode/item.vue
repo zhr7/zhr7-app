@@ -1,34 +1,17 @@
 <template>
 	<view>
-		<view v-if="roles.indexOf('institution')===0" class="item">
-            <u-form :model="formData" ref="dataForm" label-width="260">
-                <u-form-item label="通道ID" v-if="formData.id" prop="id">
-                    {{formData.id}}
+		<view class="item">
+            <u-form :model="formData" ref="dataForm" label-width="150">
+                <u-form-item label="商家门店" prop="userName">
+                    {{formData.userName}}
                 </u-form-item>
-				<u-form-item label="通道名称" prop="name">
+				<u-form-item label="名称" prop="qrcodeId">
                     <u-input v-model="formData.name"/>
                 </u-form-item>
-                <u-form-item label="微信公众号AppId" prop="appId">
-                    <u-input v-model="formData.wechat.appId"/>
-                </u-form-item>
-				<u-form-item label="微信公众号Secret" prop="secret">
-                    <u-input v-model="formData.wechat.secret"/>
-                </u-form-item>
-				<u-form-item label="支付宝AppId" prop="appId">
-                    <u-input v-model="formData.alipay.appId"/>
-                </u-form-item>
-				<u-form-item label="支付宝公钥" prop="alipayPublicKey">
-                    <u-input v-model="formData.alipay.alipayPublicKey"/>
-                </u-form-item>
-				<u-form-item label="支付宝客户端私钥" prop="privateKey">
-                    <u-input v-model="formData.alipay.privateKey"/>
-                </u-form-item>
-				<u-form-item label="支付宝签名方式" prop="signType">
-					<u-radio-group v-model="formData.alipay.signType">
-						<u-radio key="RSA2" name="RSA2">RSA2</u-radio>
-						<u-radio key="RSA" name="RSA">RSA</u-radio>
-					</u-radio-group>
-                </u-form-item>
+				<view class="qrcode">
+					<tki-qrcode cid="qrcode" ref="qrcode" class="qrcode" :val="payQrcodeUrl+'?user_id='+formData.userId + '&operator_id='+formData.id" :size="400" :show="true" :loadMake="true" @result="qrR"/>
+					<u-button type="info" @click="saveQrcodeToPhotosAlbum">保存二维码</u-button>
+				</view>
             </u-form>
             <u-line />
             <view class="bottom">	
@@ -38,7 +21,7 @@
                     type="warning" 
                     @click="submitForm('dataForm')"
                 >
-                    修改授权通道
+                    修改付款码
                 </u-button>
 				<u-button 
 					v-if="formData.id"
@@ -46,7 +29,7 @@
                     type="error" 
                     @click="modalShow=true"
                 >
-                    删除授权通道
+                    删除付款码
                 </u-button>
 				<u-button 
 					v-if="!formData.id"
@@ -54,7 +37,7 @@
                     type="primary" 
                     @click="submitFormAdd('dataForm')"
                 >
-                    新增授权通道
+                    新增付款码
                 </u-button>
 				
 		    </view>	
@@ -64,44 +47,37 @@
 	</view>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
+	import {  mapState } from 'vuex'
 	import { RouteParams } from '@/utils'
 	export default {
-        computed: {
-			...mapGetters([
-				'roles',
-			]),
+		computed: {
+			...mapState({
+				payQrcodeUrl: state => state.settings.payQrcodeUrl
+			}),
 		},
 		data() {
 			return {
 				modalShow: false,
-				modalContent: '此操作将永久删除授权通道, 是否继续?',
-				actionSheetShow: false,
+				modalContent: '此操作将永久删除付款码, 是否继续?',
 				formData: {
 					id: '',
-					alipay: {
-						appId: '',
-						alipayPublicKey: '',
-						privateKey: '',
-						signType: 'RSA2',
-					},
-					wechat: {
-						appId: '',
-						secret: '',
-					},
-					name: '',
+					build: [],
+					qrcodeId: '',
+					qrcodeKey: '',
+					drive: '',
+					driveType: [],
+					id: '',
+					printTemplate: '',
 					userId: '',
 					userName: '',
-					value: '',
 				},
-				isPrintTemplate: false
+				isPrintTemplate: false,
+				qrcodeSrc: ''
 			}
-		},
-		 watch: {
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'授权通道'
+				title:'付款码编辑'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -109,45 +85,55 @@
 			})
 		},
 		mounted() {
-             this.init() 
+            this.init()   
 		},
 		methods: {
 			init() {	//  初始化加载查询
 				const routeParams = JSON.parse(JSON.stringify(RouteParams()))
-				if (routeParams.id) {
-					const value = JSON.parse(routeParams.value)
-					this.formDataValue(value,'alipay')
-					this.formDataValue(value,'wechat')
-					this.formDataValue(routeParams,'id')
-					this.formDataValue(routeParams,'name')
-					this.formDataValue(routeParams,'userId')
-					this.formDataValue(routeParams,'userName')
-					this.formDataValue(routeParams,'value')
-				}
+				this.formDataValue(routeParams,'id')
+				this.formDataValue(routeParams,'name')
+				this.formDataValue(routeParams,'userId')
+				this.formDataValue(routeParams,'userName')
 			},
 			formDataValue(routeParams,name) {
 				if (routeParams[name] == undefined) {
-					switch (name) {
-						default:
-                    		this.formData[name] = ''
-							break;
-					}
+					this.formData[name] = ''
                 }else{
 					this.formData[name] = routeParams[name]
 				}
 				return 
 			},
+			qrR(res) {
+				this.qrcodeSrc = res
+			},
+			saveQrcodeToPhotosAlbum(){
+				console.log(this.qrcodeSrc);
+				uni.saveImageToPhotosAlbum({
+                    filePath: this.qrcodeSrc,
+                    success() {
+						uni.showToast({
+							title: "保存成功",
+							duration: 3000
+						})
+                    }
+				})
+			},
 			submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.pay.oauth.Update({
-                            oauth: this.formData
+                        this.$u.api.institution.qrcode.Update({
+                            qrcode: {
+                                id: this.formData.id,
+								userId: this.formData.userId,
+								userName: this.formData.userName,
+								name: this.formData.name,
+                            }
                         }).then(res => {
                             if (res.valid) {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'success',
-                                    title:'更新授权通道成功',
+                                    title:'更新付款码成功',
                                 })
                                 setTimeout(()=>{ 
                                     this.$u.route({
@@ -158,7 +144,7 @@
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title:'更新授权通道失败',
+                                    title:'更新付款码失败',
                                 })
                             }
                         }).catch(err => {
@@ -173,20 +159,20 @@
                 })
             },
 			submitFormAdd(formName) {
-				delete this.formData.id
-				delete this.formData.userId
-				delete this.formData.userName
-				delete this.formData.value
 				this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.pay.oauth.Create({
-                            oauth: this.formData
+                        this.$u.api.institution.qrcode.Create({
+                            qrcode: {
+								userId: this.formData.userId,
+								userName: this.formData.userName,
+								name: this.formData.name,
+                            }
                         }).then(res => {
                             if (res.valid) {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'success',
-                                    title:'新增授权通道成功',
+                                    title:'新增付款码成功',
                                 })
                                 setTimeout(()=>{ 
                                     this.$u.route({
@@ -197,7 +183,7 @@
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title:'新增授权通道失败',
+                                    title:'新增付款码失败',
                                 })
                             }
                         }).catch(err => {
@@ -214,14 +200,17 @@
 			submitDelete(formName) {
 				this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.pay.oauth.Delete({
-                            oauth: this.formData
+                        this.$u.api.institution.qrcode.Delete({
+                            qrcode: {
+								id: this.formData.id,
+								userId: this.formData.userId,
+                            }
                         }).then(res => {
                             if (res.valid) {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'success',
-                                    title:'删除授权通道成功',
+                                    title:'删除付款码成功',
                                 })
                                 setTimeout(()=>{ 
                                     this.$u.route({
@@ -232,7 +221,7 @@
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title:'删除授权通道失败',
+                                    title:'删除付款码失败',
                                 })
                             }
                         }).catch(err => {
@@ -245,9 +234,6 @@
                         })
                     }
                 })
-			},
-			hideKeyboard() {
-				uni.hideKeyboard()
 			}
 		},
 	}
@@ -280,6 +266,20 @@
 	}
 	.refundFee {
 		color: #ff0000;
+	}
+	.qrcode {
+		width:200px;
+		margin:0 auto;
+		text-align:center;
+		.title{
+			margin-top: 20px;
+			font-size: 16px;
+		}
+		.qrcode {
+			margin: 10px;
+			width:200px;
+			height: 200px;
+		}
 	}
 }
 .bottom {

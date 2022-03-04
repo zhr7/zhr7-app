@@ -109,3 +109,52 @@ export function RouteParams() {
     const routes = getCurrentPages()
     return routes[routes.length - 1].options; //获取路由参数
 }
+
+// OCR 图片识别
+export function OCR(url,type) {
+    let ocr_type = 1
+    switch (type) {
+        case 'idcard':
+            ocr_type = 1
+            break;
+        case 'bankcard':
+            ocr_type = 2
+            break;
+        case 'driving':
+            ocr_type = 3
+            break;
+        case 'driving_license':
+            ocr_type = 4
+            break;
+        case 'biz_license':
+            ocr_type = 7
+            break;
+        case 'ocr_comm':
+            ocr_type = 8
+            break;
+        case 'plate_comm':
+            ocr_type = 10
+            break;
+    }
+    // #ifdef MP-WEIXIN  
+	return OCRWechat(url,ocr_type)
+	// #endif
+}
+
+// OCRWechat 微信图片识别
+// https://fuwu.weixin.qq.com/service/detail/000ce4cec24ca026d37900ed551415
+export function OCRWechat(url,type) {
+    return wx.serviceMarket.invokeService({
+            service: 'wx79ac3de8be320b71', // '固定为服务商OCR的appid，非小程序appid',
+            api: 'OcrAllInOne',
+            data: {
+                img_url: url,
+                data_type: 3,
+                ocr_type: type,
+            },
+        }).then(res => {
+            console.log('invokeService success', res)
+          }).catch(err => {
+            console.error('invokeService fail', err)
+          })
+}

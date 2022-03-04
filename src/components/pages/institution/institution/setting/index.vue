@@ -2,12 +2,6 @@
 	<view>
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="150">
-                <u-form-item label="机构账号" prop="username">
-                    <u-input v-model="formData.username" placeholder="请输入机构名称"/>
-                </u-form-item>
-                <u-form-item label="机构密码" prop="password">
-                    <u-input v-model="formData.password" placeholder="请输入机构密码" type="password" password-icon/>
-                </u-form-item>
                 <u-form-item label="机构名称" prop="name">
                     <u-input v-model="formData.name" placeholder="请输入机构名称"/>
                 </u-form-item>
@@ -39,60 +33,22 @@
 	</view>
 </template>
 <script>
-	import { RouteParams } from '@/utils'
+    import { RouteParams } from '@/utils'
     export default {
 		data() {
 			return {
-                options: {},
                 formData: {
-                    username: '',
-                    password: '',
+                    id: '',
+                    rebate: '',
                     name: '',
-                    rebate: '0',
                     mobile: '',
                     addressCode: '0',
-                    address: ''
+                    address: '',
                 },
                 institutionName: '',
                 brandName: '',
                 providerName: '',
                 rules: {
-                    username: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' },
-                    { min: 4, max: 16, message: '长度在 4 到 16 个字符', trigger: 'blur' },
-                    {
-                        validator: (rule, value, callback) => {
-                            // 去后端验证是否存在
-                           this.$u.api.user.user.Exist({
-                               user:{ 
-                                   username: value 
-                                }
-                            }).then(res => {
-                                if (res.valid) {
-                                    callback('用户名已存在')
-                                }else{
-                                    callback()
-                                }
-                            })
-                        }, trigger: 'blur'
-                    }
-                    ],
-                    password: [
-                    {
-                        required: true,
-                        validator: (rule, value, callback) => {
-                        if (value === undefined) {
-                            callback()
-                        } else {
-                            if (!/^.{6,16}$/.test(value)) {
-                            callback('密码长度请控制在 6 到 16 个字符')
-                            }
-                            callback()
-                        }
-                        },
-                        trigger: 'blur'
-                    }
-                    ],
                     name: [
                         { required: true, message: '请输入机构名称', trigger: 'blur' },
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
@@ -139,7 +95,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'添加机构'
+				title:'商户编辑'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -147,55 +103,78 @@
 			})
 			
 		},
-		mounted() { 
-            this.options = RouteParams()
+		mounted() {
+            this.formData = JSON.parse(JSON.stringify(RouteParams()))
+            this.init()    
 		},
 		methods: {
             // 获取选择的地区
             handleGetRegion(region){
                 this.formData.addressCode = region[2].code
             },
+            init() {
+                this.$u.api.institution.institution.Get({
+                    'institution': {
+                        id: this.formData.id
+                    }
+                }).then(res => {
+                    if (res.institution) {
+                        this.formData = res.institution
+                        if (this.formData.name == 'undefined') {
+                            this.formData.name = ''
+                        }
+                        if (this.formData.rebate == 'undefined') {
+                            this.formData.rebate = ''
+                        }
+                        if (this.formData.mobile == 'undefined') {
+                            this.formData.mobile = ''
+                        }
+                        if (this.formData.addressCode == 'undefined') {
+                            this.formData.addressCode = "110101"
+                        }
+                        if (this.formData.address == 'undefined') {
+                            this.formData.address = ''
+                        }
+                        delete this.formData.updatedAt
+                        delete this.formData.createdAt
+                    } else {
+                        uni.showToast({
+                            duration: 3000,
+                            icon:'error',
+                            title:'获取机构信息',
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title: err.data.detail,
+                    })
+                })
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.institution.institution.Create({
-                            user: {
-                                username: this.formData.username,
-                                password: this.formData.password
-                            },
-                            institution: {
-                                name: this.formData.name,
-                                username: this.formData.username,
-                                rebate: this.formData.rebate,
-                                mobile: this.formData.mobile,
-                                addressCode: this.formData.addressCode,
-                                address: this.formData.address
-                            }
+                        this.$u.api.institution.institution.Update({
+                            'institution': this.formData
                         }).then(res => {
                             if (res.valid) {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'success',
-                                    title:'添加机构成功',
+                                    title:'更新机构成功',
                                 })
                                 setTimeout(()=>{ 
-                                    console.log(this.options);
-                                    if (this.options.item === "1") {
-                                        this.$u.route({
-                                            type: 'back', 
-                                        })
-                                    }else{
-                                        this.$u.route({
-                                            type: 'to',
-                                            url: '/pages/institution/institution/index'
-                                        })
-                                    }
+                                    this.$u.route({
+                                        type: 'back', 
+                                    })
                                 }, 3000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title:'添加机构失败',
+                                    title:'机构修改失败',
                                 })
                             }
                         }).catch(err => {

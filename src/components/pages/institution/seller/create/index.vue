@@ -2,18 +2,17 @@
 	<view>
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="150">
-                <u-form-item label="机构账号" prop="username">
-                    <u-input v-model="formData.username" placeholder="请输入机构名称"/>
+                <u-form-item prop="brandId">
+                    <uni-combox label="品牌商家" :candidates="queryBrands" placeholder="请选择品牌" v-model="formData.brandId" @input="inputCombox"></uni-combox>
                 </u-form-item>
-                <u-form-item label="机构密码" prop="password">
-                    <u-input v-model="formData.password" placeholder="请输入机构密码" type="password" password-icon/>
+                <u-form-item label="商家账号" prop="username">
+                    <u-input v-model="formData.username" placeholder="请输入商家名称"/>
                 </u-form-item>
-                <u-form-item label="机构名称" prop="name">
-                    <u-input v-model="formData.name" placeholder="请输入机构名称"/>
+                <u-form-item label="商家密码" prop="password">
+                    <u-input v-model="formData.password" placeholder="请输入商家密码" type="password" password-icon/>
                 </u-form-item>
-                <u-form-item label="佣金比例" prop="rebate">
-                    <template slot="right">%</template>
-                    <u-input v-model="formData.rebate" placeholder="请输入佣金比例百分比"/>
+                <u-form-item label="商家名称" prop="name">
+                    <u-input v-model="formData.name" placeholder="请输入商家名称"/>
                 </u-form-item>
                 <u-form-item label="联系手机" prop="mobile">
                     <u-input v-model="formData.mobile" placeholder="请输入联系手机"/>
@@ -40,22 +39,30 @@
 </template>
 <script>
 	import { RouteParams } from '@/utils'
+    import uniCombox from '@/components/uni-combox/uni-combox.vue'
     export default {
+        components: { 
+			uniCombox
+		},
 		data() {
 			return {
                 options: {},
                 formData: {
                     username: '',
                     password: '',
+                    brandId: '',
                     name: '',
                     rebate: '0',
                     mobile: '',
                     addressCode: '0',
                     address: ''
                 },
-                institutionName: '',
-                brandName: '',
-                providerName: '',
+                queryBrands: [
+                    {
+                        name:'默认品牌商家',
+                        lable:''
+                    }
+                ],
                 rules: {
                     username: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -94,7 +101,7 @@
                     }
                     ],
                     name: [
-                        { required: true, message: '请输入机构名称', trigger: 'blur' },
+                        { required: true, message: '请输入商家名称', trigger: 'blur' },
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
 					rebate: [
@@ -139,7 +146,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'添加机构'
+				title:'添加商家'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -155,18 +162,33 @@
             handleGetRegion(region){
                 this.formData.addressCode = region[2].code
             },
+            inputCombox(v) {
+                if (v) {
+                    this.$u.api.institution.seller.SimpleList({
+                        list_query:{
+                            page: 1,
+                            limit: 100,
+                            where: 'id=brand_id And name LIKE \'%' + v + '%\''
+                        }
+                    }).then(res => {
+                        if (res.sellers) {
+                            this.queryBrands = res.sellers
+                        }
+                    })
+                }
+            },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.institution.institution.Create({
+                        this.$u.api.institution.seller.Create({
                             user: {
                                 username: this.formData.username,
                                 password: this.formData.password
                             },
-                            institution: {
+                            seller: {
+                                brandId: this.formData.brandId,
                                 name: this.formData.name,
                                 username: this.formData.username,
-                                rebate: this.formData.rebate,
                                 mobile: this.formData.mobile,
                                 addressCode: this.formData.addressCode,
                                 address: this.formData.address
@@ -176,10 +198,9 @@
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'success',
-                                    title:'添加机构成功',
+                                    title:'添加商家成功',
                                 })
                                 setTimeout(()=>{ 
-                                    console.log(this.options);
                                     if (this.options.item === "1") {
                                         this.$u.route({
                                             type: 'back', 
@@ -187,15 +208,16 @@
                                     }else{
                                         this.$u.route({
                                             type: 'to',
-                                            url: '/pages/institution/institution/index'
+                                            url: '/pages/institution/seller/index'
                                         })
+
                                     }
                                 }, 3000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title:'添加机构失败',
+                                    title:'添加商家失败',
                                 })
                             }
                         }).catch(err => {

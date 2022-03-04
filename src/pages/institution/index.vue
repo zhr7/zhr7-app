@@ -3,7 +3,7 @@
 		<home v-if="path==='home'" @handlerPath="handlerPath"/>
 		<institution v-if="path==='institution'"/>
 		<seller v-if="path==='sellerBrand'"/>
-		<report v-if="path==='institutionReport'"/>
+		<apply v-if="path==='apply'"/>
 		<pay v-if="path==='pay'"/>
 		<my v-if="path==='my'" @handlerPath="handlerPath"/>
 		<tabbar
@@ -18,9 +18,9 @@
 <script>
 	import tabbar from '@/components/tabbar'
 	import home from './home'
-	import institution from './institution'
-	import seller from './seller'
-	import report from './report'
+	import institution from '@/components/pages/institution/institution/index.vue'
+	import seller from '@/components/pages/institution/seller/index.vue'
+	import apply from './apply'
 	import pay from './pay'
 	import my from './my'
 	export default {
@@ -29,11 +29,9 @@
 			home,
 			institution,
 			seller,
-			report,
+			apply,
 			pay,
 			my,
-		},
-		props: {
 		},
 		data() {
 			return {
@@ -55,10 +53,10 @@
 						customIcon: false,
 					},
 					{
-						path: "institutionReport",	// 报表
-						iconPath: "more-circle",
-						selectedIconPath: "more-circle-fill",
-						text: '报表',
+						path: "apply",	// 报表
+						iconPath: "plus-circle",
+						selectedIconPath: "plus-circle-fill",
+						text: '进件',
 						midButton: true,
 						customIcon: false,
 					},
@@ -81,7 +79,7 @@
 				],
 			}
 		},
-		onLoad() {
+		mounted() {
 		},
 		methods: {
 			navChange(nav){
@@ -101,7 +99,12 @@
 							url: '/pages/institution/institution/create/index?item=0'
 						})
 						break;
-					case "sellerReport":
+					case "institutionReport":
+					console.log(1212);
+						this.$u.route({
+							type: 'to',
+							url: '/pages/institution/report/index'
+						})
 						break;
 					case "sellerBrand":
 						this.path = "sellerBrand"

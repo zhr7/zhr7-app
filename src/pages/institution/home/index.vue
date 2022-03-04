@@ -273,6 +273,7 @@
 			justify-content: space-between;
 			width: 39.5vw;
 			height: 10vh;
+			min-height: 80px;
 			border-radius: 5px;
 			padding: 3vw;
 			background-color: #ffffff;

@@ -7,6 +7,11 @@
 			}
 		},
 		{
+			"path": "pages/facepay/alipay/index",
+			"style": {
+			}
+		},
+		{
 			"path": "pages/seller/order/item",
 			"style": {
 				"enablePullDownRefresh": true
@@ -16,6 +21,11 @@
 			"path": "pages/seller/order/refund",
 			"style": {
 				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/institution/report/index",
+			"style": {
 			}
 		},
 		{
@@ -136,7 +146,8 @@
 			"path": "pages/pay/qrcode/index",
 			"style": {
 				"navigationBarTitleText": "快速买单",
-				"navigationStyle":"custom"
+				"navigationStyle":"custom",
+				"transparentTitle":"always" 
 			}
 		}
 	],

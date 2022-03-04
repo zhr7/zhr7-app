@@ -99,7 +99,7 @@
 					refundFee: 0,
 					refundCount: 0
 				},
-				qrcodeSrc: ''
+				qrcodeSrc: '',
 			}
 		},
 		created() {
@@ -184,7 +184,7 @@
 					}
 					}
 				})
-			},
+			}
 		}
 	}
 </script>
