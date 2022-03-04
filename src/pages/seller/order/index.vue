@@ -91,19 +91,23 @@
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
 					<span v-if="item.method==='alipay'">
-						<m-icon name="zhifubao" custom-prefix="colour-icon" size="38">></m-icon><br>
+						<m-icon name="zhifubao" custom-prefix="colour-icon" size="38">></m-icon>
 						支付宝
 					</span>
 					<span v-if="item.method==='wechat'">
-						<m-icon name="weixinzhifu" custom-prefix="colour-icon" size="38">></m-icon><br>
+						<m-icon name="weixinzhifu" custom-prefix="colour-icon" size="38">></m-icon>
 						微信支付
 					</span>
 					<span v-if="item.method==='unionpay'">
-						<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon><br>
+						<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon>
 						云闪付
 					</span>
+					<span v-if="item.method==='sdykt'">
+						<m-icon name="sdykt" custom-prefix="colour-icon" size="38"></m-icon>
+						山东一卡通
+					</span>
 					<span v-if="item.method==='digital'">
-						<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon><br>
+						<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon>
 						数字货币
 					</span>
 				</view>
@@ -510,6 +514,10 @@
 			min-width: 60px;
 			color: #909399;
 			font-size: 10px;
+			span{
+				display: flex;
+				flex-direction: column;
+			}
 		}
 		.center{
 			display: flex;

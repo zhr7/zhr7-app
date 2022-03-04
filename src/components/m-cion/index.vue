@@ -1,5 +1,5 @@
 <template>
-    <view class="colour-icon" :class="[customPrefix+'-'+name]" :style="{color:color,'font-size':fontSize,'background':background}" @click="onClick()"></view>
+    <text class="colour-icon" :class="[customPrefix+'-'+name]" :style="{color:color,'font-size':fontSize,'background':background}" @click="onClick()"></text>
 </template>
 
 <script>
@@ -44,6 +44,9 @@
     }
 </script>
 
-<style>
+<style scoped>
 	@import "@/static/colour-iconfont.css";
+    .colour-icon{
+        line-height: 1;
+    }
 </style>

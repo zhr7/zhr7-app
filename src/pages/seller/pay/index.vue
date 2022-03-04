@@ -17,19 +17,21 @@
 				设备ID: {{ deviceId }}
 			</view>	
 		</view>
-		<u-keyboard 
-			ref="uKeyboard" 
-			mode="number" 
-			class="bottom safe-area-inset-bottom"
-			:v-model="true"
-			:dot-enabled="true" 
-			:tooltip="false"
-			confirmText="收款"
-			@change="onChange"
-			@confirm="onConfirm"
-			@backspace="onBackspace"
-		>
-		</u-keyboard>
+		<view class="k-bottom">
+			<u-keyboard 
+				ref="uKeyboard" 
+				mode="number" 
+				class="safe-area-inset-bottom"
+				:v-model="true"
+				:dot-enabled="true" 
+				:tooltip="false"
+				confirmText="收款"
+				@change="onChange"
+				@confirm="onConfirm"
+				@backspace="onBackspace"
+			>
+			</u-keyboard>
+		</view>
 		<u-toast ref="uToast" />
 	</view>
 </template>
@@ -230,11 +232,14 @@
 			}
 		}
 	}
-	.bottom{
+	.k-bottom{
 		@include vue-flex;
 		position: relative;
 		position: fixed;
 		bottom: 50px;
+		// #ifdef MP-ALIPAY
+		bottom: 80px;
+		// #endif
 		left: 0;
 	}
 </style>
