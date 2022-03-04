@@ -108,7 +108,7 @@
 				this.$store.dispatch('seller/addFacePayCont')
 				this.$u.route({
 					type: 'redirectTo',
-					url: '/pages/facepay/'+this.facePay+'/index'
+					url: '/subPackages/facepay/'+this.facePay+'/index'
 				})
 			}
 		}
