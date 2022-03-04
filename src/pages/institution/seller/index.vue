@@ -19,11 +19,11 @@
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
 					<span v-if="item.brandId===item.id">
-						<u-icon name="brand" custom-prefix="colour-icon" class="icon"></u-icon><br>
+						<m-icon name="brand" custom-prefix="colour-icon" size="38"></m-icon><br>
 						品牌
 					</span>
 					<span v-else>
-						<u-icon name="seller" custom-prefix="colour-icon" class="icon"></u-icon><br>
+						<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
 						门店
 					</span>
 				</view>

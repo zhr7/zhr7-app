@@ -91,19 +91,19 @@
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
 					<span v-if="item.method==='alipay'">
-						<u-icon name="zhifubao" custom-prefix="colour-icon" class="icon">></u-icon><br>
+						<m-icon name="zhifubao" custom-prefix="colour-icon" size="38">></m-icon><br>
 						支付宝
 					</span>
 					<span v-if="item.method==='wechat'">
-						<u-icon name="weixinzhifu" custom-prefix="colour-icon" class="icon">></u-icon><br>
+						<m-icon name="weixinzhifu" custom-prefix="colour-icon" size="38">></m-icon><br>
 						微信支付
 					</span>
 					<span v-if="item.method==='unionpay'">
-						<u-icon name="yunshanfu" custom-prefix="colour-icon" class="icon"></u-icon><br>
+						<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon><br>
 						云闪付
 					</span>
 					<span v-if="item.method==='digital'">
-						<u-icon name="yunshanfu" custom-prefix="colour-icon" class="icon"></u-icon><br>
+						<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon><br>
 						数字货币
 					</span>
 				</view>

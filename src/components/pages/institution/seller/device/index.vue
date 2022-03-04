@@ -19,8 +19,8 @@
                         </view>
                     </view>
                     <view class="right">
-                        <u-icon v-if="isExist(item.driveType,'play')" name="play" custom-prefix="colour-icon" class="icon"></u-icon>
-                        <u-icon v-if="isExist(item.driveType,'print')" name="print" custom-prefix="colour-icon" class="icon"></u-icon>
+                        <m-icon v-if="isExist(item.driveType,'play')" name="play" custom-prefix="colour-icon" size="38"></m-icon>
+                        <m-icon v-if="isExist(item.driveType,'print')" name="print" custom-prefix="colour-icon" size="38"></m-icon>
                     </view>
 					<view class="arrow-right">
 						<u-icon name="arrow-right" size="30"></u-icon>

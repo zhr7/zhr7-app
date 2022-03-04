@@ -2,11 +2,11 @@
 	<view class="item">
 		<view class="line">
 			<span v-if="item.brandId===item.id" class="info">
-				<u-icon name="brand" custom-prefix="colour-icon" class="icon"></u-icon><br>
+				<m-icon name="brand" custom-prefix="colour-icon" class="38"></m-icon><br>
 				品牌
 			</span>
 			<span v-else class="info">
-				<u-icon name="seller" custom-prefix="colour-icon" class="icon"></u-icon><br>
+				<m-icon name="seller" custom-prefix="colour-icon" class="38"></m-icon><br>
 				门店
 			</span>
 			<view>
@@ -22,84 +22,84 @@
                 col="3"
 			>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="seller" 
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('seller')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">相关门店</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="order-list" 
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerOrder')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">交易明细</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="seller-report" 
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerReport')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">日结报表</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="password"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerPassword')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">密码重置</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="pay"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerPay')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">支付配置</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="setting"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerSetting')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">商家配置</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="device" 
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerDevice')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">设备管理</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="qrcode" 
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('sellerQrcode')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">收款码</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="delete"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('delete')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">删除商家</text>
 				</u-grid-item>
 			</u-grid>

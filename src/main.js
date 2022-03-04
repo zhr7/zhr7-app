@@ -6,6 +6,9 @@ import uView from "uview-ui";
 Vue.use(store);
 Vue.use(uView);
 
+import mIcon from "./components/m-cion";
+Vue.component('m-icon', mIcon)
+
 Vue.config.productionTip = false
 App.mpType = 'app'
 

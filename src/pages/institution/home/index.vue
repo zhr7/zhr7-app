@@ -26,115 +26,115 @@
 			</view>
 			<view class="list">
 				<view @click="handler('sellerCreate')" class="item border-bottom-style">
-					<u-icon
+					<m-icon
 						name="add-seller" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">新增商户</text>
 				</view>
 				<view @click="handler('institutionCreate')" class="item border-bottom-style border-left-style">
-					<u-icon
+					<m-icon
 						name="add-institution" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">新增机构</text>
 				</view>
 				<view @click="handler('sellerBrand')" class="item border-bottom-style">
-					<u-icon
+					<m-icon
 						name="brand" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">品牌商户</text>
 				</view>
 				<view @click="handler('institution')" class="item border-bottom-style border-left-style">
-					<u-icon
+					<m-icon
 						name="institution" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">机构管理</text>
 				</view>
 				<view @click="handler('seller')" class="item border-bottom-style">
-					<u-icon
+					<m-icon
 						name="seller" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">门店管理</text>
 				</view>
 				<view @click="handler('institutionReport')" class="item border-bottom-style border-left-style">
-					<u-icon
+					<m-icon
 						name="institution-report" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">机构报表</text>
 				</view>
 				<view @click="handler('institutionSecretKey')" class="item border-bottom-style">
-					<u-icon
+					<m-icon
 						name="secretKey" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">密钥管理</text>
 				</view>
 				<view @click="handler('institutionPay')" class="item border-bottom-style border-left-style">
-					<u-icon
+					<m-icon
 						name="pay" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">支付通道</text>
 				</view>
 				<view @click="handler('institution-secret-key')" class="item border-bottom-style">
-					<u-icon
+					<m-icon
 						name="secret-key" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">密钥仓库</text>
 				</view>
 				<view @click="handler('institutionOauth')" class="item border-bottom-style border-left-style">
-					<u-icon
+					<m-icon
 						name="oauth" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">授权通道</text>
 				</view>
 				<!-- <view @click="handler('sellerReport')" class="item border-bottom-style">
-					<u-icon
+					<m-icon
 						name="seller-report" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">商户报表</text>
 				</view>
 				<view @click="handler('sellerQrcode')" class="item border-bottom-style border-left-style">
-					<u-icon
+					<m-icon
 						name="qrcode" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">收 款 码</text>
 				</view>
 				<view @click="handler('sellerOrder')" class="item">
-					<u-icon
+					<m-icon
 						name="order-list" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">交易明细</text>
 				</view>
 				<view @click="handler('sellerDevice')" class="item border-left-style">
-					<u-icon
+					<m-icon
 						name="device" 
 						custom-prefix="colour-icon" 
-						:size="60"
-					></u-icon>
+						:size="38"
+					></m-icon>
 					<text class="grid-text">设备管理</text>
 				</view> -->
 			</view>

@@ -1,32 +1,9 @@
 <template>
 	<view>
 		<view class="top">
-			<!-- <view class="search">
-				<u-search placeholder="商家品牌/门店名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
-			</view>	 -->
-			<!-- <view class="uDropdown">
-				<u-dropdown ref="uDropdown" @open="deteOpen">
-					<u-dropdown-item title="日期">
-					</u-dropdown-item>
-					<u-dropdown-item title="扫码找单">
-					</u-dropdown-item>
-					<u-dropdown-item title="筛选">
-					</u-dropdown-item>
-				</u-dropdown>
-			</view>	 -->
 		</view>
 		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
-				<!-- <view class="left">
-					<span v-if="item.brandId===item.id">
-						<u-icon name="brand" custom-prefix="colour-icon" class="icon">></u-icon><br>
-						品牌
-					</span>
-					<span v-else>
-						<u-icon name="seller" custom-prefix="colour-icon" class="icon">></u-icon><br>
-						门店
-					</span>
-				</view> -->
 				<view class="center">
 					<view class="title">
 						{{item.userName}}

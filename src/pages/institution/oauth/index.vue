@@ -14,8 +14,8 @@
                         {{item.name}}
                     </view>
                     <view class="right">
-                        <u-icon v-if="item.alipay" name="zhifubao" custom-prefix="colour-icon" class="icon"></u-icon>
-                        <u-icon v-if="item.wechat" name="weixinzhifu" custom-prefix="colour-icon" class="icon"></u-icon>
+                        <m-icon v-if="item.alipay" name="zhifubao" custom-prefix="colour-icon" size="38"></m-icon>
+                        <m-icon v-if="item.wechat" name="weixinzhifu" custom-prefix="colour-icon" size="38"></m-icon>
                     </view>
 					<view class="arrow-right">
 						<u-icon name="arrow-right" size="30"></u-icon>

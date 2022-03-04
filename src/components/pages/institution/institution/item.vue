@@ -2,7 +2,7 @@
 	<view class="item">
 		<view class="line">
 			<span class="info">
-				<u-icon name="institution" custom-prefix="colour-icon" class="icon"></u-icon><br>
+				<m-icon name="institution" custom-prefix="colour-icon" class="icon"></m-icon><br>
 				{{item.level}}级机构
 			</span>
 			<view>
@@ -18,102 +18,102 @@
                 col="3"
 			>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="institution" 
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('institution')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">下级机构</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="seller"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('seller')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">下级商户</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="provider"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('provider')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">软件服务商</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="seller-report"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('report')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">日结报表</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="pay"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('pay')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">支付通道</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="oauth"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('oauth')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">机构</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="secret-key"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('secret-key')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">密钥仓库</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="secretKey"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('secretKey')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">密钥管理</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="password"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('password')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">密码重置</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="setting"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('setting')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">机构配置</text>
 				</u-grid-item>
 				<u-grid-item>
-					<u-icon
+					<m-icon
 						name="delete"
 						custom-prefix="colour-icon" 
 						:size="100"
 						@click="handler('delete')"
-					></u-icon>
+					></m-icon>
 					<text class="grid-text">删除机构</text>
 				</u-grid-item>
 			</u-grid>

@@ -9,7 +9,7 @@
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
 					<span>
-						<u-icon name="institution" custom-prefix="colour-icon" class="icon">></u-icon><br>
+						<m-icon name="institution" custom-prefix="colour-icon" size="38"></m-icon><br>
 						{{item.level}}级机构
 					</span>
 				</view>

@@ -43,7 +43,7 @@
 				<view class="tf_left">
 					<view class="tfl_top">
 						<view class="tfl_one">|</view>
-						<view class="tfl_title">营业额<u-icon class="icon" name="question-circle"></u-icon></view>
+						<view class="tfl_title">营业额<u-icon size="38" name="question-circle"></u-icon></view>
 					</view>
 					<view class="tf_bottom">
 						{{ fee(report.totalFee) }}
@@ -88,7 +88,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="weixinzhifu" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="weixinzhifu" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>微信支付</span>
 			</view>
 			<view class="bottom">
@@ -119,7 +119,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="zhifubao" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="zhifubao" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>支付宝支付</span>
 			</view>
 			<view class="bottom">
@@ -150,7 +150,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="yunshanfu" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>银联扫码</span>
 			</view>
 			<view class="bottom">
@@ -181,7 +181,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="xinyongka" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="xinyongka" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>信用卡</span>
 			</view>
 			<view class="bottom">
@@ -212,7 +212,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="yinhangka" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="yinhangka" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>银行卡</span>
 			</view>
 			<view class="bottom">
@@ -249,7 +249,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="home-fill" class="icon">></u-icon>
+				<u-icon name="home-fill" size="38">></u-icon>
 				<span>默认支付通道</span>
 			</view>
 			<view class="bottom">
@@ -280,7 +280,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="weixinzhifu" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="weixinzhifu" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>微信支付通道</span>
 			</view>
 			<view class="bottom">
@@ -311,7 +311,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="zhifubao" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="zhifubao" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>支付宝支付通道</span>
 			</view>
 			<view class="bottom">
@@ -342,7 +342,7 @@
 			</view>
 			<u-line />
 			<view class="center">
-				<u-icon name="yunshanfu" custom-prefix="colour-icon" class="icon">></u-icon>
+				<m-icon name="yunshanfu" custom-prefix="colour-icon" size="38"></m-icon>
 				<span>银联支付通道</span>
 			</view>
 			<view class="bottom">

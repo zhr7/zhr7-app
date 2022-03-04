@@ -82,12 +82,14 @@
 			}
 		},
 		mounted() {
-			if (typeof my !== "undefined") {
+			// #ifdef MP-ALIPAY
+			if (typeof my.ix !== "undefined") {
 				this.facePay = 'alipay'
 				if (this.facePayCont===0) {
 					this.startFacePay()
 				}
 			}
+			// #endif
 		},
 		methods: {
 			navChange(nav){
