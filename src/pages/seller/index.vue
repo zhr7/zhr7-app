@@ -19,7 +19,7 @@
 	import order from './order'
 	import report from './report'
 	import pay from './pay'
-	import my from './my'
+	import My from './my'
 	export default {
 		components: { 
 			tabbar,
@@ -27,7 +27,7 @@
 			order,
 			report,
 			pay,
-			my,
+			My,
 		},
 		computed: {
 			...mapState({
