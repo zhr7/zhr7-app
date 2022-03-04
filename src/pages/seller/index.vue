@@ -92,7 +92,7 @@
 		methods: {
 			navChange(nav){
 				this.path = nav.path
-				if (this.facePay!=='') {
+				if (this.facePay!==''&&this.path==='pay') {
 					this.startFacePay()
 				}
 				if (nav.path==="order" && this.$refs.order) {
