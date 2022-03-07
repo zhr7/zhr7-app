@@ -100,7 +100,6 @@
 						})
 						break;
 					case "institutionReport":
-					console.log(1212);
 						this.$u.route({
 							type: 'to',
 							url: '/pages/institution/report/index'

@@ -26,6 +26,13 @@ const install = (Vue, vm) => {
 			}
 		},
 		institution: {
+			aaply: {	//  进件
+				List: (params = {}) => vm.$u.post('/institution-api/aaplys/list', params),	// 
+				Create: (params = {}) => vm.$u.post('/institution-api/aaplys/create', params),	// 
+				Update: (params = {}) => vm.$u.post('/institution-api/aaplys/update', params),
+				Delete: (params = {}) => vm.$u.post('/institution-api/aaplys/delete', params),	// 
+				Get: (params = {}) => vm.$u.post('/institution-api/aaplys/get', params),
+			},
 			tradeAuth: {
 				QRCode: (params = {}) => vm.$u.post('/institution-api/TradeAuth/QRCode', params),
 				JsApi: (params = {}) => vm.$u.post('/institution-api/TradeAuth/JsApi', params),

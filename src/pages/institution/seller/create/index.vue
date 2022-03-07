@@ -104,28 +104,6 @@
                         { required: true, message: '请输入商家名称', trigger: 'blur' },
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
-					rebate: [
-                        { required: true, message: '请输分成比例', trigger: 'blur' },
-                        {
-                            required: true,
-                            validator: (rule, value, callback) => {
-                            if (value > 100) {
-                                callback('分成比例不允许大于100%')
-                            } else {
-                                this.$u.api.institution.institution.SelfInfo().then(res => {
-                                if (Number(res.institution.rebate) < Number(value)) {
-                                    callback('分成比例不允许大于:' + res.institution.rebate + '%')
-                                } else {
-                                    callback()
-                                }
-                                }).catch(err => {
-                                    callback(err.message)
-                                })
-                            }
-                            },
-                            trigger: 'blur'
-                        }
-                    ],
                     mobile: [{
                         required: true,
                         validator: (rule, value, callback) => {
