@@ -13,5 +13,6 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /go/src/github.com/lecex/app/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /go/src/github.com/lecex/app/dist/build/h5 .
+COPY --from=builder /go/src/github.com/lecex/app/static .
 COPY run.sh /docker-entrypoint.d
 RUN chmod +x /docker-entrypoint.d/run.sh
