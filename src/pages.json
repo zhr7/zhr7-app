@@ -19,11 +19,6 @@
 			}
 		},
 		{
-			"path": "pages/institution/apply/index",
-			"style": {
-			}
-		},
-		{
 			"path": "pages/institution/report/index",
 			"style": {
 			}

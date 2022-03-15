@@ -1,6 +1,6 @@
 <template>
 	<view>
-        <image class="index" src="/static/facepay/index.png"></image>
+        <image class="index" src="https://wap.bichengbituo.com/static/h5/img/index.png"></image>
 	</view>
 </template>
 <script>
