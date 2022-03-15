@@ -48,17 +48,16 @@
 				}
 			},
 			userInfo(){
-				this.$store.dispatch('user/getInfo').catch(err => {
-					if (err.data.detail.indexOf("token is expired") != -1) {
-						this.$u.route({
-							type: 'redirect',
-							url: '/pages/login/index', 
-						})
-					} else {
-						this.$refs.uToast.show({
-							title: err.data.detail
-						})
-					}
+				this.$store.dispatch('user/getInfo').then(()=>{
+					this.$store.dispatch('socket/webSocket') // 链接websocket
+				}).catch(err => {
+					this.$refs.uToast.show({
+						title: err.data.detail
+					})
+					this.$u.route({
+						type: 'redirect',
+						url: '/pages/login/index', 
+					})
 				})
 			}
 		},

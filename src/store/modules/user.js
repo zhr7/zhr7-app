@@ -136,6 +136,7 @@ const actions = {
           front_permits = res.front_permits
         }
         commit('SET_FRONT_PEIMITS', front_permits)
+        resolve()
       }).catch(error => {
         reject(error)
       })
@@ -159,7 +160,7 @@ const actions = {
       commit('REMOVE_TOKEN')
       resolve()
     })
-  }
+  },
 }
 
 export default {

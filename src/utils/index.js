@@ -111,7 +111,7 @@ export function RouteParams() {
 }
 
 // OCR 图片识别
-export function OCR(url,type) {
+export function OCR(temp,type) {
     let ocr_type = 1
     switch (type) {
         case 'idcard':
@@ -136,25 +136,75 @@ export function OCR(url,type) {
             ocr_type = 10
             break;
     }
-    // #ifdef MP-WEIXIN  
-	return OCRWechat(url,ocr_type)
-	// #endif
+    return new Promise((resolve, reject) => {
+        // #ifdef MP-WEIXIN  
+        uni.getFileSystemManager().readFile({
+            filePath: temp,
+            encoding: 'base64',
+            success(r) { 
+                OCRWechat(r.data,ocr_type).then(res => {
+                    console.log(res);
+                    resolve(OCRWechatData(res.data))
+                }).catch(err => {
+                    console.log(err);
+                    reject(err)
+                })
+            }
+        })
+        // #endif
+    })
 }
-
+// 识别微信数据
+export function OCRWechatData(e) {
+    const data = {}
+    if (e.idcard_res) {
+        if (e.idcard_res.id) {
+            data.idcard = {
+                address: e.idcard_res.address.text,
+                birth: e.idcard_res.birth.text,
+                gender: e.idcard_res.gender.text,
+                id: e.idcard_res.id.text,
+                name: e.idcard_res.name.text,
+                nationality: e.idcard_res.nationality.text,
+            }
+        }else{
+            data.idcard = {
+                authority: e.idcard_res.authority.text,
+                valid_date: e.idcard_res.valid_date.text,
+            } 
+        }
+    }
+    if (e.biz_license_res) {
+        data.bizLicense = {
+            address: e.biz_license_res.address.text,
+            business_scope: e.biz_license_res.business_scope.text,
+            enterprise_name: e.biz_license_res.enterprise_name.text,
+            legal_representative: e.biz_license_res.legal_representative.text,
+            reg_num: e.biz_license_res.reg_num.text,
+            // registered_capital: e.biz_license_res.registered_capital.text,
+            registered_date: e.biz_license_res.registered_date.text,
+            title: e.biz_license_res.title.text,
+            type_of_enterprise: e.biz_license_res.type_of_enterprise.text,
+            // valid_period: e.biz_license_res.valid_period.text,
+        }
+    }
+    if (e.bankcard_res) {
+        data.bankcard = {
+            number: e.bankcard_res.number.text,
+        }
+    }
+    return data
+}
 // OCRWechat 微信图片识别
 // https://fuwu.weixin.qq.com/service/detail/000ce4cec24ca026d37900ed551415
-export function OCRWechat(url,type) {
+export function OCRWechat(data,type) {
     return wx.serviceMarket.invokeService({
             service: 'wx79ac3de8be320b71', // '固定为服务商OCR的appid，非小程序appid',
             api: 'OcrAllInOne',
             data: {
-                img_url: url,
-                data_type: 3,
+                img_data: data,
+                data_type: 2,
                 ocr_type: type,
             },
-        }).then(res => {
-            console.log('invokeService success', res)
-          }).catch(err => {
-            console.error('invokeService fail', err)
-          })
+        })
 }

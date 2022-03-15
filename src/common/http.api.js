@@ -26,12 +26,12 @@ const install = (Vue, vm) => {
 			}
 		},
 		institution: {
-			aaply: {	//  进件
-				List: (params = {}) => vm.$u.post('/institution-api/aaplys/list', params),	// 
-				Create: (params = {}) => vm.$u.post('/institution-api/aaplys/create', params),	// 
-				Update: (params = {}) => vm.$u.post('/institution-api/aaplys/update', params),
-				Delete: (params = {}) => vm.$u.post('/institution-api/aaplys/delete', params),	// 
-				Get: (params = {}) => vm.$u.post('/institution-api/aaplys/get', params),
+			apply: {	//  进件
+				List: (params = {}) => vm.$u.post('/institution-api/applys/list', params),	// 
+				Create: (params = {}) => vm.$u.post('/institution-api/applys/create', params),	// 
+				Update: (params = {}) => vm.$u.post('/institution-api/applys/update', params),
+				Delete: (params = {}) => vm.$u.post('/institution-api/applys/delete', params),	// 
+				Get: (params = {}) => vm.$u.post('/institution-api/applys/get', params),
 			},
 			tradeAuth: {
 				QRCode: (params = {}) => vm.$u.post('/institution-api/TradeAuth/QRCode', params),
@@ -113,7 +113,13 @@ const install = (Vue, vm) => {
 			report: { // 报表
 				Amount: (params = {}) => vm.$u.post('/pay-api/reports/amount', params) // 报表统计
 			},
-		}
+		},
+		storage: {
+			file: {
+				Token: (params = {}) => vm.$u.post('/storage-api/files/token', params),
+				PrivateURL: (params = {}) => vm.$u.post('/storage-api/files/privateURL', params)
+			}
+		},
 	};
 }
 

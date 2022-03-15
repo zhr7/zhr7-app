@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import getters from './getters'
 import user from './modules/user'
+import socket from './modules/socket'
 import seller from './modules/seller'
 import institution from './modules/institution'
 import healthy from './modules/healthy'
@@ -32,6 +33,7 @@ const store = new Vuex.Store({
   },
   modules: {
     user,
+    socket,
     seller,
     healthy,
     settings,
