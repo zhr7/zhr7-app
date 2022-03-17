@@ -143,7 +143,6 @@ export function OCR(temp,type) {
             encoding: 'base64',
             success(r) { 
                 OCRWechat(r.data,ocr_type).then(res => {
-                    console.log(res);
                     resolve(OCRWechatData(res.data))
                 }).catch(err => {
                     console.log(err);

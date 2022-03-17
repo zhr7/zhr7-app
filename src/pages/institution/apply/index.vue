@@ -288,6 +288,36 @@
             this.initStorageToken()
 		},
 		methods: {
+            initFormData() {
+                this.formData = {
+                    businessCode: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}'), // 业务申请编号
+                    channels: [], //  通道组
+                    subjectType: '', // 主体类型 
+                    // 营业执照
+                    licenseCopy: '', // 营业执照照片
+                    licenseCode: '', // 注册号/统一社会信用代码
+                    merchantName: '', // 商户名称
+                    address: '',
+                    // 法人资料
+                    legalPerson: '', // 个体户经营者/法人姓名
+                    legalPersonPhone: '', // 法人电话
+                    // 身份证
+                    idCardCopy: '',    // 身份证人像面照片
+                    idCardNational: '',    // 身份证国徽面照片
+                    legalPersonBank: '',    // 法人身份证号
+                    cardPeriodBegin: '20010-01-01',  // 身份证有效期开始
+                    cardPeriodEnd: '2030-01-01',  // 身份证有效期结束
+                    // 银行结算资料
+                    bankCardCopy: '',    // 银行卡照片
+                    bankAccountType: '', // 账户类型[对公银行账户、经营者个人银行卡]
+                    accountBank: '', // 开户银行
+                    bankAddressCode: '',  // 开户银行省市编码 至少精确到市，详细参见省市区编号对照表。
+                    accountNumber: '',     // 银行账号
+                    // 需求相关
+                    qrcode: '',  // 预制码 收款二维码
+                    remark: '', // 备注
+                }
+            },
             initStorageToken() {
                         this.$u.api.storage.file.Token().then(res => {
                             if (res.token.type == 'qiniu') {
@@ -443,16 +473,12 @@
                             apply: this.formData
                         }).then(res => {
                             if (res.valid) {
+                                this.initFormData()
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 5000,
                                     icon:'success',
                                     title:'进件成功',
                                 })
-                                setTimeout(()=>{ 
-                                    this.$u.route({
-                                        type: 'back', 
-                                    })
-                                }, 3000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
