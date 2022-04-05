@@ -7,6 +7,35 @@
 			}
 		},
 		{
+			"path": "pages/my/password",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/my/balance/index",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/my/balance/deposit",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+			}
+		},
+		{
+			"path": "pages/pay/qrcode/index",
+			"style": {
+				"navigationBarTitleText": "快速买单",
+				"navigationStyle":"custom",
+				"transparentTitle":"always" 
+			}
+		},
+		{
 			"path": "pages/seller/order/item",
 			"style": {
 				"enablePullDownRefresh": true
@@ -125,24 +154,6 @@
 		{
 			"path": "pages/institution/seller/qrcode/item",
 			"style": {
-			}
-		},
-		{
-			"path": "pages/my/password",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/login/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/pay/qrcode/index",
-			"style": {
-				"navigationBarTitleText": "快速买单",
-				"navigationStyle":"custom",
-				"transparentTitle":"always" 
 			}
 		}
 	],

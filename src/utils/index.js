@@ -207,3 +207,7 @@ export function OCRWechat(data,type) {
             },
         })
 }
+// fee 金额显示
+export function fee(number) { // 是否存在不存在返回0
+    return "￥"+((number ? Number(number) : 0)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+}

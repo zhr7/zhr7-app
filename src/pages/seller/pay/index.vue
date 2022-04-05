@@ -96,7 +96,6 @@
 				this.cancel = 0
 				this.successTotalFee = 0
 				uni.vibrateShort()
-				this.disabled = true
 				uni.scanCode({
 					scanType: ['qrCode'],
 					onlyFromCamera: true,

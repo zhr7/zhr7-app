@@ -15,7 +15,7 @@
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item @click="handler" icon="rmb-circle" title="秘钥管理"></u-cell-item>
+				<u-cell-item @click="handler('balance')" icon="rmb-circle" title="余额">{{fee(balance)}}</u-cell-item>
 			</u-cell-group>
 		</view>
 		
@@ -50,6 +50,7 @@
 				'name',
 				'username',
 				'avatar',
+				'balance',
 			]),
 		},
 		data() {
@@ -81,6 +82,9 @@
 					})
 				});
 			},
+			fee(number) { // 是否存在不存在返回0
+				return "￥"+((number ? Number(number) : 0)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+			},
 			outLogin(){
 				this.$store.dispatch('user/logout')
 				this.$u.route({
@@ -111,6 +115,11 @@
 					case 'password':
 						this.$u.route({
 							url: '/pages/my/password', 
+						})
+						break;
+					case 'balance':
+						this.$u.route({
+							url: '/pages/my/balance/index', 
 						})
 						break;
 					default:

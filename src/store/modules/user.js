@@ -5,11 +5,14 @@ const state = {
   username: '',
   name: '匿名',
   userId: '',
+  balance: 0,
   loginTime: new Date(),
   avatar: '',
   roles: [],
   front_permits: [],
-  provider:'h5'
+  provider:'h5',
+  openid: '',
+  appid: uni.getAccountInfoSync().miniProgram.appId,
 }
 
 const mutations = {
@@ -39,6 +42,11 @@ const mutations = {
       state.name = name
     }
   },
+  SET_BALANCE: (state, balance) => {
+    if (balance) {
+      state.balance = balance
+    }
+  },
   SET_USER_ID: (state, userId) => {
     if (userId) {
       state.userId = userId
@@ -62,6 +70,9 @@ const mutations = {
   },
   SET_PROVIDER: (state, provider) => {
     state.provider = provider
+  },
+  SET_OPENID: (state, openid) => {
+    state.openid = openid
   }
 }
 
@@ -113,15 +124,66 @@ const actions = {
       // // #endif
     })
   },
+  getOpenid({ commit, state }) {
+    const Api = store.state.$u.api
+    // 获取微信openid
+    // #ifdef MP-WEIXIN  
+    uni.login({
+      provider: 'weixin',
+      success: res => {
+        if (res.errMsg === "login:ok") {
+          Api.institution.balance.Token({
+            method: 'wechatMiniprogram',
+            code: res.code,
+            bizContent: {
+              appId: state.appid
+            }
+          }).then(res=>{
+            if (res.content.openId) {
+              commit('SET_OPENID', res.content.openId)
+            }else{
+              uni.showToast({
+                duration: 5000,
+                icon:'error',
+                title:'未能获取openid',
+              })
+            }
+          }).catch(err => {
+            console.log(err)
+            uni.showToast({
+                duration: 5000,
+                icon:'error',
+                title:'获取openid失败',
+            })
+          })
+        } else {
+          uni.showToast({
+            duration: 5000,
+            icon:'error',
+            title:'获取code失败',
+          })
+        }
+      },
+      fail: err => {
+        uni.showToast({
+          duration: 5000,
+          icon:'error',
+          title:'微信登录失败',
+        })
+      }
+    });
+    // #endif
+  },
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       const Api = store.state.$u.api
       Api.user.user.UserInfo().then(res => {
         // 用户相关信息设置
-        const { username, name, avatar, id } = res.user
+        const { username, name, balance, avatar, id } = res.user
         commit('SET_NAME', name)
         commit('SET_USERNAME', username)
+        commit('SET_BALANCE', balance)
         commit('SET_USER_ID', id)
         commit('SET_AVATAR', avatar)
         // 角色相关信息设置

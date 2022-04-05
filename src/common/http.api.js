@@ -7,6 +7,10 @@ const install = (Vue, vm) => {
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = { 
 		user: {
+			order: {
+				List: (params = {}) => vm.$u.post('/user-api/orders/list', params),	// 
+				Get: (params = {}) => vm.$u.post('/user-api/orders/get', params),
+			},
 			config: {
 				Get: (params = {}) => vm.$u.post('/user-api/configs/get', params)
 			},
@@ -26,6 +30,10 @@ const install = (Vue, vm) => {
 			}
 		},
 		institution: {
+			balance: {
+				Deposit: (params = {}) => vm.$u.post('/institution-api/balances/deposit', params),	//
+				Token: (params = {}) => vm.$u.post('/institution-api/balances/token', params),	//
+			},
 			apply: {	//  进件
 				List: (params = {}) => vm.$u.post('/institution-api/applys/list', params),	// 
 				Create: (params = {}) => vm.$u.post('/institution-api/applys/create', params),	// 

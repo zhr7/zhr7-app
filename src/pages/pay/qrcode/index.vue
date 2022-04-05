@@ -55,7 +55,7 @@
 				form: {
 					totalFee: ""
 				},
-        operatorId: "",
+        		operatorId: "",
 				keyboard: true,
 				show: false,
 				err: "",
@@ -208,7 +208,7 @@
 						title: "二维码支付C2B",
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
-            operatorId: this.operatorId,
+            			operatorId: this.operatorId,
 						openId: this.openId,
 					}
 				}).then(res=>{
@@ -239,7 +239,7 @@
 						title: "二维码支付C2B",
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
-            operatorId: this.operatorId
+            			operatorId: this.operatorId
 					}
 				}).then(res=>{
 					this.disabled = false
