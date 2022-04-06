@@ -12,9 +12,8 @@ const state = {
   front_permits: [],
   provider:'h5',
   openid: '',
-  appid: uni.getAccountInfoSync().miniProgram.appId,
+  appid: uni.getAccountInfoSync?uni.getAccountInfoSync().miniProgram.appId:'',
 }
-
 const mutations = {
   SET_TOKEN: (state, token) => {
     setToken(token)
