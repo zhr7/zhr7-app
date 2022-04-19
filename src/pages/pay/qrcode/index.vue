@@ -172,11 +172,12 @@
 						break;
 					case "wechat":
 						if (typeof WeixinJSBridge !== "undefined") {
-							console.log(wechatPackage)
+							// console.log(wechatPackage)
+							wechatPackage.timeStamp = wechatPackage.timeStamp.toString()
 							WeixinJSBridge.invoke(
 								'getBrandWCPayRequest', wechatPackage,
 								res => {
-									console.log(res)
+									// console.log(res)
 									if(res.err_msg == "get_brand_wcpay_request:ok" ){
 										uni.showToast({
 											duration: 10000,
@@ -220,14 +221,14 @@
 						}
 						this.tradePay(res.content.prepayId, wechatPackage)
 					} else {
-						console.log(res)
+						// console.log(res)
 						this.show = true
 						this.err =  res.content.returnMsg
 					}
 				}).catch(err => {
 					this.show = true
 					this.err =  "下单失败："+ err
-					console.log(err);
+					// console.log(err)
 				})
 			},
 			payQRCode() {
@@ -257,7 +258,7 @@
 				}).catch(err => {
 					this.show = true
 					this.err =  "下单失败："+ err
-					console.log(err);
+					// console.log(err)
 				})
 			},
 			hideOptionMenu(){
@@ -318,7 +319,7 @@
 				}).catch(err => {
 					this.show = true
 					this.err =  "获取openid失败:"+ err
-					console.log(err);
+					// console.log(err)
 				})
 			},
 			navigator(){
