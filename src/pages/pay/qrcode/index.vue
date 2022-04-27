@@ -224,7 +224,7 @@
 					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
-						title: "二维码支付C2B",
+						title: this.getTitle(),
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
             			operatorId: this.operatorId,
@@ -255,7 +255,7 @@
 					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
-						title: "二维码支付C2B",
+						title: this.getTitle(),
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
             			operatorId: this.operatorId
