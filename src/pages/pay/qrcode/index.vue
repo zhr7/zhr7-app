@@ -10,7 +10,7 @@
 						<span class="top-name">
 							{{name}}
 						</span>
-						<span class="top-operatorName">
+						<span v-if="operatorName" class="top-operatorName">
 							[{{operatorName}}]
 						</span>
 					</u-form-item>
