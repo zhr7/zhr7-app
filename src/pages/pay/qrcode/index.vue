@@ -10,6 +10,9 @@
 						<span class="top-name">
 							{{name}}
 						</span>
+						<span class="top-operatorName">
+							[{{operatorName}}]
+						</span>
 					</u-form-item>
 					<u-form-item label="消费金额:" prop="name">
 						<span class="totalFee">
@@ -56,6 +59,7 @@
 					totalFee: ""
 				},
         		operatorId: "",
+				operatorName: "", // 收款码明显
 				keyboard: true,
 				show: false,
 				err: "",
@@ -110,21 +114,35 @@
 							return
 						}
 						this.qrcodeType = res.config.qrcodeType
-            if (this.qrcodeType == "jsapi" && this.code == "") {
-				if (res.oauth) {
-					this.oauthAppId(res.oauth)
-        		} else {
-					this.show = true;
-					this.err =  "未找到Oauth授权配置"
-					return
-        		}
-            } else {
-            	this.loading = true
-            }
+						if (this.qrcodeType == "jsapi" && this.code == "") {
+							if (res.oauth) {
+								this.oauthAppId(res.oauth)
+							} else {
+								this.show = true;
+								this.err =  "未找到Oauth授权配置"
+								return
+							}
+						} else {
+							this.loading = true
+						}
 					}
 				}).catch(err => {
 					this.show = true;
 					this.err =  "获取商户简讯失败。"
+					console.log(err)
+				})
+				this.$u.api.institution.qrcode.SimpleInfo({ qrcode: {
+					id: this.$route.query.operator_id
+				}}).then(res =>{
+					if (res.qrcode.userId === this.$route.query.user_id) {
+						this.operatorName = res.qrcode.name
+					}else{
+						this.show = true;
+						this.err =  "收款码和商户不匹配。"
+					}
+				}).catch(err => {
+					this.show = true;
+					this.err =  "获取收款码简讯失败。"
 					console.log(err)
 				})
 			},
@@ -332,6 +350,9 @@
 				if (/UnionPay/.test(window.navigator.userAgent)) {
 					this.method = "unionpay"
 				}
+			},
+			getTitle() {
+				return this.operatorName?"C2B-"+this.operatorName:"二维码支付C2B"
 			}
 		}
 	}
@@ -364,6 +385,12 @@
 		padding-left: 3vw;
 		font-size: 5vw;
 		font-weight: 900;
+	}
+	.top-operatorName{
+		padding-left: 3vw;
+		font-weight: 900;
+		font-size: 3vw;
+		color: #909399;
 	}
 	.totalFee {
 		font-size: 8vw;

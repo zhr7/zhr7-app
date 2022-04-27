@@ -83,6 +83,7 @@ const install = (Vue, vm) => {
 				Update: (params = {}) => vm.$u.post('/institution-api/qrcodes/update', params),
 				Create: (params = {}) => vm.$u.post('/institution-api/qrcodes/create', params),
 				Delete: (params = {}) => vm.$u.post('/institution-api/qrcodes/delete', params),
+				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/qrcodes/simpleInfo', params),
 			},
 			sellerReport: {
 				Amount: (params = {}) => vm.$u.post('/institution-api/sellerReports/amount', params), // 报表统计

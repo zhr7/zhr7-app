@@ -2,7 +2,7 @@ let baseUrl = 'https://rpc.bichengbituo.com'
 // #ifdef H5
 	baseUrl = document.getElementsByTagName('meta')['baseUrl'].getAttribute('content')
 	if (process.env.NODE_ENV === 'development') {
-		baseUrl = 'http://172.16.0.2:8080'
+		baseUrl = 'http://127.0.0.1:8080'
 	}
 // #endif
 // baseUrl = 'http://127.0.0.1:8080'
