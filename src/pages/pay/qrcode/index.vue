@@ -131,20 +131,24 @@
 					this.err =  "获取商户简讯失败。"
 					console.log(err)
 				})
-				this.$u.api.institution.qrcode.SimpleInfo({ qrcode: {
-					id: this.$route.query.operator_id
-				}}).then(res =>{
-					if (res.qrcode.userId === this.$route.query.user_id) {
-						this.operatorName = res.qrcode.name
-					}else{
+				if (this.$route.query.operator_id) {
+					this.$u.api.institution.qrcode.SimpleInfo({ qrcode: {
+						id: this.$route.query.operator_id
+					}}).then(res =>{
+						if (res.qrcode) {
+							if (res.qrcode.userId === this.$route.query.user_id) {
+								this.operatorName = res.qrcode.name
+							}else{
+								this.show = true;
+								this.err =  "收款码和商户不匹配。"
+							}
+						}
+					}).catch(err => {
 						this.show = true;
-						this.err =  "收款码和商户不匹配。"
-					}
-				}).catch(err => {
-					this.show = true;
-					this.err =  "获取收款码简讯失败。"
-					console.log(err)
-				})
+						this.err =  "获取收款码简讯失败。"
+						console.log(err)
+					})
+				}
 			},
 			submit() {
 				uni.vibrateShort() // 震动
