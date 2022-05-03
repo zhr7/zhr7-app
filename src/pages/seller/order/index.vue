@@ -151,12 +151,23 @@
 			</view>
 			<u-loadmore :status="status" />
 		</view>
-		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
+		<uni-datetime-picker
+			ref="datetimePicker"
+			type="datetimerange"
+			@change="changeDate"
+			@maskClick="changeDate"
+			v-model="datetimerange"
+			rangeSeparator="至"
+		/>
 	</view>
 </template>
 <script>
 	import { parseTime } from '@/utils'
+	import uniDatetimePicker from '@/components/uni-datetime-picker/uni-datetime-picker.vue'
 	export default {
+		components: { 
+			uniDatetimePicker
+		},
 		data() {
 			return {
 				status: 'loadmore',
@@ -170,7 +181,7 @@
 				},
 				query: {
 					date: [
-						new Date(new Date(new Date().toLocaleDateString()).getTime() - 30 * 24 * 60 * 60 * 1000),
+						new Date(new Date(new Date().toLocaleDateString()).getTime() - 3 * 24 * 60 * 60 * 1000),
 						new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1000)
 					],
 					method: '',
@@ -282,9 +293,21 @@
 						value: 1,
 					},
 				],
-				showDate: false,
 				search: '',
 			}
+		},
+		computed: {
+			datetimerange: {
+				get() {
+					return [
+						parseTime(this.query.date[0]),
+						parseTime(this.query.date[1]),
+					]
+				},
+				set() {
+					return
+				}
+			},
 		},
 		created() {
 			uni.setNavigationBarTitle({
@@ -409,7 +432,7 @@
 			},
 			deteOpen(index) {
 				if (index === 0) {
-					this.showDate = true
+					this.$refs.datetimePicker.show()
 					this.$refs.uDropdown.close()
 				}
 				if (index === 1) {
@@ -422,8 +445,8 @@
 				}
 			},
 			changeDate(e){ // 时间选择
-				this.query.date[0] = new Date(e.startDate + " 00:00:00")
-				this.query.date[1] = new Date(e.endDate + " 23:59:59")
+				this.query.date[0] = new Date(e[0])
+				this.query.date[1] = new Date(e[1])
 				this.listQuery = {
 					page: 1,
 					limit: 15,

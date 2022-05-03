@@ -11,7 +11,7 @@
 							{{name}}
 						</span>
 						<span v-if="operatorName" class="top-operatorName">
-							[{{operatorName}}]
+							{{operatorName}}
 						</span>
 					</u-form-item>
 					<u-form-item label="消费金额:" prop="name">
