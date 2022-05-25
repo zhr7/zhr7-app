@@ -92,8 +92,8 @@ const install = (Vue, vm) => {
 		},
 		pay: {
 			balance: {
-				Deposit: (params = {}) => vm.$u.post('/institution-api/balances/deposit', params),	//
-				Token: (params = {}) => vm.$u.post('/institution-api/balances/token', params),	//
+				Deposit: (params = {}) => vm.$u.post('/pay-api/balances/deposit', params),	//
+				Token: (params = {}) => vm.$u.post('/pay-api/balances/token', params),	//
 			},
 			tradeAuth: {
 				AopF2F: (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params),  // 下单
