@@ -30,10 +30,6 @@ const install = (Vue, vm) => {
 			}
 		},
 		institution: {
-			balance: {
-				Deposit: (params = {}) => vm.$u.post('/institution-api/balances/deposit', params),	//
-				Token: (params = {}) => vm.$u.post('/institution-api/balances/token', params),	//
-			},
 			apply: {	//  进件
 				List: (params = {}) => vm.$u.post('/institution-api/applys/list', params),	// 
 				Create: (params = {}) => vm.$u.post('/institution-api/applys/create', params),	// 
@@ -95,6 +91,10 @@ const install = (Vue, vm) => {
 			}
 		},
 		pay: {
+			balance: {
+				Deposit: (params = {}) => vm.$u.post('/institution-api/balances/deposit', params),	//
+				Token: (params = {}) => vm.$u.post('/institution-api/balances/token', params),	//
+			},
 			tradeAuth: {
 				AopF2F: (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params),  // 下单
 				Query: (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params),  // 查询

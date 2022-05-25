@@ -97,7 +97,7 @@
 			},
             onConfirm(){
 				uni.vibrateShort()
-				this.$u.api.institution.balance.Deposit({
+				this.$u.api.pay.balance.Deposit({
 					bizContent: {
                         method: this.method,
 						totalFee: String(Math.round(this.totalFee * 100)),

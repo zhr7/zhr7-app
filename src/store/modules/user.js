@@ -131,7 +131,7 @@ const actions = {
       provider: 'weixin',
       success: res => {
         if (res.errMsg === "login:ok") {
-          Api.institution.balance.Token({
+          Api.pay.balance.Token({
             method: 'wechatMiniprogram',
             code: res.code,
             bizContent: {
