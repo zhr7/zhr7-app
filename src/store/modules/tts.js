@@ -16,6 +16,10 @@ const actions = {
 	},'com.iflytek.speechcloud');
   },
   order({ commit,state },order) {
+	if (new Date(order.created_at).getTime() < new Date(new Date(new Date().toLocaleDateString()).getTime())) {
+	  console.log('非当天订单不播报');
+	  return
+	}
 	if (order.total_fee) {
 	  order.totalFee = order.total_fee
 	}
