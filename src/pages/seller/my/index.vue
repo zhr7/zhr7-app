@@ -21,15 +21,16 @@
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item @click="handler" icon="volume" title="云喇叭"></u-cell-item>
+				<!-- <u-cell-item @click="handler" icon="volume" title="云喇叭"></u-cell-item>
 				<u-cell-item @click="handler" icon="coupon" title="云打印机"></u-cell-item>
 				<u-cell-item @click="handler" icon="tags" title="门店"></u-cell-item>
-				<u-cell-item @click="handler" icon="server-man" title="收银员/终端"></u-cell-item>
+				<u-cell-item @click="handler" icon="server-man" title="收银员/终端"></u-cell-item> -->
 				<u-cell-item @click="handler('password')" icon="eye-fill" title="修改密码"></u-cell-item>
 				<!-- #ifdef APP-PLUS -->
 				<u-cell-item icon="volume-up-fill" title="收款语音播报" :arrow="false">
 					<u-switch v-model="palyOrder"></u-switch>
 				</u-cell-item>
+				<u-cell-item icon="error-circle-fill" title="软件版本" :arrow="false">{{version}}.{{versionCode}}</u-cell-item>
 				<!-- #endif -->
 			</u-cell-group>
 		</view>
@@ -49,6 +50,7 @@
 </template>
 <script>
 	import {  mapGetters } from 'vuex'
+	import { mapState } from 'vuex'
 	export default {
 		computed: {
 			...mapGetters([
@@ -57,6 +59,10 @@
 				'avatar',
 				'balance',
 			]),
+			...mapState({
+				versionCode: state => state.settings.versionCode,
+				version: state => state.settings.version
+			}),
 			palyOrder: {
 				get() {
 					return this.$store.state.socket.palyOrder

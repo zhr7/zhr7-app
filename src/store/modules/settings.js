@@ -1,8 +1,10 @@
 import store from '@/store'
 const state = {
+  versionCode: '',
+  version: '',
   icpBeiAn: '',
   payQrcodeUrl: '',
-  sysName: ''
+  sysName: '',
 }
 
 const mutations = {

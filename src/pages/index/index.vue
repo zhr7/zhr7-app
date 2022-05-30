@@ -54,8 +54,8 @@
 			systemUpdate(){
 				// #ifdef APP-PLUS
 				plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
-					// this.versionCode = widgetInfo.versionCode
-					// this.version = widgetInfo.version
+					this.$store.dispatch('settings/changeSetting', { key: 'versionCode', value: widgetInfo.versionCode })
+					this.$store.dispatch('settings/changeSetting', { key: 'version', value: widgetInfo.version })
 					uni.request({
 						url: baseAppUrl+'manifest.json',
 						success: (result) => {
