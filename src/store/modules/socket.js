@@ -2,7 +2,7 @@ import { Base64 } from 'js-base64'
 import { baseWSUrl } from '@/settings.js'
 import store from '@/store'
 const state = {
-  token: uni.getStorageSync('token'),
+  token: '',
   palyOrder: uni.getStorageSync('socket.palyOrder'),
   event: {},
   deviceId: '',
@@ -19,7 +19,7 @@ const mutations = {
       header: {
         'content-type': 'application/json',
         'deviceInfo': deviceId,
-        'token': state.token
+        'token': uni.getStorageSync('token')
       },
     })
   },
@@ -38,6 +38,9 @@ const actions = {
       store.dispatch('tts/speak', {text:"开启语音播报成功",id:0}) // 语音播报
     }
     uni.setStorageSync('socket.palyOrder', state.palyOrder)
+  },
+  closeSocket({ commit, state }) {
+    uni.closeSocket()
   },
   webSocket({ commit, state }, deviceId) {
     commit('INIT', deviceId) // 初始化

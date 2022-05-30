@@ -29,7 +29,6 @@
 		onLoad(options) {
 			this.systemUpdate()
 			this.login()
-			this.init()
 		},
 		mounted() {
 			if (this.$refs.seller) {
@@ -40,17 +39,6 @@
 			this.scrollTop = e.scrollTop
 		},
 		methods: {
-			init() {
-				// #ifdef APP-PLUS
-				this.$store.dispatch('tts/init')
-				uni.getSystemInfo({ 
-                	success: (res) => {
-						this.deviceId = res.deviceId
-						this.$store.dispatch('socket/webSocket',this.deviceId)
-					}
-				})
-				//  #endif
-			},
 			systemUpdate(){
 				// #ifdef APP-PLUS
 				plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
@@ -111,7 +99,16 @@
 			},
 			userInfo(){
 				this.$store.dispatch('user/getInfo').then(()=>{
-					this.$store.dispatch('socket/webSocket') // 链接websocket
+					// #ifdef APP-PLUS
+					this.$store.dispatch('tts/init')
+					this.$store.dispatch('socket/closeSocket') // 关闭wss
+					uni.getSystemInfo({ 
+						success: (res) => {
+							this.deviceId = res.deviceId
+							this.$store.dispatch('socket/webSocket',this.deviceId)
+						}
+					})
+					//  #endif
 				}).catch(err => {
 					this.$refs.uToast.show({
 						title: err.data.detail

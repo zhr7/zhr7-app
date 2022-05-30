@@ -1,7 +1,7 @@
 
 import store from '@/store'
 const state = {
-  token: uni.getStorageSync('token'),
+  token: '',
   username: '',
   name: '匿名',
   userId: '',
