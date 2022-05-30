@@ -7,7 +7,7 @@ let  baseUrl = 'https://rpc.bichengbituo.com/'
 module.exports = {
   baseUrl: baseUrl,
   baseWSUrl: 'wss://ws.bichengbituo.com/ws',
-  baseAppUrl: 'http://wap.bichengbituo.com/',
+  baseAppUrl: 'https://wap.bichengbituo.com/',
   // 备案
   icp: '鲁ICP备2021012345号'
 }

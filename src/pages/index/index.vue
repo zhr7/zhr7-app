@@ -27,9 +27,9 @@
 			}
 		},
 		onLoad(options) {
+			this.systemUpdate()
 			this.login()
 			this.init()
-			this.systemUpdate()
 		},
 		mounted() {
 			if (this.$refs.seller) {
