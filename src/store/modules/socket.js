@@ -1,65 +1,93 @@
 import { Base64 } from 'js-base64'
-
+import { baseWSUrl } from '@/settings.js'
+import store from '@/store'
 const state = {
   token: uni.getStorageSync('token'),
-  open: false,
-  msgQueue: [],
-  event: {}
+  palyOrder: uni.getStorageSync('socket.palyOrder'),
+  event: {},
+  deviceId: '',
+  status: false,
+  timer: null,
+  order: null,
 }
 
 const mutations = {
+  INIT: (state, deviceId) => {
+    state.deviceId = deviceId
+    uni.connectSocket({
+      url: baseWSUrl,
+      header: {
+        'content-type': 'application/json',
+        'deviceInfo': deviceId,
+        'token': state.token
+      },
+    })
+  },
+  PUSH_ORDER: (state, data) => {
+    const order = JSON.parse(Base64.decode(data))
+    if (state.palyOrder) {
+      store.dispatch('tts/order', order) // 语音播报
+    }
+  }
 }
 
 const actions = {
-  // sendSocketMessage({ commit, state }, {msg}) {
-  //   console.log(state,msg,commit);
-  //   if (state.open) {
-  //     uni.sendSocketMessage({
-  //       data: msg
-  //     });
-  //   } else {
-  //     state.msgQueue.push(msg);
-  //   }
-  // },
-  webSocket({ commit, state }) {
-    uni.connectSocket({
-      url: 'ws://127.0.0.1:8082/ws',
-      data() {
-        return {
-          deviceInfo:"TXAP12107000994ND002113",
-          service:'user-api',
-          method:'Auth.Auth',
-          request:{
-              user: {
-                  username: "admin", 
-                  password: "admin123"
-              },
-          },
-        };
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-    })
+  setPalyOrder({ commit, state }) {
+    state.palyOrder = !state.palyOrder
+    if (state.palyOrder) {
+      store.dispatch('tts/speak', {text:"开启语音播报成功",id:0}) // 语音播报
+    }
+    uni.setStorageSync('socket.palyOrder', state.palyOrder)
+  },
+  webSocket({ commit, state }, deviceId) {
+    commit('INIT', deviceId) // 初始化
     uni.onSocketOpen((res) => {
       console.log('WebSocket连接已打开！');
-      uni.sendSocketMessage({
-        data: JSON.stringify({
-          token: state.token,
-          service:'user-api',
-          method:'Users.Info',
-          request: {}
-        })
-      })
+      state.status = true
+      clearInterval(state.timer); //再次清空定时器，防止重复注册定时器
+      state.timer = null
     })
+    // 监听WebSocket接受到的消息
     uni.onSocketError((res) => {
-      console.log('WebSocket连接打开失败，请检查！');
+      state.status = false
+      console.log('WebSocket连接报错:', JSON.stringify(res));
+      // 每隔3秒执行一次
+      clearInterval(state.timer); //再次清空定时器，防止重复注册定时器
+      state.timer = null
+      state.timer = setInterval(() => {
+        if (!state.status) {
+          console.log('WebSocket正在尝试连接！');
+          commit('INIT', deviceId)
+        }
+      }, 5000)
+    });
+    uni.onSocketClose((res) => {  
+      state.status = false
+      console.log('WebSocket连接断开，请检查！');
+      // 每隔3秒执行一次
+      clearInterval(state.timer); //再次清空定时器，防止重复注册定时器
+      state.timer = null
+      state.timer = setInterval(() => {
+        if (!state.status) {
+          console.log('WebSocket正在尝试连接！');
+          commit('INIT', deviceId)
+        }
+      }, 5000)                   
     });
     uni.onSocketMessage((res) => {
-      const event = JSON.parse(res.data)
-      event.data = JSON.parse(Base64.decode(event.data))
-      state.event = event
-      console.log( state);
+      if (res.data) {
+        const event = JSON.parse(res.data)
+        switch (event.topic) {
+          case "message.drive.SuccessOrder":
+            commit('PUSH_ORDER', event.data)
+            break;
+          case "pay.trade.SuccessOrder":
+              commit('PUSH_ORDER', event.data)
+              break;
+          default:
+            break;
+        }
+      }
     });
   },
 }

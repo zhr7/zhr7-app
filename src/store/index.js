@@ -7,6 +7,7 @@ import seller from './modules/seller'
 import institution from './modules/institution'
 import healthy from './modules/healthy'
 import settings from './modules/settings'
+import tts from './modules/tts'
 
 Vue.use(Vuex)
 
@@ -38,6 +39,7 @@ const store = new Vuex.Store({
     healthy,
     settings,
     institution,
+    tts,
   },
   getters
 })
