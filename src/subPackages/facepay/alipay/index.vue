@@ -9,6 +9,7 @@
 	export default {
 		data() {
 			return {
+				codeType: "C",
 			}
 		},
         computed: {
@@ -33,6 +34,11 @@
                     case 131:
                         this.startApp(r.amount)
                         break;
+					case 134:
+                        this.$u.route({
+                            type: 'redirectTo',
+                            url: '/pages/index/index'
+                        })
                     case 136:
                         this.$u.route({
                             type: 'redirectTo',
@@ -61,6 +67,7 @@
                     success: (r) => {
                         const amount = Math.round(totalAmount * 100)
                         this.aopF2F(outTradeNo, amount, r.barCode, r.deviceSn )
+						this.codeType = r.codeType
                     },
                     fail: (r) => {
                         if (r.error===1400) {
@@ -96,6 +103,7 @@
                             icon:'success',
                             title:'收款成功',
                         })
+						this.play(res.content) // 语音播报
 						this.successTotalFee = this.totalFee
 						this.totalFee = ""
 					} else {
@@ -103,6 +111,40 @@
 					}
 				}).catch(err => {
 					this.Query(order)
+				})
+			},
+			play(order) {
+				if (this.codeType === "F") { // 刷脸支付时不播报
+					return
+				}
+				switch (order.method) {
+				case 'wechat':
+					order.method = '微信'
+					break
+				case 'alipay':
+					order.method = '支付宝'
+					break
+				case 'unionpay':
+					order.method = '银联'
+					break
+				case 'digital':
+					order.method = '数字人民币'
+					break
+				case 'sdykt':
+					order.method = '山东一卡通'
+					break
+				}
+				// 替换.00为空防止播报两百点零零元
+				let text = "收款"+((order.totalFee ? Number(order.totalFee) : 0)/100).toFixed(2).replace(/\.00/g, '')+"元"
+				if (order.operatorName) {
+					text = order.operatorName+text
+				}else{
+					text = order.method+text
+				}
+				my.ix.speech({
+					text: text,
+					success: (r) => {
+					}
 				})
 			},
 			Query(order){
@@ -118,6 +160,7 @@
                                     icon:'success',
                                     title:'收款成功',
                                 })
+								this.play(res.content) // 语音播报
 								this.totalFee = ""
 								break;
 							case 'USERPAYING':

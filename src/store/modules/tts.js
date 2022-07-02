@@ -23,9 +23,6 @@ const actions = {
 	if (order.total_fee) {
 	  order.totalFee = order.total_fee
 	}
-	if (order.total_fee) {
-	  order.totalFee = order.total_fee
-	}
 	switch (order.method) {
 	  case 'wechat':
 	    order.method = '微信'
