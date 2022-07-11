@@ -20,22 +20,26 @@
 						</span>
 						<span class="input-label totalFee">{{form.totalFee}}</span>
 					</u-form-item>
+					<u-form-item label="备注信息:" prop="remark">
+						<u-input v-model="remark" type="text" :border="true" placeholder="可输入备注信息"/>
+					</u-form-item>
 				</u-form>
-				<u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button>
+				<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
 			</view>
-			<u-keyboard
-				ref="uKeyboard"
-				mode="number"
-				v-model="keyboard"
-				:mask="false"
-				:tooltip="false"
-				:mask-close-able="false"
-				:safe-area-inset-bottom="true"
-				:dot-enabled="true"
-				:z-index="100"
-				@change="onChange"
-				@backspace="onBackspace"
-			></u-keyboard>
+			<view class="k-bottom">
+				<u-keyboard
+					ref="uKeyboard" 
+					mode="number" 
+					class="safe-area-inset-bottom"
+					:v-model="true"
+					:dot-enabled="true" 
+					:tooltip="false"
+					confirmText="付款"
+					@change="onChange"
+					@confirm="submit"
+					@backspace="onBackspace"
+				></u-keyboard>
+			</view>
 		</template>
 		<template v-else>
 			<u-alert-tips type="error" :show-icon="true" description="暂不支持此支付通道"></u-alert-tips>
@@ -45,11 +49,15 @@
 </template>
 
 <script>
+	import uKeyboard from '@/components/uview-ui/components/u-keyboard/u-keyboard.vue'
 	// #ifdef H5
 	import wx from 'weixin-js-sdk'
 	// #endif
     import { parseTime }  from '@/utils'
 	export default {
+		components: { 
+			uKeyboard
+		},
 		data() {
 			return {
 				loading: false,
@@ -63,11 +71,12 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method: "", //浏览器
+				method: "wechat", //浏览器
 				brandId: "",
 				qrcodeType: "qrcode",
 				code: "",
 				openId: "",
+				remark: "",
 			}
 		},
 		onLoad() {
@@ -356,7 +365,11 @@
 				}
 			},
 			getTitle() {
-				return this.operatorName?"C2B-"+this.operatorName:"二维码支付C2B"
+				if (this.remark) {
+					return this.operatorName?"C2B-"+this.operatorName+"-"+this.remark:"C2B-"+this.remark
+				}else{
+					return this.operatorName?"C2B-"+this.operatorName:"C2B二维码支付"
+				}
 			}
 		}
 	}
@@ -398,6 +411,12 @@
 	}
 	.totalFee {
 		font-size: 8vw;
+	}
+	.k-bottom{
+		position: relative;
+		position: fixed;
+		bottom: 0px;
+		left: 0;
 	}
 </style>
 <style scoped>

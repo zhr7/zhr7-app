@@ -110,6 +110,7 @@
 					title:'收款下单中'
 				})
 				const order = {
+					brandId: this.$store.state.institution.sellerBrandId,
 					bizContent: {
 						authCode: code,
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
