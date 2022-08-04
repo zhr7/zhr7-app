@@ -230,7 +230,6 @@
 						openId: this.openId,
 					}
 				}
-				console.log(1,req);
 				this.$u.api.institution.tradeAuth.JsApi(req).then(res=>{
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
@@ -262,7 +261,6 @@
             			operatorId: this.operatorId
 					}
 				}
-				console.log(111,req);
 				this.$u.api.institution.tradeAuth.QRCode(req).then(res=>{
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
