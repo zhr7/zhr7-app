@@ -1,9 +1,8 @@
 # 编译环境
-FROM node:12.22.12 as builder
+FROM node:10.23.1 as builder
 
 WORKDIR /go/src/github.com/lecex/app
 COPY . .
-RUN npm install -g yarn
 RUN yarn
 RUN yarn run build:h5
 
