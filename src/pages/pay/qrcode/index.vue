@@ -139,7 +139,9 @@
 							}
 						}else{
 							this.loading = true
-							this.payJsApi()
+							if (this.outTradeNo) { // 订单聚合时直接拉起支付
+								this.payJsApi()
+							}
 						}
 					} else {
 						this.loading = true
