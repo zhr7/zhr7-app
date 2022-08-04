@@ -1,10 +1,11 @@
 # 编译环境
-FROM node:10.23.1 as builder
+FROM node:12.22.12 as builder
 
 WORKDIR /go/src/github.com/lecex/app
 COPY . .
-RUN npm install
-RUN npm run build:h5
+RUN npm install -g yarn
+RUN yarn
+RUN yarn run build:h5
 
 # 运行环境自动构建
 FROM nginx:alpine
