@@ -110,7 +110,7 @@
 				this.$u.api.institution.trade.SimpleInfo({ 
 					userId: this.$route.query.user_id,
 					orderId: this.$route.query.order_id,
-					qrcodeId: this.$route.query.qrcode_id,
+					qrcodeId: this.$route.query.operator_id,
 				}).then(res=>{
 					this.disabled = false
 					this.brandId = res.brandId
