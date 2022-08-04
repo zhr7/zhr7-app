@@ -1,5 +1,5 @@
 # 编译环境
-FROM node:10.23.1 as builder
+FROM node:12.22.12 as builder
 
 WORKDIR /go/src/github.com/lecex/app
 COPY . .
