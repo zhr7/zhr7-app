@@ -37,6 +37,9 @@ const install = (Vue, vm) => {
 				Delete: (params = {}) => vm.$u.post('/institution-api/applys/delete', params),	// 
 				Get: (params = {}) => vm.$u.post('/institution-api/applys/get', params),
 			},
+			trade: {
+				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/trades/simpleInfo', params),
+			},
 			tradeAuth: {
 				QRCode: (params = {}) => vm.$u.post('/institution-api/TradeAuth/QRCode', params),
 				JsApi: (params = {}) => vm.$u.post('/institution-api/TradeAuth/JsApi', params),

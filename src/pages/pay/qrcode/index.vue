@@ -15,12 +15,14 @@
 						</span>
 					</u-form-item>
 					<u-form-item label="消费金额:" prop="name">
-						<span class="totalFee">
-							￥
-						</span>
-						<span class="input-label totalFee">{{form.totalFee}}</span>
+						<view v-bind:class="outTradeNo?'disabledTotalFee':''">
+							<span class="totalFee">
+								￥
+							</span>
+							<span class="totalFee" v-bind:class="outTradeNo?'':'input-label'">{{form.totalFee}}</span>
+						</view>
 					</u-form-item>
-					<u-form-item label="备注信息:" prop="remark">
+					<u-form-item label="备注信息:" prop="remark" v-show="!outTradeNo">
 						<u-input v-model="remark" type="text" :border="true" placeholder="可输入备注信息"/>
 					</u-form-item>
 				</u-form>
@@ -77,6 +79,8 @@
 				code: "",
 				openId: "",
 				remark: "",
+				userId:"",
+				outTradeNo: "", // 订单编号
 			}
 		},
 		onLoad() {
@@ -102,62 +106,48 @@
 		},
 		methods: {
 			simpleInfo(){
-				if (!this.$route.query.user_id) {
-					this.show = true;
-					this.err =  "二维码错误!未找到用户信息。"
-					return
-				}
 				this.disabled = true
-				this.$u.api.institution.seller.SimpleInfo({ seller: {
-					id: this.$route.query.user_id
-				}}).then(res =>{
-					if (res.seller) {
-						this.disabled = false
-						this.brandId = res.seller.brandId
-						this.name = res.seller.name
+				this.$u.api.institution.trade.SimpleInfo({ 
+					userId: this.$route.query.user_id,
+					orderId: this.$route.query.order_id,
+					qrcodeId: this.$route.query.qrcode_id,
+				}).then(res=>{
+					this.disabled = false
+					this.brandId = res.brandId
+					this.name = res.sellerName
+					this.operatorName = res.qrcodeName
+					this.userId = res.userId
+					if (!res.configStatus) {
+						this.show = true;
+						this.err =  "商户支付功能关闭。"
+						return
 					}
-					if (res.config) {
-						if (!res.config.status) {
-							this.show = true;
-							this.err =  "商户支付功能关闭。"
-							return
-						}
-						this.qrcodeType = res.config.qrcodeType
-						if (this.qrcodeType == "jsapi" && this.code == "") {
-							if (res.oauth) {
-								this.oauthAppId(res.oauth)
+					this.qrcodeType = res.configQrcodeType
+					this.outTradeNo = res.outTradeNo
+					this.form.totalFee = res.totalFee?(res.totalFee/100).toFixed(2):""
+					if (this.outTradeNo) { // 若果有订单编号，则使用jsapi方式支付
+						this.qrcodeType = "jsapi"
+					}
+					if (this.qrcodeType == "jsapi") {
+						if (this.code == "") {
+							if (res.oauthId) {
+								this.oauthAppId(res)
 							} else {
 								this.show = true;
 								this.err =  "未找到Oauth授权配置"
 								return
 							}
-						} else {
+						}else{
 							this.loading = true
+							this.payJsApi()
 						}
+					} else {
+						this.loading = true
 					}
-				}).catch(err => {
-					this.show = true;
-					this.err =  "获取商户简讯失败。"
-					console.log(err)
+				}).catch(err=>{
+					this.err =  "获取简讯失败。"
+					this.show = true
 				})
-				if (this.$route.query.operator_id) {
-					this.$u.api.institution.qrcode.SimpleInfo({ qrcode: {
-						id: this.$route.query.operator_id
-					}}).then(res =>{
-						if (res.qrcode) {
-							if (res.qrcode.userId === this.$route.query.user_id) {
-								this.operatorName = res.qrcode.name
-							}else{
-								this.show = true;
-								this.err =  "收款码和商户不匹配。"
-							}
-						}
-					}).catch(err => {
-						this.show = true;
-						this.err =  "获取收款码简讯失败。"
-						console.log(err)
-					})
-				}
 			},
 			submit() {
 				uni.vibrateShort() // 震动
@@ -228,22 +218,20 @@
 				}
 			},
 			payJsApi() {
-				if (!this.openId) {
-					this.show = true
-					this.err =  "获取openid失败"
-				}
-				this.$u.api.institution.tradeAuth.JsApi({
-					userId: this.$route.query.user_id,
+				const req = {
+					userId: this.userId,
 					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
 						title: this.getTitle(),
-						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
+						outTradeNo: this.outTradeNo?this.outTradeNo:parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
             			operatorId: this.operatorId,
 						openId: this.openId,
 					}
-				}).then(res=>{
+				}
+				console.log(1,req);
+				this.$u.api.institution.tradeAuth.JsApi(req).then(res=>{
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
 						let wechatPackage = {}
@@ -263,8 +251,8 @@
 				})
 			},
 			payQRCode() {
-				this.$u.api.institution.tradeAuth.QRCode({
-					userId: this.$route.query.user_id,
+				const req = {
+					userId: this.userId,
 					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
@@ -273,7 +261,9 @@
 						totalFee: String(Math.round(this.form.totalFee*100)),
             			operatorId: this.operatorId
 					}
-				}).then(res=>{
+				}
+				console.log(111,req);
+				this.$u.api.institution.tradeAuth.QRCode(req).then(res=>{
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
 						if (res.content.qrcode) {
@@ -299,6 +289,9 @@
 			},
 			onChange(val){
 				uni.vibrateShort() // 震动
+				if (this.outTradeNo) { // 如果有订单号，则不能改变订单金额
+					return
+				}
 				if (Number(this.form.totalFee + val)<1000000) {
 					if (this.form.totalFee === "0" && val != ".") {
 						return
@@ -309,22 +302,26 @@
 			},
 			onBackspace(e){
 				uni.vibrateShort() // 震动
+				if (this.outTradeNo) { // 如果有订单号，则不能删除
+					return
+				}
 				if(this.form.totalFee.length>0){
 					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
 				}
 			},
-			oauthAppId(oauth) {
-				const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + oauth.id)
+			oauthAppId(res) {
+				const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + res.oauthId)
 				// console.log(redirect_uri)
-				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?user_id="+ this.$route.query.user_id + "&oauth_id=" + oauth.id)
+				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?"+ window.location.href.split("?")[1]+ "&oauth_id=" + res.oauthId)
+				
 				switch (this.method) {
 					case "alipay":
 							window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
-							oauth.alipay.appId + "&scope=auth_base&redirect_uri=" + redirect_uri
+							res.oauthAlipayAppid + "&scope=auth_base&redirect_uri=" + redirect_uri
 						break;
 					case "wechat":
 							window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
-							oauth.wechat.appId + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+							res.oauthWechatAppid + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
 						break;
 					default:
 						break;
@@ -417,6 +414,9 @@
 		position: fixed;
 		bottom: 0px;
 		left: 0;
+	}
+	.disabledTotalFee{
+		color: #909399;
 	}
 </style>
 <style scoped>
