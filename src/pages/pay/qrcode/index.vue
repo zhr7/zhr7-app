@@ -139,9 +139,6 @@
 							}
 						}else{
 							this.loading = true
-							if (this.outTradeNo) { // 订单聚合时直接拉起支付
-								this.payJsApi()
-							}
 						}
 					} else {
 						this.loading = true
@@ -200,7 +197,7 @@
 							WeixinJSBridge.invoke(
 								'getBrandWCPayRequest', wechatPackage,
 								res => {
-									// console.log(res)
+									console.log(res)
 									if(res.err_msg == "get_brand_wcpay_request:ok" ){
 										uni.showToast({
 											duration: 10000,
@@ -340,6 +337,9 @@
 				}).then(res=>{
 					if (res.openid) {
 						this.openId = res.openid
+						if (this.outTradeNo) { // 订单聚合时直接拉起支付
+							this.payJsApi()
+						}
 					} else {
 						this.show = true
 						this.err =  "获取openid失败"
