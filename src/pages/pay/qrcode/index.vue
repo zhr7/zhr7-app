@@ -95,11 +95,11 @@
 			if (this.$route.query.operator_id) {
 				this.operatorId = this.$route.query.operator_id
 			}
-			if (this.code) {
-				this.oauthToken()
-			}
 			if (this.method) {
 				this.simpleInfo()
+			}
+			if (this.code) {
+				this.oauthToken()
 			}
 		},
 		mounted() {
