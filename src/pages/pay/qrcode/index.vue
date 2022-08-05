@@ -28,7 +28,7 @@
 				</u-form>
 				<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
 			</view>
-			<view class="k-bottom" v-show="isJsapi2">
+			<view class="k-bottom" v-show="!isJsapi2">
 				<u-keyboard
 					ref="uKeyboard" 
 					mode="number" 
