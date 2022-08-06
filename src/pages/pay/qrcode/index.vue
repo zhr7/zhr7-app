@@ -143,7 +143,7 @@
 								return
 							}
 						}
-					} else {
+					}
 					this.loading = true
 				}).catch(err=>{
 					this.err =  "获取简讯失败。"
