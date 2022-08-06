@@ -142,12 +142,9 @@
 								this.err =  "未找到Oauth授权配置"
 								return
 							}
-						}else{
-							this.loading = true
 						}
 					} else {
-						this.loading = true
-					}
+					this.loading = true
 				}).catch(err=>{
 					this.err =  "获取简讯失败。"
 					this.show = true
