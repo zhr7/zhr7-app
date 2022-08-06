@@ -28,7 +28,7 @@
 				</u-form>
 				<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
 			</view>
-			<view class="k-bottom">
+			<view class="k-bottom" v-show="!isJsapi2">
 				<u-keyboard
 					ref="uKeyboard" 
 					mode="number" 
@@ -80,10 +80,14 @@
 				openId: "",
 				remark: "",
 				userId:"",
+				orderId:"",
 				outTradeNo: "", // 订单编号
 			}
 		},
 		computed: {
+			isJsapi2() {
+				return this.orderId!=""&&this.code!=""
+			}
 		},
 		onLoad() {
 			// this.hideOptionMenu() // 禁止分享
@@ -93,6 +97,9 @@
 			}
 			if (this.$route.query.code) {
 				this.code = this.$route.query.code
+			}
+			if (this.$route.query.order_id) {
+				this.orderId = this.$route.query.order_id
 			}
 			if (this.$route.query.operator_id) {
 				this.operatorId = this.$route.query.operator_id
