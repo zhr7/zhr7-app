@@ -28,7 +28,7 @@
 				</u-form>
 				<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
 			</view>
-			<view class="k-bottom" v-show="!isJsapi2">
+			<view class="k-bottom">
 				<u-keyboard
 					ref="uKeyboard" 
 					mode="number" 
@@ -84,9 +84,6 @@
 			}
 		},
 		computed: {
-			isJsapi2() {
-				return this.code!=""&&this.outTradeNo!=""
-			}
 		},
 		onLoad() {
 			// this.hideOptionMenu() // 禁止分享
