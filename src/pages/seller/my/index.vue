@@ -36,6 +36,9 @@
 		</view>
 		<view class="u-m-t-20">
 			<u-cell-group>
+				<view @click="clickDeleteUsers" class="cell-item">删除账号缓存</view>
+			</u-cell-group>
+			<u-cell-group>
 				<view @click="showActionSheet = !showActionSheet" class="cell-item">切换账号</view>
 			</u-cell-group>
 		</view>
@@ -109,6 +112,12 @@
 				this.$u.route({
 					type:'redirectTo',
 					url: 'pages/login/index'
+				})
+			},
+			clickDeleteUsers() {
+				uni.removeStorageSync("users")
+				this.$refs.uToast.show({
+					title: "账号缓存已删除"
 				})
 			},
 			clickActionSheet(index) {

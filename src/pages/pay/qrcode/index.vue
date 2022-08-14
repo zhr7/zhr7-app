@@ -73,7 +73,7 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				method: "wechat", //浏览器
+				method: "", //浏览器
 				brandId: "",
 				qrcodeType: "qrcode",
 				code: "",
