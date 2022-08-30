@@ -28,6 +28,7 @@ const mutations = {
     state.name = ''
     state.userId = ''
     state.avatar = ''
+    state.balance = 0
     state.roles = []
     state.front_permits = []
   },
