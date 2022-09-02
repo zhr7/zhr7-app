@@ -55,7 +55,7 @@
 			})
 		},
 		onLoad(options) {
-			this.$store.dispatch('user/getOpenid')
+			// this.$store.dispatch('user/getOpenid')
 		},
 		mounted() {
             this.init()

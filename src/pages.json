@@ -23,6 +23,12 @@
 			}
 		},
 		{
+			"path": "pages/my/message/wechat/index",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/login/index",
 			"style": {
 			}

@@ -24,8 +24,8 @@
 				<!-- <u-cell-item @click="handler" icon="volume" title="云喇叭"></u-cell-item>
 				<u-cell-item @click="handler" icon="coupon" title="云打印机"></u-cell-item>
 				<u-cell-item @click="handler" icon="tags" title="门店"></u-cell-item>
-				<u-cell-item @click="handler" icon="server-man" title="收银员/终端"></u-cell-item> -->
-				<u-cell-item @click="handler('password')" icon="eye-fill" title="修改密码"></u-cell-item>
+				<u-cell-item @click="handler('password')" icon="eye-fill" title="修改密码"></u-cell-item> -->
+				<u-cell-item @click="handler('message-wechat')" icon="weixin-fill" title="微信通知"></u-cell-item>
 				<!-- #ifdef APP-PLUS -->
 				<u-cell-item icon="volume-up-fill" title="收款语音播报" :arrow="false">
 					<u-switch v-model="palyOrder"></u-switch>
@@ -148,6 +148,11 @@
 					case 'balance':
 						this.$u.route({
 							url: '/pages/my/balance/index', 
+						})
+						break;
+					case 'message-wechat':
+						this.$u.route({
+							url: '/pages/my/message/wechat/index', 
 						})
 						break;
 					default:

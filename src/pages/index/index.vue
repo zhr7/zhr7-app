@@ -29,6 +29,7 @@
 		onLoad(options) {
 			this.systemUpdate()
 			this.login()
+			this.$store.dispatch('user/getOpenid')
 		},
 		mounted() {
 			if (this.$refs.seller) {
