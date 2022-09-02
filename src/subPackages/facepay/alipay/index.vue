@@ -1,6 +1,8 @@
 <template>
 	<view>
-        <image class="index" src="https://wap.bichengbituo.com/static/h5/img/index.png"></image>
+		<!-- #ifdef MP-ALIPAY -->
+        	<image class="index" src="https://wap.bichengbituo.com/static/h5/img/index.png"></image>
+		<!-- #endif -->
 	</view>
 </template>
 <script>
