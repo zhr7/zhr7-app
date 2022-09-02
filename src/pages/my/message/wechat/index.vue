@@ -196,7 +196,7 @@
 			flex-direction: column;
 			justify-content: space-between;
 			padding: 10px;
-            font-size: 20px;
+            font-size: 18px;
 		}
 		.right {
 			display: flex;
