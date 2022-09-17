@@ -8,7 +8,7 @@
                     type="info" 
                     size="mini"
                     @click="clipboardData(form.subMerId)"
-                    >复制客户端公钥
+                    >复制商户号
                 </u-button>
             </u-form-item>
 		</u-form>
