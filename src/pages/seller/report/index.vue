@@ -1,5 +1,8 @@
 <template>
 	<view class="report">
+		<view class="top-seller-select" v-if="roles.indexOf('sellerBrand')!=-1">
+			<seller-select @sellerId="handlerSellerId"/>
+		</view>
 		<view class="top-time">
 			<view class="left">选择时间</view>
 			<view class="right">
@@ -376,8 +379,18 @@
 	</view>
 </template>
 <script>
+	import {  mapGetters } from 'vuex'
 	import { parseTime } from '@/utils'
+	import sellerSelect from '@/components/seller/select.vue'
 	export default {
+		components: { 
+			sellerSelect
+		},
+		computed: {
+			...mapGetters([
+				'roles',
+			]),
+		},
 		data() {
 			return {
 				dateSelected: 0,
@@ -390,7 +403,8 @@
 				date: new Date(new Date(new Date().toLocaleDateString()).getTime() - 1 * 24 * 60 * 60 * 1000),
 				show: false,
 				dateRange: [],
-				report: {}
+				report: {},
+				sellerId: 'all'
 			}
 		},
 		created() {
@@ -442,15 +456,22 @@
 				} else {
 					where = where + " And date = '" + parseTime(this.date,'{y}{m}{d}') + "'"
 				}
-				this.$u.api.pay.report.Amount({
+				if (this.sellerId != 'all') {
+					where = where + " And user_id = '" + this.sellerId + "'"
+				}
+				this.$u.api.institution.sellerReport.Amount({
 					listQuery: {
 						where: where
 					}
 				}).then(res => {
-					if (res.report) {
-						this.report = res.report
+					if (res.sellerReport) {
+						this.report = res.sellerReport
 					}
 				})
+			},
+			handlerSellerId(id){
+				this.sellerId = id
+				this.getAmount()
 			}
 		}
 	}
@@ -459,6 +480,10 @@
 <style lang="scss" scoped>
 .report{
 	padding: 3vw;
+	.top-seller-select{
+		width: 100%;
+		margin-bottom: 2vw;
+	}
 	.top-time {
 		display: flex;
 		flex-direction: row;

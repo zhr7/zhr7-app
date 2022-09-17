@@ -13,6 +13,14 @@
 					<u-dropdown-item title="筛选">
 						<view class="slot-content">
 							<view class="dropdown-center">
+								<view class="type" v-if="roles.indexOf('sellerBrand')!=-1">
+									<view class="title">
+										门店
+									</view>
+									<view class="order-item">
+										<seller-select @sellerId="handlerSellerId" class="terminal-input"/>
+									</view>
+								</view>
 								<view class="type">
 									<view class="title">
 										订单类型
@@ -162,11 +170,30 @@
 	</view>
 </template>
 <script>
+	import { mapGetters } from 'vuex'
 	import { parseTime } from '@/utils'
 	import uniDatetimePicker from '@/components/uni-datetime-picker/uni-datetime-picker.vue'
+	import sellerSelect from '@/components/seller/select.vue'
 	export default {
 		components: { 
-			uniDatetimePicker
+			uniDatetimePicker,
+			sellerSelect
+		},
+		computed: {
+			...mapGetters([
+				'roles',
+			]),
+			datetimerange: {
+				get() {
+					return [
+						parseTime(this.query.date[0]),
+						parseTime(this.query.date[1]),
+					]
+				},
+				set() {
+					return
+				}
+			},
 		},
 		data() {
 			return {
@@ -294,20 +321,8 @@
 					},
 				],
 				search: '',
+				sellerId: 'all'
 			}
-		},
-		computed: {
-			datetimerange: {
-				get() {
-					return [
-						parseTime(this.query.date[0]),
-						parseTime(this.query.date[1]),
-					]
-				},
-				set() {
-					return
-				}
-			},
 		},
 		created() {
 			uni.setNavigationBarTitle({
@@ -412,10 +427,13 @@
 				if (this.query.terminalId) {
 					where = where + " And terminal_id = '" + this.query.terminalId + "'"
 				}
+				if (this.sellerId != 'all') {
+					where = where + " And user_id = '" + this.sellerId + "'"
+				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.pay.order.List({
-					list_query: this.listQuery
+				this.$u.api.institution.order.List({
+					listQuery: this.listQuery
 				}).then(res => {
 					if (res.orders) {
 						res.orders.forEach(item => {
@@ -514,8 +532,10 @@
 					url: '/pages/seller/order/item', 
 				})
 				this.$store.dispatch('seller/setOrderInfoCache',item)
+			},
+			handlerSellerId(id){
+				this.sellerId = id
 			}
-			
 		},
 	}
 </script>
@@ -623,6 +643,9 @@
 			text-align: center;
 			border-radius: 15px;
 			margin: 5px;
+		}
+		.terminal-input{
+			width: 95vw;
 		}
 	}
 	.fee-item{

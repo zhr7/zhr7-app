@@ -66,6 +66,7 @@ const install = (Vue, vm) => {
 				SimpleList: (params = {}) => vm.$u.post('/institution-api/sellers/simpleList', params),	// 
 			},
 			order: {
+				Amount: (params = {}) => vm.$u.post('/institution-api/orders/amount', params),
 				List: (params = {}) => vm.$u.post('/institution-api/orders/list', params),	
 			},
 			provider: {

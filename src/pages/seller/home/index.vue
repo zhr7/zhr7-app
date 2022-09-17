@@ -1,6 +1,7 @@
 <template>
 	<view class="">
 		<view class="top">
+			<seller-select v-if="roles.indexOf('sellerBrand')!=-1" @sellerId="handlerSellerId"/>
 			<view class="line">
 				<view class="title">
 					今日交易统计
@@ -68,9 +69,11 @@
 	import {  mapGetters, mapState } from 'vuex'
 	import { parseTime } from '@/utils'
 	import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
+	import sellerSelect from '@/components/seller/select.vue'
 	export default {
 		components: { 
-			tkiQrcode
+			tkiQrcode,
+			sellerSelect
 		},
 		computed: {
 			...mapState({
@@ -80,6 +83,7 @@
 				'name',
 				'userId',
 				'avatar',
+				'roles',
 			]),
 		},
 		data() {
@@ -100,6 +104,7 @@
 					refundCount: 0
 				},
 				qrcodeSrc: '',
+				sellerId: 'all'
 			}
 		},
 		created() {
@@ -154,36 +159,52 @@
 					const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
 					where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
 				}
-				this.$u.api.pay.order.Amount({
-					list_query: {
+				if (this.sellerId != 'all') {
+					where = where + " And user_id = '" + this.sellerId + "'"
+				}
+				this.$u.api.institution.order.Amount({
+					listQuery: {
 						where: where
 					}
 				}).then(res => {
+					this.amount = {
+						totalFee: 0,
+						fee: 0,
+						buyerPayFee: 0,
+						rebate: 0,
+						count: 0,
+						refundFee: 0,
+						refundCount: 0
+					}
 					if (res.amount) {
-					const amount = res.amount
-					if (amount.count) {
-						this.amount.count = amount.count
-					}
-					if (amount.totalFee) {
-						this.amount.totalFee = amount.totalFee
-					}
-					if (amount.fee) {
-						this.amount.fee = amount.fee
-					}
-					if (amount.refundFee) {
-						this.amount.refundFee = amount.refundFee
-					}
-					if (amount.count) {
-						this.amount.count = amount.count
-					}
-					if (amount.refundCount) {
-						this.amount.refundCount = amount.refundCount
-					}
-					if (amount.buyerPayFee) {
-						this.amount.buyerPayFee = amount.buyerPayFee
-					}
+						const amount = res.amount
+						if (amount.count) {
+							this.amount.count = amount.count
+						}
+						if (amount.totalFee) {
+							this.amount.totalFee = amount.totalFee
+						}
+						if (amount.fee) {
+							this.amount.fee = amount.fee
+						}
+						if (amount.refundFee) {
+							this.amount.refundFee = amount.refundFee
+						}
+						if (amount.count) {
+							this.amount.count = amount.count
+						}
+						if (amount.refundCount) {
+							this.amount.refundCount = amount.refundCount
+						}
+						if (amount.buyerPayFee) {
+							this.amount.buyerPayFee = amount.buyerPayFee
+						}
 					}
 				})
+			},
+			handlerSellerId(id){
+				this.sellerId = id
+				this.getAmount()
 			}
 		}
 	}
