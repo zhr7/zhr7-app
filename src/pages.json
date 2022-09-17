@@ -42,6 +42,14 @@
 			}
 		},
 		{
+			"path": "pages/register/index",
+			"style": {
+				"navigationBarTitleText": "商户H5注册",
+				"navigationStyle":"custom",
+				"transparentTitle":"always" 
+			}
+		},
+		{
 			"path": "pages/seller/order/item",
 			"style": {
 				"enablePullDownRefresh": true

@@ -141,6 +141,11 @@ const install = (Vue, vm) => {
 				PrivateURL: (params = {}) => vm.$u.post('/storage-api/files/privateURL', params)
 			}
 		},
+		icbcjft: {
+			register: {
+				H5Register: (params = {}) => vm.$u.post('/icbcjft/registers/h5Register', params)
+			}
+		},
 	};
 }
 
