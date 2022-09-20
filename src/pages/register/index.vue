@@ -8,11 +8,11 @@
                     type="info" 
                     size="mini"
                     @click="clipboardData(form.subMerId)"
-                    >复制客户端公钥
+                    >复制商户号
                 </u-button>
             </u-form-item>
 		</u-form>
-		<u-button type="primary" @click="submit">提交</u-button>
+		<u-button type="primary" :disabled="disabled" @click="submit">提交</u-button>
 		<u-modal v-model="show" title="错误提示" :content="err"></u-modal>
 	</view>
 </template>
@@ -28,6 +28,7 @@
 				},
 				show: false,
 				err: "",
+				disabled: false
 			}
 		},
 		computed: {
@@ -52,6 +53,7 @@
                 })
             },
 			submit() {
+				this.disabled = true
 				this.$u.api.icbcjft.register.H5Register({ 
 					config: {
 						"AppId": "10000000000003236024",
@@ -70,6 +72,7 @@
 				}).catch(err=>{
 					this.err =  "获取工行聚富通注册信息失败"
 					this.show = true
+					this.disabled = false
 				})
 			}
 		}
