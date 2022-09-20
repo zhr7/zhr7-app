@@ -44,7 +44,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'date desc'
+					sort: 'date DESC,id DESC'
 				},
 				query: {
 				},
@@ -77,7 +77,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'date desc'
+					sort: 'date DESC,id DESC'
 				}
 				this.list = []
 				this.getList()
