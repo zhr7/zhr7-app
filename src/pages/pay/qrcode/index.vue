@@ -131,6 +131,16 @@
 						this.err =  "商户支付功能关闭。"
 						return
 					}
+					switch (res.Status) {
+						case "CLOSED":
+							this.show = true;
+							this.err =  "订单已关闭不允许支付"
+							return
+						case "SUCCESS":
+							this.show = true;
+							this.err =  "不允许重复支付"
+							return
+					}
 					this.qrcodeType = res.configQrcodeType
 					this.outTradeNo = res.outTradeNo
 					this.form.totalFee = res.totalFee?(res.totalFee/100).toFixed(2):""
