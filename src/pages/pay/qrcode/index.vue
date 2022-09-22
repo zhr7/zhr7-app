@@ -121,6 +121,7 @@
 					orderId: this.$route.query.order_id,
 					qrcodeId: this.$route.query.operator_id,
 				}).then(res=>{
+					this.loading = true
 					this.disabled = false
 					this.brandId = res.brandId
 					this.name = res.sellerName
@@ -158,7 +159,6 @@
 							}
 						}
 					}
-					this.loading = true
 				}).catch(err=>{
 					this.err =  "获取简讯失败。"
 					this.show = true
