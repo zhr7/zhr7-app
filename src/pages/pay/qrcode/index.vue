@@ -1,51 +1,56 @@
 <template>
 	<view class="content">
-		<template v-if="method">
-			<view class="pay">
-				<u-form :model="form" ref="uForm" label-width="190">
-					<u-form-item>
-						<span class="top">
-							<u-icon name="home"></u-icon>
-						</span>
-						<span class="top-name">
-							{{name}}
-						</span>
-						<span v-if="operatorName" class="top-operatorName">
-							{{operatorName}}
-						</span>
-					</u-form-item>
-					<u-form-item label="消费金额:" prop="name">
-						<view v-bind:class="outTradeNo?'disabledTotalFee':''">
-							<span class="totalFee">
-								￥
+		<view v-if="loading">
+			<template v-if="method">
+				<view class="pay">
+					<u-form :model="form" ref="uForm" label-width="190">
+						<u-form-item>
+							<span class="top">
+								<u-icon name="home"></u-icon>
 							</span>
-							<span class="totalFee" v-bind:class="outTradeNo?'':'input-label'">{{form.totalFee}}</span>
-						</view>
-					</u-form-item>
-					<u-form-item label="备注信息:" prop="remark" v-show="!outTradeNo">
-						<u-input v-model="remark" type="text" :border="true" placeholder="可输入备注信息"/>
-					</u-form-item>
-				</u-form>
-				<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
-			</view>
-			<view class="k-bottom" v-if="loading" v-show="!isJsapi2">
-				<u-keyboard
-					ref="uKeyboard" 
-					mode="number" 
-					class="safe-area-inset-bottom"
-					:v-model="true"
-					:dot-enabled="true" 
-					:tooltip="false"
-					confirmText="付款"
-					@change="onChange"
-					@confirm="submit"
-					@backspace="onBackspace"
-				></u-keyboard>
-			</view>
-		</template>
-		<template v-else>
-			<u-alert-tips type="error" :show-icon="true" description="暂不支持此支付通道"></u-alert-tips>
-		</template>
+							<span class="top-name">
+								{{name}}
+							</span>
+							<span v-if="operatorName" class="top-operatorName">
+								{{operatorName}}
+							</span>
+						</u-form-item>
+						<u-form-item label="消费金额:" prop="name">
+							<view v-bind:class="outTradeNo?'disabledTotalFee':''">
+								<span class="totalFee">
+									￥
+								</span>
+								<span class="totalFee" v-bind:class="outTradeNo?'':'input-label'">{{form.totalFee}}</span>
+							</view>
+						</u-form-item>
+						<u-form-item label="备注信息:" prop="remark" v-show="!outTradeNo">
+							<u-input v-model="remark" type="text" :border="true" placeholder="可输入备注信息"/>
+						</u-form-item>
+					</u-form>
+					<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
+				</view>
+				<view class="k-bottom" v-show="!isJsapi2">
+					<u-keyboard
+						ref="uKeyboard" 
+						mode="number" 
+						class="safe-area-inset-bottom"
+						:v-model="true"
+						:dot-enabled="true" 
+						:tooltip="false"
+						confirmText="付款"
+						@change="onChange"
+						@confirm="submit"
+						@backspace="onBackspace"
+					></u-keyboard>
+				</view>
+			</template>
+			<template v-else>
+				<u-alert-tips type="error" :show-icon="true" description="暂不支持此支付通道"></u-alert-tips>
+			</template>
+		</view>
+		<view v-else>
+			<u-alert-tips type="error" :show-icon="true" :description="err"></u-alert-tips>
+		</view>
 		<u-modal v-model="show" title="错误提示" :content="err"></u-modal>
 	</view>
 </template>
