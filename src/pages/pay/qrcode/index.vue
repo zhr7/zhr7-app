@@ -1,5 +1,5 @@
 <template>
-	<view class="content" v-if="loading">
+	<view class="content">
 		<template v-if="method">
 			<view class="pay">
 				<u-form :model="form" ref="uForm" label-width="190">
@@ -28,7 +28,7 @@
 				</u-form>
 				<!-- <u-button @click="submit" type="warning" :loading="disabled" :disabled="disabled">确认付款</u-button> -->
 			</view>
-			<view class="k-bottom" v-show="!isJsapi2">
+			<view class="k-bottom" v-if="loading" v-show="!isJsapi2">
 				<u-keyboard
 					ref="uKeyboard" 
 					mode="number" 
@@ -121,12 +121,14 @@
 					orderId: this.$route.query.order_id,
 					qrcodeId: this.$route.query.operator_id,
 				}).then(res=>{
-					this.loading = true
 					this.disabled = false
 					this.brandId = res.brandId
 					this.name = res.sellerName
 					this.operatorName = res.qrcodeName
 					this.userId = res.userId
+					this.qrcodeType = res.configQrcodeType
+					this.outTradeNo = res.outTradeNo
+					this.form.totalFee = res.totalFee?(res.totalFee/100).toFixed(2):""
 					if (!res.configStatus) {
 						this.show = true;
 						this.err =  "商户支付功能关闭。"
@@ -142,9 +144,6 @@
 							this.err =  "不允许重复支付"
 							return
 					}
-					this.qrcodeType = res.configQrcodeType
-					this.outTradeNo = res.outTradeNo
-					this.form.totalFee = res.totalFee?(res.totalFee/100).toFixed(2):""
 					if (this.outTradeNo) { // 若果有订单编号，则使用jsapi方式支付
 						this.qrcodeType = "jsapi"
 					}
@@ -159,6 +158,7 @@
 							}
 						}
 					}
+					this.loading = true
 				}).catch(err=>{
 					this.err =  "获取简讯失败。"
 					this.show = true
