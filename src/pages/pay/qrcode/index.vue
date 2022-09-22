@@ -126,9 +126,6 @@
 					this.name = res.sellerName
 					this.operatorName = res.qrcodeName
 					this.userId = res.userId
-					this.qrcodeType = res.configQrcodeType
-					this.outTradeNo = res.outTradeNo
-					this.form.totalFee = res.totalFee?(res.totalFee/100).toFixed(2):""
 					if (!res.configStatus) {
 						this.show = true;
 						this.err =  "商户支付功能关闭。"
@@ -144,6 +141,9 @@
 							this.err =  "不允许重复支付"
 							return
 					}
+					this.qrcodeType = res.configQrcodeType
+					this.outTradeNo = res.outTradeNo
+					this.form.totalFee = res.totalFee?(res.totalFee/100).toFixed(2):""
 					if (this.outTradeNo) { // 若果有订单编号，则使用jsapi方式支付
 						this.qrcodeType = "jsapi"
 					}
