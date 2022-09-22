@@ -131,7 +131,7 @@
 						this.err =  "商户支付功能关闭。"
 						return
 					}
-					switch (res.Status) {
+					switch (res.status) {
 						case "CLOSED":
 							this.show = true;
 							this.err =  "订单已关闭不允许支付"
