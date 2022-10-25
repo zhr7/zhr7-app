@@ -35,6 +35,7 @@
 				'openid',
 				'appid',
                 'name',
+				'userId',
 			])
 		},
 		data() {
@@ -72,7 +73,7 @@
                 this.getDevices()
             },
             getDevices() {
-                this.listQuery.where = "drive='miniprogramWechat'"
+                this.listQuery.where = "drive='miniprogramWechat' And user_id='"+this.userId+"'"
                 this.$u.api.message.device.List({
                     list_query: this.listQuery
                 }).then(res=>{

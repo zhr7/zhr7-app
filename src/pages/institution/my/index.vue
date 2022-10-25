@@ -13,6 +13,12 @@
 			</view>
 		</view>
 		
+		<view class="u-m-t-20">
+			<u-cell-group>
+				<u-cell-item @click="handler('balance')" icon="rmb-circle" title="余额">{{fee(balance)}}</u-cell-item>
+			</u-cell-group>
+		</view>
+		
 		<!-- <view class="u-m-t-20">
 			<u-cell-group>
 				<u-cell-item @click="handler('institution')" icon="rmb-circle" title="机构管理"></u-cell-item>
@@ -21,6 +27,7 @@
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
+				<u-cell-item @click="handler('message-wechat')" icon="weixin-fill" title="微信通知"></u-cell-item>
 				<u-cell-item @click="handler('institutionReport')" icon="volume" title="机构报表"></u-cell-item>
 				<u-cell-item @click="handler('sellerReport')" icon="coupon" title="商家报表"></u-cell-item>
 				<u-cell-item @click="handler('seller')" icon="tags" title="商家管理"></u-cell-item>
@@ -28,6 +35,9 @@
 			</u-cell-group>
 		</view>
 		<view class="u-m-t-20">
+			<u-cell-group>
+				<view @click="clickDeleteUsers" class="cell-item">删除账号缓存</view>
+			</u-cell-group>
 			<u-cell-group>
 				<view @click="showActionSheet = !showActionSheet" class="cell-item">切换账号</view>
 			</u-cell-group>
@@ -49,6 +59,7 @@
 				'name',
 				'username',
 				'avatar',
+				'balance',
 			]),
 		},
 		data() {
@@ -80,11 +91,20 @@
 					})
 				});
 			},
+			fee(number) { // 是否存在不存在返回0
+				return "￥"+((number ? Number(number) : 0)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+			},
 			outLogin(){
 				this.$store.dispatch('user/logout')
 				this.$u.route({
 					type:'redirectTo',
 					url: 'pages/login/index'
+				})
+			},
+			clickDeleteUsers() {
+				uni.removeStorageSync("users")
+				this.$refs.uToast.show({
+					title: "账号缓存已删除"
 				})
 			},
 			clickActionSheet(index) {
@@ -105,11 +125,34 @@
 					url: '/pages/index/index', 
 				})
 			},
-			handler(e) {
-				this.$emit('handlerPath', e)
-				this.$refs.uToast.show({
-					title: "努力开发中"
-				})
+			handler(path) {
+				switch (path) {
+					case 'password':
+						this.$u.route({
+							url: '/pages/my/password', 
+						})
+						break;
+					case 'balance':
+						this.$u.route({
+							url: '/pages/my/balance/index', 
+						})
+						break;
+					case 'message-wechat':
+						this.$u.route({
+							url: '/pages/my/message/wechat/index', 
+						})
+						break;
+					default:
+						this.$emit('handlerPath', path)
+						this.$refs.uToast.show({
+							title: "正在努力开发中。。"
+						})
+						break;
+				}
+				// this.$emit('handlerPath', e)
+				// this.$refs.uToast.show({
+				// 	title: "努力开发中"
+				// })
 			}
 		}
 	}
