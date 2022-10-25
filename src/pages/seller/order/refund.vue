@@ -93,7 +93,8 @@
 			},
 			refund(item) {
 				const refundFee = String(this.form.refundFee*100)
-				this.$u.api.pay.tradeAuth.Refund({ 
+				this.$u.api.institution.tradeAuth.Refund({ 
+					userId: this.item.userId,
 					bizContent: {
 						outTradeNo: this.item.outTradeNo,
 						outRefundNo: this.item.outTradeNo + '_' + parseTime(new Date(), '{h}{i}{s}{n}'),

@@ -43,6 +43,11 @@ const install = (Vue, vm) => {
 			tradeAuth: {
 				QRCode: (params = {}) => vm.$u.post('/institution-api/TradeAuth/QRCode', params),
 				JsApi: (params = {}) => vm.$u.post('/institution-api/TradeAuth/JsApi', params),
+
+				AopF2F: (params = {}) => vm.$u.post('/institution-api/TradeAuth/aopF2F', params),  // 下单
+				Query: (params = {}) => vm.$u.post('/institution-api/TradeAuth/query', params),  // 查询
+				Refund: (params = {}) => vm.$u.post('/institution-api/TradeAuth/refund', params),  // 退款
+				RefundQuery: (params = {}) => vm.$u.post('/institution-api/TradeAuth/refundQuery', params),  // 退款查询
 			},
 			institution: {
 				Password: (params = {}) => vm.$u.post('/institution-api/institutions/password', params),
@@ -99,16 +104,16 @@ const install = (Vue, vm) => {
 				Deposit: (params = {}) => vm.$u.post('/pay-api/balances/deposit', params),	//
 				Token: (params = {}) => vm.$u.post('/pay-api/balances/token', params),	//
 			},
-			tradeAuth: {
-				AopF2F: (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params),  // 下单
-				Query: (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params),  // 查询
-				Refund: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params),  // 退款
-				RefundQuery: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params),  // 退款查询
-				QRCode: (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params),
-				JsApi: (params = {}) => vm.$u.post('/pay-api/TradeAuth/JsApi', params),
-				OauthAppId: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthAppId', params),
-				OauthToken: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthToken', params),
-			},
+			// tradeAuth: {
+			// 	AopF2F: (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params),  // 下单
+			// 	Query: (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params),  // 查询
+			// 	Refund: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params),  // 退款
+			// 	RefundQuery: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params),  // 退款查询
+			// 	QRCode: (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params),
+			// 	JsApi: (params = {}) => vm.$u.post('/pay-api/TradeAuth/JsApi', params),
+			// 	OauthAppId: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthAppId', params),
+			// 	OauthToken: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthToken', params),
+			// },
 			oauth: {
 				Token: (params = {}) => vm.$u.post('/pay-api/oauths/token', params),
 				List: (params = {}) => vm.$u.post('/pay-api/oauths/list', params),

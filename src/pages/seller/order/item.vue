@@ -131,7 +131,8 @@
 		methods: {
 			init() {	//  初始化加载查询
 				if (this.item.totalFee>0) {
-					this.$u.api.pay.tradeAuth.Query({
+					this.$u.api.institution.tradeAuth.Query({
+						userId: this.item.userId,
 						bizContent: {
 							outTradeNo: this.item.outTradeNo
 						}
@@ -170,7 +171,8 @@
 						uni.stopPullDownRefresh()
 					})
 				} else {
-					this.$u.api.pay.tradeAuth.RefundQuery({
+					this.$u.api.institution.tradeAuth.RefundQuery({
+						userId: this.item.userId,
 						bizContent: {
 							outRefundNo: this.item.outTradeNo
 						}

@@ -119,7 +119,7 @@
 						terminalId: this.deviceId,
 					}
 				}
-				this.$u.api.pay.tradeAuth.AopF2F(order).then(res=>{
+				this.$u.api.institution.tradeAuth.AopF2F(order).then(res=>{
 					if (res.content.returnCode === 'SUCCESS' && res.content.status === 'SUCCESS') {
 						uni.showToast({
                             duration: 5000,
@@ -147,7 +147,7 @@
 				uni.showLoading({
 					title:'收款查询中'
 				})
-				this.$u.api.pay.tradeAuth.Query(order).then(res => {
+				this.$u.api.institution.tradeAuth.Query(order).then(res => {
 					if (res.content.returnCode === 'SUCCESS') {
 						switch (res.content.status) {
 							case 'SUCCESS':
