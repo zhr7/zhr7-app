@@ -100,7 +100,7 @@
 			},
 			userInfo(){
 				this.$store.dispatch('user/getInfo').then(()=>{
-					// #ifdef APP-PLUS
+					// #ifdef APP-PLUS || MP-ALIPAY
 					this.$store.dispatch('tts/init')
 					this.$store.dispatch('socket/closeSocket') // 关闭wss
 					uni.getSystemInfo({ 

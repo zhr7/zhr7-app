@@ -109,13 +109,30 @@
 						this.successTotalFee = this.totalFee
 						this.totalFee = ""
 					} else {
-						this.Query(order)
+						my.showToast({
+							type: 'fail',
+							content: res.content.returnMsg,
+							duration: 5000,
+						});
+						// 等待5秒
+						setTimeout(()=>{
+							this.Query(order)
+						},5000)
 					}
 				}).catch(err => {
+					my.showToast({
+						type: 'fail',
+						content: JSON.stringify(err),
+						duration: 10000,
+					});
 					this.Query(order)
 				})
 			},
 			play(order) {
+				// 开启socket播报后不重复播报
+				if (this.$store.state.socket.palyOrder) {
+					return
+				}
 				if (this.codeType === "F") { // 刷脸支付时不播报
 					return
 				}
@@ -197,11 +214,11 @@
 					}
 
 				}).catch(error => {
-					uni.showToast({
-                        duration: 5000,
-						icon:'error',
-						title:'查询失败!请到流水里面查询'
-					})
+					my.showToast({
+						type: 'fail',
+						content: JSON.stringify(err),
+						duration: 10000,
+					});
 				})
 			}
 		},

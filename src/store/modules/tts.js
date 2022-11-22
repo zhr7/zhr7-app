@@ -3,6 +3,10 @@ const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS");
 // #endif
 const state = {
   isTtsInit: false,
+  // 语音播报队列
+  ttsQueue: [],
+  // 队列锁
+  ttsLock: true,
 }
 
 const mutations = {
@@ -10,10 +14,23 @@ const mutations = {
 
 const actions = {
   init({ commit,state }) {
+	// #ifdef APP-PLUS
 	FvvUniTTS.init((callback) => {
 		state.isTtsInit = true
 		// actions.speak({ commit,state }, {text:"欢迎使用必诚付",id:"1"})
 	},'com.iflytek.speechcloud');
+	// #endif
+	// #ifdef MP-ALIPAY
+	state.isTtsInit = true
+	//  #endif
+	// 消费队列
+	setInterval(() => {
+		if (state.ttsQueue.length > 0 && state.ttsLock) {
+			 // 出队
+			const data = state.ttsQueue.shift()
+			actions.speak({ commit,state }, data)
+		}
+	}, 500)
   },
   order({ commit,state },order) {
 	if (new Date(order.created_at).getTime() < new Date(new Date(new Date().toLocaleDateString()).getTime())) {
@@ -47,14 +64,38 @@ const actions = {
 	}else{
 	  text = order.method+text
 	}
-	actions.speak({ commit,state }, {text:text,id:order.id})
+	// 增加队列
+	state.ttsQueue.push({text:text,id:order.id})
   },
   speak({ commit,state },{text,id}) {
 	if (state.isTtsInit ) {
+		state.ttsLock = false //上锁
+		// #ifdef APP-PLUS
 		FvvUniTTS.speak({
 			text: text,
 			id:id,
 		})
+		FvvUniTTS.onDone((id) => {
+			state.ttsLock = true //开锁
+		})
+		// #endif
+		// #ifdef MP-ALIPAY
+		my.showToast({
+			type: 'success',
+			content: text,
+			duration: 10000,
+		})
+		my.ix.speech({
+			text: text,
+			success: (r) => {
+				state.ttsLock = true //开锁
+			},
+			fail: (r) => {
+				state.ttsQueue.push({text:text,id:order.id})
+				state.ttsLock = true //开锁
+			}
+		})
+		//  #endif
 	}else{
 		uni.showToast({
 			duration: 3000,
