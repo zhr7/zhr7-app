@@ -18,8 +18,8 @@
 <script>
 	import tabbar from '@/components/tabbar'
 	import home from './home'
-	import institution from '@/components/pages/institution/institution/index.vue'
-	import seller from '@/components/pages/institution/seller/index.vue'
+	import institution from '@/pages/institution/institution/index.vue'
+	import seller from '@/pages/institution/seller/index.vue'
 	import apply from './apply'
 	import pay from './pay'
 	import my from './my'
@@ -90,19 +90,19 @@
 					case "sellerCreate":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/seller/create/index?item=0'
+							url: '/subPackages/main/institution/seller/create/index?item=0'
 						})
 						break;
 					case "institutionCreate":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/institution/create/index?item=0'
+							url: '/subPackages/main/institution/institution/create/index?item=0'
 						})
 						break;
 					case "institutionReport":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/report/index'
+							url: '/subPackages/main/institution/institution/report/index'
 						})
 						break;
 					case "sellerBrand":
@@ -117,7 +117,7 @@
 					case "institutionSecretKey":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/secretKey/index'
+							url: '/subPackages/main/institution/secretKey/index'
 						})
 						break;
 					case "institution-secret-key":
@@ -127,7 +127,7 @@
 					case "institutionOauth":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/oauth/index'
+							url: '/subPackages/main/institution/oauth/index'
 						})
 						break;
 					default:

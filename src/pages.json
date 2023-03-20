@@ -1,6 +1,5 @@
 {
 	"pages": [ 
-		
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -62,51 +61,7 @@
 			}
 		},
 		{
-			"path": "pages/institution/report/index",
-			"style": {
-			}
-		},
-		{
 			"path": "pages/institution/institution/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/institution/item",
-			"style": {
-				"enablePullDownRefresh": false
-			}
-		},{
-			"path": "pages/institution/secretKey/index",
-			"style": {
-			}
-		},{
-			"path": "pages/institution/oauth/index",
-			"style": {
-			}
-		},{
-			"path": "pages/institution/oauth/item",
-			"style": {
-			}
-		},{
-			"path": "pages/institution/institution/create/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/institution/password/index",
-			"style": {
-			}
-		},{
-			"path": "pages/institution/institution/setting/index",
-			"style": {
-			}
-		},{
-			"path": "pages/institution/institution/secretKey/index",
-			"style": {
-			}
-		},{
-			"path": "pages/institution/seller/create/index",
 			"style": {
 			}
 		},
@@ -114,60 +69,6 @@
 			"path": "pages/institution/seller/index",
 			"style": {
 				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/institution/seller/item",
-			"style": {
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/institution/seller/order/index",
-			"style": {
-				"enablePullDownRefresh": true
-			}
-		},
-		{
-			"path": "pages/institution/seller/order/item",
-			"style": {
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/institution/seller/report/index",
-			"style": {
-				"enablePullDownRefresh": true
-			}
-		},
-		{
-			"path": "pages/institution/seller/password/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/seller/setting/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/seller/device/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/seller/device/item",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/seller/qrcode/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/seller/qrcode/item",
-			"style": {
 			}
 		}
 	],
@@ -183,12 +84,147 @@
 	},
 	"subPackages": [
 		{
-			"root": "subPackages",
-			"name": "subPackages",
+			"root": "subPackages/main",
+			"name": "subMain",
 			"pages": [
 				{
-					"path": "facepay/alipay/index",
+					"path": "institution/seller/qrcode/index",
 					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/qrcode/item",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/device/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/device/item",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/setting/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/order/index",
+					"style": {
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "institution/seller/order/item",
+					"style": {
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "institution/seller/report/index",
+					"style": {
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "institution/seller/password/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/create/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/seller/item",
+					"style": {
+						"enablePullDownRefresh": false
+					}
+				},{
+					"path": "institution/institution/create/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/institution/password/index",
+					"style": {
+					}
+				},{
+					"path": "institution/institution/setting/index",
+					"style": {
+					}
+				},{
+					"path": "institution/institution/secretKey/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/institution/report/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/institution/item",
+					"style": {
+						"enablePullDownRefresh": false
+					}
+				},{
+					"path": "institution/secretKey/index",
+					"style": {
+					}
+				},{
+					"path": "institution/oauth/index",
+					"style": {
+					}
+				},{
+					"path": "institution/oauth/item",
+					"style": {
+					}
+				}
+			]
+		},
+		{
+			"root": "subPackages/facepay",
+			"name": "subFacepay",
+			"pages": [
+				{
+					"path": "alipay/index",
+					"style": {
+					}
+				}
+			]
+		},
+		{
+			"root": "subPackages/profit",
+			"name": "subProfit",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "list",
+					"style": {
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "cashList",
+					"style": {
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "cashAccount",
+					"style": {
+						"enablePullDownRefresh": true
 					}
 				}
 			]

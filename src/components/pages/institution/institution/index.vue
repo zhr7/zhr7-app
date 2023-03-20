@@ -2,29 +2,15 @@
 	<view>
 		<view class="top">
 			<view class="search">
-				<u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
+				<u-search placeholder="机构名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
-			<!-- <view class="uDropdown">
-				<u-dropdown ref="uDropdown" @open="deteOpen">
-					<u-dropdown-item title="日期">
-					</u-dropdown-item>
-					<u-dropdown-item title="扫码找单">
-					</u-dropdown-item>
-					<u-dropdown-item title="筛选">
-					</u-dropdown-item>
-				</u-dropdown>
-			</view>	 -->
 		</view>
 		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
-					<span v-if="item.brandId===item.id">
-						<m-icon name="brand" custom-prefix="colour-icon" size="38"></m-icon><br>
-						品牌
-					</span>
-					<span v-else>
-						<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
-						门店
+					<span>
+						<m-icon name="institution" custom-prefix="colour-icon" size="38"></m-icon><br>
+						{{item.level}}级机构
 					</span>
 				</view>
 				<view class="center">
@@ -59,12 +45,11 @@
 	export default {
 		computed: {
 			...mapState({
-				initCache: state => state.seller.initCache
+				initCache: state => state.institution.initCache
 			}),
 		},
 		data() {
 			return {
-				options: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -78,10 +63,16 @@
 				},
 				showDate: false,
 				search: '',
-				title: '',
+				institution: {
+					id: '',
+					institutionId: '',
+					level: '',
+					mobile: '',
+					name: '',
+					rebate: '',
+					username: '',
+				}
 			}
-		},
-		props: {
 		},
 		watch: {
 			initCache: {
@@ -92,25 +83,16 @@
 			}
 		},
 		created() {
-		},
-		onShow() {
-			this.options = RouteParams()
-		},
-		mounted() {
-			this.title = '门店管理'
-			if (!this.options.seller) {
-				this.title = '品牌管理'
-			}
-			if (this.options.brandId) {
-				this.title = '门店管理'
-			}
 			uni.setNavigationBarTitle({
-				title:this.title
+				title:'机构管理'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
+		},
+		mounted() {
+			this.institution = JSON.parse(JSON.stringify(RouteParams()))
 			this.init()
 		},
 		methods: {
@@ -144,36 +126,29 @@
 			},
 			getList() {
 				let where = ' true'
-				if (!this.options.brandId) {
-					where = where + ` And brand_id=id`
-				}
-				if (this.options.seller) {
-					where = ' true'
-				}
 				if (this.query.search) {
-					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
+					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.seller.List({
-					list_query: this.listQuery,
-					seller: {
-						brandId: this.options.brandId,
-						institutionId: this.options.institutionId
-					}
-				}).then(res => {
-					if (res.sellers) {
-						res.sellers.forEach(item => {
-							this.list.push(item)
-						});
-						this.total = Number(res.total)
-						if (this.list.length>=this.total) {
+				this.$u.api.institution.institution.List({
+						list_query: this.listQuery,
+						institution: {
+							id: this.institution.id,
+						},
+					}).then(res => {
+						if (res.institutions) {
+							res.institutions.forEach(item => {
+								this.list.push(item)
+							});
+							this.total = Number(res.total)
+							if (this.list.length>=this.total) {
+								this.status = 'nomore'
+							}
+						}else{
 							this.status = 'nomore'
 						}
-					}else{
-						this.status = 'nomore'
-					}
-				})
+					})
 			},
 			handlerSearch(res) {
 				if (res) {
@@ -193,7 +168,7 @@
 			click(item){
 				this.$u.route({
 					type: 'to',
-					url: '/pages/institution/seller/item', 
+					url: '/subPackages/main/institution/institution/item', 
 					params: item
 				})
 			}

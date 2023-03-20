@@ -1,70 +1,42 @@
 <template>
 	<view>
 		<view class="top">
-			<view class="search">
-				<u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
-			</view>	
-			<!-- <view class="uDropdown">
-				<u-dropdown ref="uDropdown" @open="deteOpen">
-					<u-dropdown-item title="日期">
-					</u-dropdown-item>
-					<u-dropdown-item title="扫码找单">
-					</u-dropdown-item>
-					<u-dropdown-item title="筛选">
-					</u-dropdown-item>
-				</u-dropdown>
-			</view>	 -->
 		</view>
 		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
-				<view class="left">
-					<span v-if="item.brandId===item.id">
-						<m-icon name="brand" custom-prefix="colour-icon" size="38"></m-icon><br>
-						品牌
-					</span>
-					<span v-else>
-						<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
-						门店
-					</span>
-				</view>
 				<view class="center">
 					<view class="title">
-						{{item.name}}
+						{{item.userName}}
 					</view>
 					<view class="time">
-						{{item.mobile}}
+						品牌:{{item.brandName}}
+					</view>
+					<view class="time">
+						笔:{{item.count}} <span v-if="item.rebate">预估佣金:{{fee(item.rebate/10000)}}</span>
 					</view>
 				</view>
 				<view class="right">
 					<view>
-						{{item.username}}
+						{{fee(item.totalFee)}}
+					</view>
+					<view class="fee">
+						手续费:{{fee(item.fee)}}
 					</view>
 					<view class="status">
-						{{replaceTime(item.updatedAt)}}
+						{{replaceTime(item.date)}}
 					</view>
-				</view>
-				<view class="arrow-right">
-					<u-icon name="arrow-right" size="30"></u-icon>
 				</view>
 			</view>
 			<u-loadmore :status="status" />
 		</view>
 		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
-		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
-	import { parseTime, RouteParams } from '@/utils'
-	import {  mapState } from 'vuex'
+	import { parseTime } from '@/utils'
 	export default {
-		computed: {
-			...mapState({
-				initCache: state => state.seller.initCache
-			}),
-		},
 		data() {
 			return {
-				options: {},
 				status: 'loadmore',
 				list: [],
 				total: 0,
@@ -72,45 +44,31 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'date DESC,id DESC'
 				},
 				query: {
 				},
 				showDate: false,
 				search: '',
-				title: '',
-			}
-		},
-		props: {
-		},
-		watch: {
-			initCache: {
-				handler(val, oldVal) {
-					this.init()
-				},
-				deep: true
 			}
 		},
 		created() {
-		},
-		onShow() {
-			this.options = RouteParams()
-		},
-		mounted() {
-			this.title = '门店管理'
-			if (!this.options.seller) {
-				this.title = '品牌管理'
-			}
-			if (this.options.brandId) {
-				this.title = '门店管理'
-			}
 			uni.setNavigationBarTitle({
-				title:this.title
+				title:'商家报表'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
                 backgroundColor: '#ffffff',  
 			})
+			
+		},
+		onLoad(options) {
+			this.routes = options
+			uni.setNavigationBarTitle({
+				title: this.routes.sellerName
+			})
+		},
+		onShow() {
 			this.init()
 		},
 		methods: {
@@ -119,7 +77,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'date DESC,id DESC'
 				}
 				this.list = []
 				this.getList()
@@ -136,34 +94,29 @@
 				return parseTime(time)
 			},
 			replaceTime(time){
-				time = time.replace("T", " ")
-				return time.replace("+08:00", "")
+				return time.substr(0,4)+"-"+time.substr(4,2)+"-"+time.substr(6,2)
 			},
-			isNumber(fee) { // 价格是否存在不存在返回0
-				return fee ? Number(fee)  : 0
+			isNumber(number) { // 是否存在不存在返回0
+				return number ? number : 0
+			},
+			fee(number) { // 是否存在不存在返回0
+				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
 				let where = ' true'
-				if (!this.options.brandId) {
-					where = where + ` And brand_id=id`
-				}
-				if (this.options.seller) {
-					where = ' true'
-				}
 				if (this.query.search) {
-					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
+					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.seller.List({
-					list_query: this.listQuery,
-					seller: {
-						brandId: this.options.brandId,
-						institutionId: this.options.institutionId
+				this.$u.api.institution.sellerReport.List({
+					listQuery: this.listQuery,
+					sellerReport: {
+						userId: this.routes.sellerId
 					}
 				}).then(res => {
-					if (res.sellers) {
-						res.sellers.forEach(item => {
+					if (res.sellerReports) {
+						res.sellerReports.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -191,11 +144,11 @@
 				this.getList()
 			},
 			click(item){
-				this.$u.route({
-					type: 'to',
-					url: '/subPackages/main/institution/seller/item', 
-					params: item
-				})
+				// this.$u.route({
+				// 	type: 'to',
+				// 	url: '/subPackages/main/institution/seller/item', 
+				// 	params: item
+				// })
 			}
 			
 		},
@@ -242,16 +195,16 @@
 			.totalFee {
 				color: #000;
 			}
+			.fee{
+				font-size: 3vw;
+				color: #909399;
+			}
 			.refundFee {
 				color: #FF0000;
 			}
 			.status {
 				font-size: 12px;
 			}
-		}
-		.arrow-right {
-			height: 60px;
-			line-height: 60px;
 		}
 	}
 }

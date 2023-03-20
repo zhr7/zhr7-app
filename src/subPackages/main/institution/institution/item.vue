@@ -2,7 +2,7 @@
 	<view class="item">
 		<view class="line">
 			<span class="info">
-				<m-icon name="institution" custom-prefix="colour-icon" class="icon"></m-icon><br>
+				<m-icon name="institution" custom-prefix="colour-icon" size="38"></m-icon><br>
 				{{item.level}}级机构
 			</span>
 			<view>
@@ -21,7 +21,7 @@
 					<m-icon
 						name="institution" 
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('institution')"
 					></m-icon>
 					<text class="grid-text">下级机构</text>
@@ -30,7 +30,7 @@
 					<m-icon
 						name="seller"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('seller')"
 					></m-icon>
 					<text class="grid-text">下级商户</text>
@@ -39,7 +39,7 @@
 					<m-icon
 						name="provider"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('provider')"
 					></m-icon>
 					<text class="grid-text">软件服务商</text>
@@ -48,7 +48,7 @@
 					<m-icon
 						name="seller-report"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('report')"
 					></m-icon>
 					<text class="grid-text">日结报表</text>
@@ -57,7 +57,7 @@
 					<m-icon
 						name="pay"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('pay')"
 					></m-icon>
 					<text class="grid-text">支付通道</text>
@@ -66,7 +66,7 @@
 					<m-icon
 						name="oauth"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('oauth')"
 					></m-icon>
 					<text class="grid-text">机构</text>
@@ -75,7 +75,7 @@
 					<m-icon
 						name="secret-key"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('secret-key')"
 					></m-icon>
 					<text class="grid-text">密钥仓库</text>
@@ -84,7 +84,7 @@
 					<m-icon
 						name="secretKey"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('secretKey')"
 					></m-icon>
 					<text class="grid-text">密钥管理</text>
@@ -93,7 +93,7 @@
 					<m-icon
 						name="password"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('password')"
 					></m-icon>
 					<text class="grid-text">密码重置</text>
@@ -102,7 +102,7 @@
 					<m-icon
 						name="setting"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('setting')"
 					></m-icon>
 					<text class="grid-text">机构配置</text>
@@ -111,7 +111,7 @@
 					<m-icon
 						name="delete"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('delete')"
 					></m-icon>
 					<text class="grid-text">删除机构</text>

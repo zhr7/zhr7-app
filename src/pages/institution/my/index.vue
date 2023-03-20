@@ -16,6 +16,7 @@
 		<view class="u-m-t-20">
 			<u-cell-group>
 				<u-cell-item @click="handler('balance')" icon="rmb-circle" title="余额">{{fee(balance)}}</u-cell-item>
+				<u-cell-item @click="handler('profit')" icon="rmb-circle" title="分润管理"></u-cell-item>
 			</u-cell-group>
 		</view>
 		
@@ -135,6 +136,11 @@
 					case 'balance':
 						this.$u.route({
 							url: '/pages/my/balance/index', 
+						})
+						break;
+					case 'profit':
+						this.$u.route({
+							url: '/subPackages/profit/index', 
 						})
 						break;
 					case 'message-wechat':

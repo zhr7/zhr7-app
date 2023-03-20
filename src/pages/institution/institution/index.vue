@@ -168,7 +168,7 @@
 			click(item){
 				this.$u.route({
 					type: 'to',
-					url: '/pages/institution/institution/item', 
+					url: '/subPackages/main/institution/institution/item', 
 					params: item
 				})
 			}

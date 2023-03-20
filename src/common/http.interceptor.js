@@ -1,3 +1,10 @@
+/*
+ * @Author: BigRocs
+ * @Date: 2023-01-08 15:28:46
+ * @LastEditTime: 2023-03-17 15:53:40
+ * @LastEditors: BigRocs
+ * @Description: QQ: 532388887, Email:bigrocs@qq.com
+ */
 let baseUrl = 'https://rpc.bichengbituo.com'
 // #ifdef H5
 	// baseUrl = document.getElementsByTagName('meta')['baseUrl'].getAttribute('content')
@@ -35,7 +42,11 @@ const install = (Vue, vm) => {
 		// config.header.token = token;
 
 		const token = uni.getStorageSync('token');
-		config.header['X-CSRF-Token'] = token;
+		if (config.url.indexOf('www.bichengbituo.com/api')!=-1) {
+			config.header['Authorization'] = token;
+		}else{
+			config.header['X-CSRF-Token'] = token;
+		}
 		return config;
 	}
 	// 响应拦截，判断状态码是否通过

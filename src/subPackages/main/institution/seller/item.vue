@@ -1,9 +1,13 @@
 <template>
 	<view class="item">
 		<view class="line">
-			<span class="info">
-				<m-icon name="institution" custom-prefix="colour-icon" class="icon"></m-icon><br>
-				{{item.level}}级机构
+			<span v-if="item.brandId===item.id" class="info">
+				<m-icon name="brand" custom-prefix="colour-icon" class="38"></m-icon><br>
+				品牌
+			</span>
+			<span v-else class="info">
+				<m-icon name="seller" custom-prefix="colour-icon" class="38"></m-icon><br>
+				门店
 			</span>
 			<view>
 				<view class="right name">{{item.name}}</view>
@@ -19,103 +23,85 @@
 			>
 				<u-grid-item>
 					<m-icon
-						name="institution" 
+						name="seller" 
 						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('institution')"
-					></m-icon>
-					<text class="grid-text">下级机构</text>
-				</u-grid-item>
-				<u-grid-item>
-					<m-icon
-						name="seller"
-						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('seller')"
 					></m-icon>
-					<text class="grid-text">下级商户</text>
+					<text class="grid-text">相关门店</text>
 				</u-grid-item>
 				<u-grid-item>
 					<m-icon
-						name="provider"
+						name="order-list" 
 						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('provider')"
+						:size="58"
+						@click="handler('sellerOrder')"
 					></m-icon>
-					<text class="grid-text">软件服务商</text>
+					<text class="grid-text">交易明细</text>
 				</u-grid-item>
 				<u-grid-item>
 					<m-icon
-						name="seller-report"
+						name="seller-report" 
 						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('report')"
+						:size="58"
+						@click="handler('sellerReport')"
 					></m-icon>
 					<text class="grid-text">日结报表</text>
 				</u-grid-item>
 				<u-grid-item>
 					<m-icon
-						name="pay"
-						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('pay')"
-					></m-icon>
-					<text class="grid-text">支付通道</text>
-				</u-grid-item>
-				<u-grid-item>
-					<m-icon
-						name="oauth"
-						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('oauth')"
-					></m-icon>
-					<text class="grid-text">机构</text>
-				</u-grid-item>
-				<u-grid-item>
-					<m-icon
-						name="secret-key"
-						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('secret-key')"
-					></m-icon>
-					<text class="grid-text">密钥仓库</text>
-				</u-grid-item>
-				<u-grid-item>
-					<m-icon
-						name="secretKey"
-						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('secretKey')"
-					></m-icon>
-					<text class="grid-text">密钥管理</text>
-				</u-grid-item>
-				<u-grid-item>
-					<m-icon
 						name="password"
 						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('password')"
+						:size="58"
+						@click="handler('sellerPassword')"
 					></m-icon>
 					<text class="grid-text">密码重置</text>
 				</u-grid-item>
 				<u-grid-item>
 					<m-icon
+						name="pay"
+						custom-prefix="colour-icon" 
+						:size="58"
+						@click="handler('sellerPay')"
+					></m-icon>
+					<text class="grid-text">支付配置</text>
+				</u-grid-item>
+				<u-grid-item>
+					<m-icon
 						name="setting"
 						custom-prefix="colour-icon" 
-						:size="100"
-						@click="handler('setting')"
+						:size="58"
+						@click="handler('sellerSetting')"
 					></m-icon>
-					<text class="grid-text">机构配置</text>
+					<text class="grid-text">商家配置</text>
 				</u-grid-item>
-				<!-- <u-grid-item>
+				<u-grid-item>
+					<m-icon
+						name="device" 
+						custom-prefix="colour-icon" 
+						:size="58"
+						@click="handler('sellerDevice')"
+					></m-icon>
+					<text class="grid-text">设备管理</text>
+				</u-grid-item>
+				<u-grid-item>
+					<m-icon
+						name="qrcode" 
+						custom-prefix="colour-icon" 
+						:size="58"
+						@click="handler('sellerQrcode')"
+					></m-icon>
+					<text class="grid-text">收款码</text>
+				</u-grid-item>
+				<u-grid-item>
 					<m-icon
 						name="delete"
 						custom-prefix="colour-icon" 
-						:size="100"
+						:size="58"
 						@click="handler('delete')"
 					></m-icon>
-					<text class="grid-text">删除机构</text>
-				</u-grid-item> -->
+					<text class="grid-text">删除商家</text>
+				</u-grid-item>
 			</u-grid>
 		</view>	
 		<u-modal v-model="modalShow" :show-cancel-button="true" @confirm="submitDelete()">
@@ -147,51 +133,65 @@
                 backgroundColor: '#ffffff',  
 			})
 		},
-		mounted() {
+		onShow() {
 			this.item = RouteParams()
 		},
 		methods: {
+			isNumber(fee) { // 价格是否存在不存在返回0
+				return fee ? Number(fee) : 0
+			},
+			replaceTime(time){
+				time = time.replace("T", " ")
+				return time.replace("+08:00", "")
+			},
+			refund() {
+				this.$u.route({
+					type: 'to',
+					url: '/pages/seller/order/refund', 
+				})
+			},
 			handler(e){
 				switch (e) {
-					case "institution":
-						this.$u.route({
-							type: 'to',
-							url: '/pages/institution/institution/index',
-							params: this.item
-						})
-						break;
 					case "seller":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/seller/index?institutionId='+this.item.id,
+							url: '/pages/institution/seller/index?brandId=' + this.item.brandId
 						})
 						break;
-					case "report":
+					case "sellerOrder":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/report/index',
-							params: this.item
+							url: '/subPackages/main/institution/seller/order/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
 						})
 						break;
-					case "password":
+					case "sellerReport":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/password/index',
-							params: this.item
+							url: '/subPackages/main/institution/seller/report/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
 						})
 						break;
-					case "setting":
+					case "sellerPassword":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/setting/index',
-							params: this.item
+							url: '/subPackages/main/institution/seller/password/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
 						})
 						break;
-					case "secretKey":
+					case "sellerSetting":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/secretKey/index',
-							params: this.item
+							url: '/subPackages/main/institution/seller/setting/index?id=' + this.item.id 
+						})
+						break;
+					case "sellerDevice":
+						this.$u.route({
+							type: 'to',
+							url: '/subPackages/main/institution/seller/device/index?id=' + this.item.id + '&name=' + this.item.name
+						})
+						break;
+					case "sellerQrcode":
+						this.$u.route({
+							type: 'to',
+							url: '/subPackages/main/institution/seller/qrcode/index?id=' + this.item.id + '&name=' + this.item.name
 						})
 						break;
 					case "delete":
@@ -206,8 +206,8 @@
 			},
 			submitDelete() {
 				if (this.modalContent === '我确认删除') {
-					this.$u.api.institution.institution.Delete({
-						institution: {
+					this.$u.api.institution.seller.Delete({
+						seller: {
 							id: this.item.id
 						}
 					}).then(res => {
@@ -215,9 +215,9 @@
 							uni.showToast({
 								duration: 3000,
 								icon:'success',
-								title:'删除机构成功',
+								title:'删除商家成功',
 							})
-							this.$store.dispatch('institution/changeInitCache') // 通知机构首页更新
+							this.$store.dispatch('seller/changeInitCache') // 通知商家首页更新
 							setTimeout(()=>{ 
 								this.$u.route({
 									type: 'back', 
@@ -227,7 +227,7 @@
 							uni.showToast({
 								duration: 3000,
 								icon:'error',
-								title:'删除机构失败',
+								title:'删除商家失败',
 							})
 						}
 					}).catch(err => {
@@ -271,8 +271,8 @@
 		text-align: right;
 	}
 	.name {
-		font-size: 20px;
-		color: #ff0000;
+		font-size: 4vw;
+		color: #dd6161;
 	}
 }
 .icon{
@@ -289,6 +289,21 @@
     /* #ifndef APP-PLUS */
     box-sizing: border-box;
     /* #endif */
+}
+.order{
+	color: #409EFF;
+}
+.report{
+	color: #19be6b;
+}
+.pay{
+	color: #67C23A;
+}
+.setting {
+	color: #F56C6C;
+}
+.password {
+	color: #E6A23C;
 }
 .slot-content{
 	padding: 5vw;
