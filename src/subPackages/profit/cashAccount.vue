@@ -1,7 +1,7 @@
 <!--
  * @Author: BigRocs
  * @Date: 2023-02-11 10:06:28
- * @LastEditTime: 2023-03-19 16:38:18
+ * @LastEditTime: 2023-03-22 11:03:07
  * @LastEditors: BigRocs
  * @Description: QQ: 532388887, Email:bigrocs@qq.com
 -->
@@ -92,7 +92,15 @@
 		methods: {
             init() {
 				this.$u.api.v3.profit.account.AccountGetByUserId({}).then((res) => {
-					this.formData = JSON.parse(JSON.stringify(res.item));
+					if (res.item) {
+						this.formData.id = res.item.id
+						this.formData.accountType = res.item.accountType
+						this.formData.accountName = res.item.accountName
+						this.formData.accountNumber = res.item.accountNumber
+						this.formData.accountBank = res.item.accountBank
+						this.formData.bankAddressCode = res.item.bankAddressCode
+						this.formData.bankName = res.item.bankName
+					}
 				});
             },
 			confirm(e) {
