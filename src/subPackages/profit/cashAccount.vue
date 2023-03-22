@@ -1,7 +1,7 @@
 <!--
  * @Author: BigRocs
  * @Date: 2023-02-11 10:06:28
- * @LastEditTime: 2023-03-22 11:04:33
+ * @LastEditTime: 2023-03-22 11:08:15
  * @LastEditors: BigRocs
  * @Description: QQ: 532388887, Email:bigrocs@qq.com
 -->
@@ -113,7 +113,11 @@
 				});
 			},
             submitForm() {
-				this.$u.api.v3.profit.account.AccountCreateOrUpdate(this.formData).then((res) => {
+				const data = JSON.parse(JSON.stringify(this.formData))
+				if (data.id=='') {
+					delete data.id
+				}
+				this.$u.api.v3.profit.account.AccountCreateOrUpdate(data).then((res) => {
                     if (res.valid) {
                         uni.showToast({
                             duration: 3000,
