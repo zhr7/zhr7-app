@@ -252,7 +252,7 @@
 						value: 'alipay',
 					},
 					{
-						label: '银联扫码',
+						label: '银联云闪付',
 						value: 'unionpay',
 					},
 					{

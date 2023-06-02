@@ -154,7 +154,7 @@
 			<u-line />
 			<view class="center">
 				<m-icon name="yunshanfu" custom-prefix="colour-icon" size="14"></m-icon>
-				<span>银联扫码</span>
+				<span>银联云闪付</span>
 			</view>
 			<view class="bottom">
 				<view class="item">

@@ -176,6 +176,7 @@ const actions = {
   },
   // get user info
   getInfo({ commit, state }) {
+    commit('INIT_USER')
     return new Promise((resolve, reject) => {
       const Api = store.state.$u.api
       Api.user.user.UserInfo().then(res => {
