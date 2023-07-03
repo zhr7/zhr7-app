@@ -123,10 +123,10 @@
 			})
 		},
 		mounted() {
-			this.init()
+			// this.init()
 		},
 		onPullDownRefresh() {
-			this.init()
+			// this.init()
 		},
 		methods: {
 			init() {	//  初始化加载查询

@@ -158,6 +158,9 @@
                 .time {
                     font-size: 10px;
                     color: #909399;
+					// 自动换行
+					word-break: break-all;
+					overflow: hidden;
                 }
             }
             .right {
