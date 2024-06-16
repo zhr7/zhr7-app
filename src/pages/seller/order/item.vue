@@ -102,6 +102,7 @@
 	</view>
 </template>
 <script>
+	import { parseTime } from '@/utils'
 	import { mapState } from 'vuex'
 	export default {
 		computed: {
@@ -210,8 +211,7 @@
 				return fee ? Number(fee) : 0
 			},
 			replaceTime(time){
-				time = time.replace("T", " ")
-				return time.replace("+08:00", "")
+				return parseTime(time)
 			},
 			refund() {
 				this.$u.route({

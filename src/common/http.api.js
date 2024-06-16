@@ -165,6 +165,9 @@ const install = (Vue, vm) => {
 					AccountGetByUserId: (params = {}) => vm.$u.post(V3+'/profit/account/getByUserId', params), // 
 				}
 			},
+			order: {
+				Search: (params = {}) => vm.$u.post(V3+'/order/order/search', params), // 报表统计
+			}
 		},
 	};
 }

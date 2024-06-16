@@ -202,9 +202,9 @@
 				total: 0,
 				listQuery: {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				},
 				query: {
 					date: [
@@ -340,9 +340,9 @@
 			init() {
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
@@ -359,8 +359,8 @@
 				return parseTime(time)
 			},
 			replaceTime(time){
-				time = time.replace("T", " ")
-				return time.replace("+08:00", "")
+				// time是时间戳转时间字符串显示
+				return parseTime(time)
 			},
 			isNumber(fee) { // 价格是否存在不存在返回0
 				return fee ? Number(fee)  : 0
@@ -373,7 +373,7 @@
 				})
 			},
 			getList() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.query.date.length===2) {
 					if (this.query.date[1] - this.query.date[0] > 31 * 24 * 60 * 60 * 1000) {
 						uni.showToast({
@@ -383,9 +383,10 @@
                         })
 						return
 					}
-					const start = parseTime(this.query.date[0])
-					const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
-					where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
+					// const start = parseTime(this.query.date[0])
+					// const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
+					// where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
+					
 				}
 				if (this.query.type) {
 					if (this.query.type === 1) {
@@ -431,12 +432,12 @@
 					where = where + " And user_id = '" + this.sellerId + "'"
 				}
 				this.listQuery.where = where
+				this.listQuery.startTime= Math.floor(this.query.date[0].getTime() / 1000),
+				this.listQuery.endTime=Math.floor(this.query.date[1].getTime() / 1000),
 				this.status = 'loading';
-				this.$u.api.institution.order.List({
-					listQuery: this.listQuery
-				}).then(res => {
-					if (res.orders) {
-						res.orders.forEach(item => {
+				this.$u.api.v3.order.Search(this.listQuery).then(res => {
+					if (res.items) {
+						res.items.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -467,9 +468,9 @@
 				this.query.date[1] = new Date(e[1])
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.query.search = ''
 				this.search = ''
@@ -479,9 +480,9 @@
 			clickFilter() {
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.query.search = ''
 				this.search = ''
@@ -518,7 +519,7 @@
 				}
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
 					sort: 'created_at desc'
 				}
