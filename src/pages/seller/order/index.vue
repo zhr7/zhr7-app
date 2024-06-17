@@ -167,6 +167,7 @@
 			v-model="datetimerange"
 			rangeSeparator="至"
 		/>
+		<u-modal v-model="show" title="错误提示" :content="errMsg"></u-modal>
 	</view>
 </template>
 <script>
@@ -321,7 +322,9 @@
 					},
 				],
 				search: '',
-				sellerId: 'all'
+				sellerId: 'all',
+				show: false,
+				errMsg: "",
 			}
 		},
 		created() {
@@ -447,6 +450,9 @@
 					}else{
 						this.status = 'nomore'
 					}
+				}).catch(err => {
+					this.errMsg = err.data
+					this.show = true
 				})
 			},
 			deteOpen(index) {
