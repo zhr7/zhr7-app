@@ -208,7 +208,7 @@
 				},
 				query: {
 					date: [
-						new Date(new Date(new Date().toLocaleDateString()).getTime() - 3 * 24 * 60 * 60 * 1000),
+						new Date(new Date(new Date().toLocaleDateString()).getTime() - 1 * 24 * 60 * 60 * 1000),
 						new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1000)
 					],
 					method: '',
