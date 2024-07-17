@@ -2,12 +2,13 @@
 FROM node:12.22.12 as builder
 
 WORKDIR /go/src/github.com/lecex/app
-# 添加更新证书和时区的步骤
-RUN apk add --no-cache --update tzdata && \
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+# 更正命令以适用于基于Debian或Ubuntu的镜像
+RUN apt-get update && \
+    apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
-    apk add --no-cache ca-certificates && update-ca-certificate
-    
+    apt-get install -y ca-certificates && \
+    update-ca-certificates
 COPY . .
 RUN yarn
 RUN yarn run build:h5
