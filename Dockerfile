@@ -2,16 +2,9 @@
 FROM node:12.22.12 as builder
 
 WORKDIR /go/src/github.com/lecex/app
-# 更正命令以适用于基于Debian或Ubuntu的镜像
-RUN apt-get update && \
-    apt-get install -y tzdata && \
-    ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone && \
-    apt-get install -y ca-certificates && \
-    update-ca-certificates
 COPY . .
-RUN yarn
-RUN yarn run build:h5
+RUN npm install
+RUN npm run build:h5
 
 # 运行环境自动构建
 FROM nginx:alpine
