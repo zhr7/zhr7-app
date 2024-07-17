@@ -2,7 +2,12 @@
 FROM node:12.22.12 as builder
 
 WORKDIR /go/src/github.com/lecex/app
-RUN yarn config set registry https://registry.yarnpkg.com
+# 添加更新证书和时区的步骤
+RUN apk add --no-cache --update tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    apk add --no-cache ca-certificates && update-ca-certificate
+    
 COPY . .
 RUN yarn
 RUN yarn run build:h5
