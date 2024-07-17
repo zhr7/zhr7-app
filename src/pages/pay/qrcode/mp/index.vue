@@ -177,7 +177,6 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 						if (this.method == "wechat") {
 							this.oauthWechatAppId(res)
 						}
-						console.log(this,res);
 						if (this.method == "alipay") {
 							this.oauthAlipayAppId(res)
 						}
@@ -395,7 +394,7 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 			oauthWechatAppId(res) {
 				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&wechat_appid=" + res.channel.oauthWechatAppid)
 				this.locationHref = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + res.channel.oauthWechatAppid + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
-				// window.location.href = 	this.locationHref
+				window.location.href = 	this.locationHref
 				console.log(this.locationHref);
 			},
 			oauthAlipayAppId(res) {
