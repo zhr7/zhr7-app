@@ -399,7 +399,7 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 				console.log(this.locationHref);
 			},
 			oauthAlipayAppId(res) {
-				const redirect_uri = encodeURIComponent("http://localhost:8080/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&alipay_appid=" + res.channel.oauthAlipayAppid)
+				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&alipay_appid=" + res.channel.oauthAlipayAppid)
 				window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
 							res.channel.oauthAlipayAppid + "&scope=auth_base&redirect_uri=" + redirect_uri
 				

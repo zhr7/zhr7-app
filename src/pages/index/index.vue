@@ -40,12 +40,6 @@
 			this.scrollTop = e.scrollTop
 		},
 		methods: {
-			handleButtonClick() {
-				uni.navigateTo({
-					url: '/pages/pay/qrcode/index?user_id=8040ecac-2cf1-439d-9621-1ac46ed1e5f6',
-				});
-				
-			},
 			systemUpdate(){
 				// #ifdef APP-PLUS
 				plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {

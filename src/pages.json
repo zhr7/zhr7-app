@@ -1,15 +1,15 @@
 {
 	"pages": [ 
 		{
+			"path": "pages/index/index",
+			"style": {
+			}
+		},
+		{
 			"path": "pages/pay/qrcode/mp/index",
 			"style": {
 				"navigationBarTitleText": "付款",
 				"transparentTitle":"always" 
-			}
-		},
-		{
-			"path": "pages/index/index",
-			"style": {
 			}
 		},
 		{
