@@ -1,10 +1,6 @@
 # 编译环境
 FROM node:12.22.12 as builder
 
-RUN apt-get update && \
-    apt-get install -y ca-certificates && \
-    update-ca-certificates
-
 WORKDIR /go/src/github.com/lecex/app
 RUN yarn config set registry https://registry.yarnpkg.com
 COPY . .
