@@ -126,7 +126,7 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 				this.wechatAppid = options.wechat_appid
 			}
 			if (options.alipay_appid) {
-				this.oauthAlipayAppid = options.alipay_appid
+				this.alipayAppid = options.alipay_appid
 			}
 			
 			if (this.method) {
@@ -135,6 +135,13 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 
 			if (this.code && this.wechatAppid) {
 				this.wechatOpenid()
+			}
+			if (this.code && this.alipayAppid) {
+				// options json to string
+				
+				this.err =  JSON.stringify(options)
+				this.show = true
+				this.alipayOpenid()
 			}
 		},
 		mounted() {
@@ -235,7 +242,6 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 							AlipayJSBridge.call("tradePay", {
 								tradeNO: prepayId
 							}, (data) => {
-								log(JSON.stringify(data));
 								if ("9000" == data.resultCode) {
 									uni.showToast({
 										duration: 10000,
@@ -441,6 +447,9 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 					this.show = true
 					this.err =  "微信Appid为空"
 				}
+			},
+			alipayOpenid() {
+				console.log(122112);
 			},
 			navigator(){
 				// #ifndef MP-WEIXIN  
