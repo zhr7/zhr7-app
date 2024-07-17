@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<web-view v-if="qrcode" :src="qrcode" @load="webViewLoad" @error="webViewError"></web-view>
+		<web-view v-if="locationHref" :src="locationHref" @load="webViewLoad" @error="webViewError"></web-view>
 		<view v-if="loading">
 			<template v-if="method">
 				<view class="pay">
@@ -63,14 +63,15 @@
 	// #endif
     import { parseTime }  from '@/utils'
 	import { mapGetters } from 'vuex'
+import { resolveLocale } from '@dcloudio/uni-i18n'
 	export default {
 		components: { 
 			uKeyboard
 		},
 		computed: {
-            ...mapGetters([
-				'openid',
-			])
+			isJsapi2() {
+				return this.orderId!=""&&this.code!=""
+			}
 		},
 		data() {
 			return {
@@ -85,28 +86,25 @@
 				keyboard: true,
 				show: false,
 				err: "",
+				locationHref: "",
 				method: "", //浏览器
 				brandId: "",
 				qrcodeType: "qrcode",
 				code: "",
-				openId: "",
+				wechatAppid: uni.getAccountInfoSync?uni.getAccountInfoSync().miniProgram.appId:'',
+				openid: "",
 				remark: "",
 				userId:"",
 				orderId:"",
 				outTradeNo: "", // 订单编号
-				qrcode: "",
-			}
-		},
-		computed: {
-			isJsapi2() {
-				return this.orderId!=""&&this.code!=""
 			}
 		},
 		onLoad(options) {
-					uni.setNavigationBarTitle({
-						title: "21321321"
-					})
-			options.user_id = "8040ecac-2cf1-439d-9621-1ac46ed1e5f6"
+			// uni.setNavigationBarTitle({
+			// 	title: "扫码支付",
+			// 	transparentTitle: "always"
+			// });
+			options.user_id = "730f9208-f146-4344-9260-1d488593ab62"
 			// this.hideOptionMenu() // 禁止分享
 			this.navigator() // 识别浏览器
 			if (options.auth_code) {
@@ -124,28 +122,27 @@
 			if (options.operator_id) {
 				this.operatorId = options.operator_id
 			}
+			if (options.wechat_appid) {
+				this.wechatAppid = options.wechat_appid
+			}
+			if (options.alipay_appid) {
+				this.oauthAlipayAppid = options.alipay_appid
+			}
+			
 			if (this.method) {
 				this.simpleInfo()
-				// #ifdef MP-WEIXIN  
-				if (this.qrcodeType == "jsapi") {
-					this.$store.dispatch('user/getOpenid')
-				}
-				// #endif
 			}
-			if (this.code) {
-				this.oauthToken()
+
+			if (this.code && this.wechatAppid) {
+				this.wechatOpenid()
 			}
 		},
 		mounted() {
 		},
 		methods: {
 			webViewLoad(e) {
-				console.log('web-view加载成功',this.qrcode);
+				console.log('web-view加载成功',this.locationHref);
 				console.log('web-view加载成功',e);
-				// 等待一分钟 
-				setTimeout(() => {
-					this.qrcode = ''
-				}, 10000);
 			},
 			webViewError(e) {
 				console.log('web-view加载失败', e.detail);
@@ -163,42 +160,47 @@
 						this.err =  "商户支付功能关闭。"
 						return
 					}
-					this.brandId = res.seller.brandId
+					this.qrcodeType = res.channel.qrcodeType
 					this.name = res.seller.name
 					this.operatorName = res.qrocde.name
-					uni.setNavigationBarTitle({
-						title: this.operatorName+this.name 
-					})
-					this.userId = res.seller.userId
-					switch (res.order.status) {
-						case "CLOSED":
-							this.show = true;
-							this.err =  "订单已关闭不允许支付"
-							return
-						case "SUCCESS":
-							this.show = true;
-							this.err =  "不允许重复支付"
-							return
+					// uni.setNavigationBarTitle({
+					// 	title: this.operatorName+this.name,
+					// 	transparentTitle: "always"
+					// });
+					// #ifdef MP-WEIXIN  
+					// 如果是小程序支付则获取openid
+					if (this.qrcodeType == "miniprogram") {
+						this.wechatMiniProgramOpenid()
 					}
-					this.qrcodeType = res.channel.qrcodeType
-					this.outTradeNo = res.order.outTradeNo
-					this.form.totalFee = res.order.totalFee?(res.order.totalFee/100).toFixed(2):""
-					if (this.outTradeNo) { // 若果有订单编号，则使用jsapi方式支付
-						this.qrcodeType = "jsapi"
-					}
-					if (this.qrcodeType == "jsapi"&&this.method!="wechat") {
-						if (this.code == "") {
-							if (res.oauthId) {
-								this.oauthAppId(res)
-							} else {
-								this.show = true;
-								this.err =  "未找到Oauth授权配置"
-								return
-							}
+					// #endif
+					if (this.qrcodeType == "jsapi" && this.code == "") {
+						if (this.method == "wechat") {
+							this.oauthWechatAppId(res)
+						}
+						console.log(this,res);
+						if (this.method == "alipay") {
+							this.oauthAlipayAppId(res)
 						}
 					}
+					// switch (res.order.status) {
+					// 	case "CLOSED":
+					// 		this.show = true;
+					// 		this.err =  "订单已关闭不允许支付"
+					// 		return
+					// 	case "SUCCESS":
+					// 		this.show = true;
+					// 		this.err =  "不允许重复支付"
+					// 		return
+					// }
+					// this.outTradeNo = res.order.outTradeNo
+					// this.form.totalFee = res.order.totalFee?(res.order.totalFee/100).toFixed(2):""
+					// if (this.outTradeNo) { // 若果有订单编号，则使用jsapi方式支付
+					// 	this.qrcodeType = "jsapi"
+					// }
+				
 					this.loading = true
 				}).catch(err=>{
+					console.error(err);
 					this.err =  "获取简讯失败。"
 					this.show = true
 				})
@@ -213,7 +215,10 @@
 				this.disabled = true
 				switch (this.qrcodeType) {
 					case "jsapi":
-						this.payJsApi()
+						this.payJsApi("jsapi")
+						break;
+					case "miniprogram":
+						this.payJsApi("miniprogram")
 						break;
 					case "qrcode":
 						this.payQRCode()
@@ -246,56 +251,82 @@
 						}
 						break;
 					case "wechat":
-						if (typeof WeixinJSBridge !== "undefined") {
-							// console.log(wechatPackage)
-							wechatPackage.timeStamp = wechatPackage.timeStamp.toString()
-							WeixinJSBridge.invoke(
-								'getBrandWCPayRequest', wechatPackage,
-								res => {
-									console.log(res)
-									if(res.err_msg == "get_brand_wcpay_request:ok" ){
-										uni.showToast({
-											duration: 10000,
-											icon:'success',
-											title:'支付成功',
-										})
+						wechatPackage.timeStamp = wechatPackage.timeStamp.toString()
+						if (this.qrcodeType == "jsapi") {
+							if (typeof WeixinJSBridge !== "undefined") {
+								WeixinJSBridge.invoke(
+									'getBrandWCPayRequest', wechatPackage,
+									res => {
+										if(res.err_msg == "get_brand_wcpay_request:ok" ){
+											uni.showToast({
+												duration: 10000,
+												icon:'success',
+												title:'支付成功',
+											})
+										}
 									}
+								)
+							}else{
+								this.show = true
+								this.err =  "未找到WeixinJSBridge请用微信扫码"
+							}
+						}
+						if (this.qrcodeType == "miniprogram") {
+							wx.requestPayment({
+								"timeStamp": String(wechatPackage.timeStamp),
+								"nonceStr":  wechatPackage.nonceStr,
+								"package":  wechatPackage.package,
+								"signType":  wechatPackage.signType,
+								"paySign":  wechatPackage.paySign,
+								"success": (res) => {
+									uni.showToast({
+										duration: 10000,
+										icon:'success',
+										title:'支付成功',
+									})
+								},
+								"fail": (res) => {
+									uni.showToast({
+										duration: 10000,
+										icon:'error',
+										title:'支付失败',
+									})
 								}
-							)
-						}else{
-							this.show = true
-							this.err =  "未找到WeixinJSBridge请用微信扫码"
+							})
 						}
 						break;
 					default:
 						break;
 				}
 			},
-			payJsApi() {
-				const req = {
+			payJsApi(tradeType) {
+				this.$u.api.v3.trade.JsApi({
 					userId: this.userId,
-					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
 						title: this.getTitle(),
 						outTradeNo: this.outTradeNo?this.outTradeNo:parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
 						totalFee: String(Math.round(this.form.totalFee*100)),
             			operatorId: this.operatorId,
-						openId: this.openId,
+						openId: this.openid,
+						appId: this.wechatAppid,
+						tradeType: tradeType,
 					}
-				}
-				this.$u.api.institution.tradeAuth.JsApi(req).then(res=>{
+				}).then(res=>{
 					this.disabled = false
-					if (res.content.returnCode === "SUCCESS") {
+					if (res.returnCode === "SUCCESS") {
 						let wechatPackage = {}
-						if (res.content.wechatPackage) {
-							wechatPackage = JSON.parse(res.content.wechatPackage)
+						if (res.wechatPackage) {
+							wechatPackage = JSON.parse(res.wechatPackage)
+							this.tradePay(res.prepayId, wechatPackage)
+						}else{
+							this.show = true
+							this.err =  res.returnMsg
 						}
-						this.tradePay(res.content.prepayId, wechatPackage)
 					} else {
 						// console.log(res)
 						this.show = true
-						this.err =  res.content.returnMsg
+						this.err =  res.returnMsg
 					}
 				}).catch(err => {
 					this.show = true
@@ -306,7 +337,6 @@
 			payQRCode() {
 				const req = {
 					userId: this.userId,
-					brandId: this.brandId,
 					bizContent: {
 						method: this.method,
 						title: this.getTitle(),
@@ -316,11 +346,10 @@
 					}
 				}
 				this.$u.api.institution.tradeAuth.QRCode(req).then(res=>{
-					console.log(res);
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
 						if (res.content.qrcode) {
-							this.qrcode = res.content.qrcode
+							this.locationHref = res.content.qrcode
 							// window.location.href = res.content.qrcode
 						} else {
 							console.log(res)
@@ -363,49 +392,56 @@
 					this.form.totalFee = this.form.totalFee.substring(0,this.form.totalFee.length-1);
 				}
 			},
-			oauthAppId(res) {
-				const redirect_uri = encodeURIComponent(window.location.href + "&oauth_id=" + res.oauthId)
-				// console.log(redirect_uri)
-				// const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/index?"+ window.location.href.split("?")[1]+ "&oauth_id=" + res.oauthId)
-				
-				switch (this.method) {
-					case "alipay":
-							window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
-							res.oauthAlipayAppid + "&scope=auth_base&redirect_uri=" + redirect_uri
-						break;
-					case "wechat":
-							window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
-							res.oauthWechatAppid + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
-						break;
-					default:
-						break;
-				}
+			oauthWechatAppId(res) {
+				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&wechat_appid=" + res.channel.oauthWechatAppid)
+				this.locationHref = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + res.channel.oauthWechatAppid + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+				// window.location.href = 	this.locationHref
+				console.log(this.locationHref);
 			},
-			oauthToken() {
-				if (this.$route.query.oauth_id instanceof Array) {
-					this.$route.query.oauth_id = this.$route.query.oauth_id[0]
-				}
-				this.$u.api.pay.oauth.Token({
-					oauth: {
-						id: this.$route.query.oauth_id,
-					},
-					method: this.method,
+			oauthAlipayAppId(res) {
+				const redirect_uri = encodeURIComponent("http://localhost:8080/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&alipay_appid=" + res.channel.oauthAlipayAppid)
+				window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
+							res.channel.oauthAlipayAppid + "&scope=auth_base&redirect_uri=" + redirect_uri
+				
+			},
+			wechatMiniProgramOpenid() {
+				uni.login({
+					provider: 'weixin',
+					success: res => {
+						if (res.errMsg === "login:ok") {
+							this.code = res.code
+							this.wechatOpenid()
+						}
+					}
+				})
+			},
+			wechatOpenid() {
+				if (this.wechatAppid) {
+					this.$u.api.v3.wechat.Code2openid({
 					code: this.code,
+					appid: this.wechatAppid
 				}).then(res=>{
 					if (res.openid) {
-						this.openId = res.openid
-						if (this.outTradeNo) { // 订单聚合时直接拉起支付
-							this.payJsApi()
-						}
-					} else {
-						this.show = true
-						this.err =  "获取openid失败"
+						this.openid = res.openid
+					}else{
+					uni.showToast({
+						duration: 5000,
+						icon:'error',
+						title:'未能获取openid',
+					})
 					}
 				}).catch(err => {
-					this.show = true
-					this.err =  "获取openid失败:"+ err
-					// console.log(err)
+					console.error(err)
+					uni.showToast({
+						duration: 5000,
+						icon:'error',
+						title: err.data,
+					})
 				})
+				}else{
+					this.show = true
+					this.err =  "微信Appid为空"
+				}
 			},
 			navigator(){
 				// #ifndef MP-WEIXIN  

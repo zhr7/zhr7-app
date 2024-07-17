@@ -1,3 +1,10 @@
+/*
+ * @Author: BigRocs
+ * @Date: 2022-01-14 22:04:12
+ * @LastEditTime: 2024-07-14 20:18:20
+ * @LastEditors: BigRocs
+ * @Description: QQ: 532388887, Email:bigrocs@qq.com
+ */
 import Vue from 'vue'
 import store from './store'
 import App from './App'
@@ -29,5 +36,4 @@ Vue.use(httpApi, app);
 // import routeIntercept from '@/common/route.interceptor.js';
 // Vue.use(routeIntercept, app);
 
-store.dispatch('settings/initConfig')
 app.$mount()

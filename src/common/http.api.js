@@ -3,6 +3,7 @@
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
 const V3 = "https://www.bichengbituo.com/api"
+// const V3 = "http://127.0.0.1:8081"
 const install = (Vue, vm) => {
 	// 此处使用了传入的params参数，一切自定义即可
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
@@ -167,7 +168,21 @@ const install = (Vue, vm) => {
 			},
 			order: {
 				Search: (params = {}) => vm.$u.post(V3+'/order/order/search', params), // 报表统计
-			}
+			},
+			wechat: {
+			    Code2openid: (params = {}) => vm.$u.post(V3+'/wechat/appid/code2openid', params), // 
+				GetByAppid: (params = {}) => vm.$u.post(V3+'/wechat/appid/getByAppid', params), // 
+			},
+			message: {
+				Build: (params = {}) => vm.$u.post(V3+'/message/message/build', params), // 
+				Unbuild: (params = {}) => vm.$u.post(V3+'/message/message/unbuild', params), // 
+				Search: (params = {}) => vm.$u.post(V3+'/message/message/search', params), // 
+			},
+			trade: {
+			    SimpleInfo: (params = {}) => vm.$u.post(V3+'/trade/public/simpleInfo', params), // 
+			    JsApi: (params = {}) => vm.$u.post(V3+'/trade/public/jsApi', params), // 
+			    QRCode: (params = {}) => vm.$u.post(V3+'/trade/public/qrCode', params), // 
+			},
 		},
 	};
 }

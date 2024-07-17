@@ -132,15 +132,12 @@ const actions = {
       provider: 'weixin',
       success: res => {
         if (res.errMsg === "login:ok") {
-          Api.pay.balance.Token({
-            method: 'wechatMiniprogram',
+          Api.v3.wechat.Code2openid({
             code: res.code,
-            bizContent: {
-              appId: state.appid
-            }
+            appid: state.appid
           }).then(res=>{
-            if (res.content.openId) {
-              commit('SET_OPENID', res.content.openId)
+            if (res.openid) {
+              commit('SET_OPENID', res.openid)
             }else{
               uni.showToast({
                 duration: 5000,
@@ -182,6 +179,7 @@ const actions = {
       Api.user.user.UserInfo().then(res => {
         // 用户相关信息设置
         const { username, name, balance, avatar, id } = res.user
+        // const { username, realName, avatar,  userId } = res
         commit('SET_NAME', name)
         commit('SET_USERNAME', username)
         commit('SET_BALANCE', balance)

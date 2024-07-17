@@ -2,26 +2,15 @@
 	<view class="item">
         <view class="top">
 		</view>
-		<view class="content">
-            <view class="item" v-for="(item, index) in list" :key="index">
-				<view class="left">
-					<span>
-						<m-icon name="weixinzhifu" custom-prefix="colour-icon" size="38">></m-icon>
-					</span>
-				</view>
-				<view class="center">
-					{{item.deviceKey}}
-				</view>
-				<view class="right">
-					<view class="status">
-						<u-button type="error" size="medium" @click="unbind(item)">解绑</u-button>
-					</view>
-				</view>
-			</view>
-            
+		<view class="u-m-t-20">
+			<u-cell-group>
+				<!-- #ifdef MP-WEIXIN -->
+				<u-cell-item icon="volume-up-fill" title="小程序收款通知" :arrow="false">
+					<u-switch v-model="showBind" @change="changeWechatMessage"></u-switch>
+				</u-cell-item>
+				<!-- #endif -->
+			</u-cell-group>
 		</view>
-        <u-button v-show="showBind" type="success" open-type="getUserInfo" @getuserinfo="bindWechat">绑定微信</u-button>
-		<u-toast ref="uToast" />
 	</view>
 </template>
 <script>
@@ -41,14 +30,8 @@
 		data() {
 			return {
                 nickName: "",
-                listQuery: {
-					page: 1,
-					limit: 20,
-					where: '',
-					sort: 'created_at desc'
-				},
                 showBind: false,
-                list: []
+                item: [],
 			}
 		},
 		created() {
@@ -61,7 +44,6 @@
 			})
 		},
 		onLoad(options) {
-			console.log(this.openid);
 		},
 		mounted() {
             this.init()
@@ -72,22 +54,92 @@
             init() {
                 this.getDevices()
             },
+			changeWechatMessage() {
+				if (this.showBind) {
+					this.$u.api.v3.wechat.GetByAppid({
+						appid: this.appid
+					}).then(res=>{
+						if (res.item) {
+							if (res.item.configs) {
+								// res.item.configs string转json
+								const configs = JSON.parse(res.item.configs)
+								wx.requestSubscribeMessage({
+									tmplIds: [configs.MiniprogramVoiceTemplateId],
+									success: (res) => {
+										if (res[configs.MiniprogramVoiceTemplateId] == 'accept') {
+											this.$u.api.v3.message.Build({
+												userId: this.userId,
+												userName: this.name,
+												drive: 'wechat',
+												types: ["MINIPROGRAM_WECHAT"],
+												address: this.openid,
+												eventType: ["ORDER"],
+												config: '',
+											}).then(res=>{
+												if (res.valid) {
+													this.getDevices()
+													uni.showToast({
+														duration: 5000,
+														icon:'success',
+														title:'收款通知开启',
+													})
+												}else{
+													this.showBind = false
+												}
+											}).catch(err => {
+												this.showBind = false
+												uni.showToast({
+													duration: 5000,
+													icon:'error',
+													title:'获取微信通知绑定失败',
+												})
+											})
+										}else{
+											this.showBind = false
+											uni.showToast({
+												duration: 5000,
+												icon:'error',
+												title:'收款通知开启失败',
+											})
+										}
+									},
+									fail(err) {
+										console.log(err);
+										this.showBind = false
+										uni.showToast({
+											duration: 5000,
+											icon:'error',
+											title:'收款通知开启失败',
+										})
+									}
+								})
+							}
+						}
+					}).catch(err => {
+						console.log(err)
+						this.showBind = false
+						uni.showToast({
+							duration: 5000,
+							icon:'error',
+							title: err.Error(),
+						})
+					})
+				}else{
+					this.unbind()
+				}
+			},
             getDevices() {
-                this.listQuery.where = "drive='miniprogramWechat' And user_id='"+this.userId+"'"
-                this.$u.api.message.device.List({
-                    list_query: this.listQuery
+                const where = "WHERE drive='wechat' And types='[\"MINIPROGRAM_WECHAT\"]' And user_id='"+this.userId+"'"
+                this.$u.api.v3.message.Search({
+					page: 1,
+					limit: 20,
+					where: where,
+					sort: 'ORDER BY created_at DESC, id DESC'
                 }).then(res=>{
-                    this.list = []
-                    if (res.devices) {
-                        this.list = res.devices
-                        this.list.forEach(element => {
-                            if (element.deviceId == this.openid) {
-                                this.showBind = false
-                            }
-                        });
-                    }else{
-                        this.showBind = true
-                    }
+					if (res.total > 0){
+						this.item = res.items[0]
+						this.showBind = true
+					}
                 }).catch(err => {
                     console.log(err)
 					uni.showToast({
@@ -97,46 +149,12 @@
                     })
 				})
             },
-            bindWechat(res) {
-                this.nickName = res.detail.userInfo.nickName
-                this.$u.api.message.device.Create({
-					device: {
-                        userName: this.name,
-                        drive: 'miniprogramWechat',
-                        deviceId: this.openid,
-                        deviceKey: this.nickName
-					}
+            unbind() {
+                this.$u.api.v3.message.Unbuild({
+					id: this.item.id,
 				}).then(res=>{
                     if (res.valid) {
-                        uni.showToast({
-                            duration: 5000,
-                            icon:'success',
-                            title:'绑定微信成功',
-                        })
-                        this.getDevices()
-                    }else{
-                        uni.showToast({
-                            duration: 5000,
-                            icon:'none',
-                            title:'绑定微信失败',
-                        })
-                    }
-				}).catch(err => {
-                    console.log(err)
-					uni.showToast({
-                        duration: 5000,
-                        icon:'error',
-                        title:'绑定微信失败',
-                    })
-				})
-            },
-            unbind(item) {
-                this.$u.api.message.device.Delete({
-					device: {
-                        id: item.id,
-					}
-				}).then(res=>{
-                    if (res.valid) {
+						this.showBind = false
                         uni.showToast({
                             duration: 5000,
                             icon:'success',

@@ -1,3 +1,10 @@
+<!--
+ * @Author: BigRocs
+ * @Date: 2022-01-14 22:04:12
+ * @LastEditTime: 2024-07-16 22:52:56
+ * @LastEditors: BigRocs
+ * @Description: QQ: 532388887, Email:bigrocs@qq.com
+-->
 <script>
 	export default {
 		onLaunch () {
