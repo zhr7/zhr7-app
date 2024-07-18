@@ -404,7 +404,13 @@
 				show: false,
 				dateRange: [],
 				report: {},
-				sellerId: 'all'
+				sellerId: 'all',
+				listQuery: {
+					page: 1,
+					pageSize: 15,
+					where: '',
+					sort: 'ORDER BY created_at DESC, id DESC'
+				},
 			}
 		},
 		created() {
@@ -422,6 +428,12 @@
 		methods: {
 			init() {
 				this.getAmount()
+				this.listQuery = {
+					page: 1,
+					pageSize: 15,
+					where: '',
+					sort: 'ORDER BY created_at DESC, id DESC'
+				}
 			},
 			parseTime(time, cFormat){
 				return parseTime(time, cFormat)
@@ -448,7 +460,7 @@
 				this.getAmount()
 			},
 			getAmount() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.dateRange.length>0) {
 					const start = parseTime(this.dateRange[0],'{y}{m}{d}')
 					const end = parseTime(this.dateRange[1],'{y}{m}{d}')
@@ -459,13 +471,10 @@
 				if (this.sellerId != 'all') {
 					where = where + " And user_id = '" + this.sellerId + "'"
 				}
-				this.$u.api.institution.sellerReport.Amount({
-					listQuery: {
-						where: where
-					}
-				}).then(res => {
-					if (res.sellerReport) {
-						this.report = res.sellerReport
+				this.listQuery.where = where
+				this.$u.api.v3.report.ReportSearch(this.listQuery).then(res => {
+					if (res.sum) {
+						this.report = res.sum
 					}
 				})
 			},

@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<iframe src="https://www.baidu.com" width="100%" height="500px" frameborder="0"></iframe>
 		<web-view v-if="locationHref" :src="locationHref" @load="webViewLoad" @error="webViewError"></web-view>
 		<view v-if="loading">
 			<template v-if="method">
@@ -58,12 +59,7 @@
 
 <script>
 	import uKeyboard from '@/components/uview-ui/components/u-keyboard/u-keyboard.vue'
-	// #ifdef H5
-	import wx from 'weixin-js-sdk'
-	// #endif
     import { parseTime }  from '@/utils'
-	import { mapGetters } from 'vuex'
-import { resolveLocale } from '@dcloudio/uni-i18n'
 	export default {
 		components: { 
 			uKeyboard
@@ -91,6 +87,7 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 				brandId: "",
 				qrcodeType: "qrcode",
 				code: "",
+				auth_code: "",
 				wechatAppid: uni.getAccountInfoSync?uni.getAccountInfoSync().miniProgram.appId:'',
 				openid: "",
 				remark: "",
@@ -104,11 +101,11 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 			// 	title: "扫码支付",
 			// 	transparentTitle: "always"
 			// });
-			options.user_id = "730f9208-f146-4344-9260-1d488593ab62"
+			options.user_id = "99c5c95e-835c-48d8-b052-6a0b8fdcdcfe"
 			// this.hideOptionMenu() // 禁止分享
 			this.navigator() // 识别浏览器
 			if (options.auth_code) {
-				this.code = options.auth_code
+				this.auth_code = options.auth_code
 			}
 			if (options.code) {
 				this.code = options.code
@@ -136,7 +133,7 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 			if (this.code && this.wechatAppid) {
 				this.wechatOpenid()
 			}
-			if (this.code && this.alipayAppid) {
+			if (this.auth_code && this.alipayAppid) {
 				// options json to string
 				
 				this.err =  JSON.stringify(options)
@@ -207,7 +204,7 @@ import { resolveLocale } from '@dcloudio/uni-i18n'
 					this.loading = true
 				}).catch(err=>{
 					console.error(err);
-					this.err =  "获取简讯失败。"
+					this.err =  "获取简讯失败。" + JSON.stringify(err)
 					this.show = true
 				})
 			},

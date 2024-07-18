@@ -183,6 +183,9 @@ const install = (Vue, vm) => {
 			    JsApi: (params = {}) => vm.$u.post(V3+'/trade/public/jsApi', params), // 
 			    QRCode: (params = {}) => vm.$u.post(V3+'/trade/public/qrCode', params), // 
 			},
+			report: {
+				ReportSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportSearch', params), // 
+			},
 		},
 	};
 }
