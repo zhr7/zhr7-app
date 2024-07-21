@@ -119,9 +119,6 @@
 			if (options.wechat_appid) {
 				this.wechatAppid = options.wechat_appid
 			}
-			if (options.alipay_appid) {
-				this.alipayAppid = options.alipay_appid
-			}
 			
 			if (this.method) {
 				this.simpleInfo()
@@ -130,9 +127,10 @@
 			if (this.code && this.wechatAppid) {
 				this.wechatOpenid()
 			}
-			if (this.auth_code && this.alipayAppid) {
-				// options json to string
-				
+			if (this.auth_code) {
+				if (options.app_id) {
+					this.alipayAppid = options.app_id
+				}
 				this.err =  JSON.stringify(options)
 				this.show = true
 				this.alipayOpenid()
@@ -392,7 +390,7 @@
 				console.log(this.locationHref);
 			},
 			oauthAlipayAppId(res) {
-				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&alipay_appid=" + res.channel.oauthAlipayAppid)
+				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId)
 				window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
 							res.channel.oauthAlipayAppid + "&scope=auth_base&redirect_uri=" + redirect_uri
 				
