@@ -1,7 +1,5 @@
 <template>
 	<view class="content">
-		<iframe src="https://www.baidu.com" width="100%" height="500px" frameborder="0"></iframe>
-		<web-view v-if="locationHref" :src="locationHref" @load="webViewLoad" @error="webViewError"></web-view>
 		<view v-if="loading">
 			<template v-if="method">
 				<view class="pay">
@@ -82,7 +80,6 @@
 				keyboard: true,
 				show: false,
 				err: "",
-				locationHref: "",
 				method: "", //浏览器
 				brandId: "",
 				qrcodeType: "qrcode",
@@ -144,13 +141,6 @@
 		mounted() {
 		},
 		methods: {
-			webViewLoad(e) {
-				console.log('web-view加载成功',this.locationHref);
-				console.log('web-view加载成功',e);
-			},
-			webViewError(e) {
-				console.log('web-view加载失败', e.detail);
-			},
 			simpleInfo(){
 				this.disabled = true
 				this.$u.api.v3.trade.SimpleInfo({ 
@@ -351,8 +341,7 @@
 					this.disabled = false
 					if (res.content.returnCode === "SUCCESS") {
 						if (res.content.qrcode) {
-							this.locationHref = res.content.qrcode
-							// window.location.href = res.content.qrcode
+							window.location.href = res.content.qrcode
 						} else {
 							console.log(res)
 						}
