@@ -98,7 +98,7 @@
 			// 	title: "扫码支付",
 			// 	transparentTitle: "always"
 			// });
-			options.user_id = "c6d0c1ba-c37d-4632-8f3b-8a070635f41"
+			options.user_id = "c6d0c1ba-c37d-4632-8f3b-8a070635f41b"
 			// this.hideOptionMenu() // 禁止分享
 			this.navigator() // 识别浏览器
 			if (options.auth_code) {
