@@ -171,10 +171,12 @@
 						if (this.method == "wechat") {
 							this.oauthWechatAppId(res)
 						}
-						if (this.method == "alipay") {
-							this.oauthAlipayAppId(res)
-						}
 					}
+					// #ifdef H5
+					if (this.method == "alipay") {
+						this.oauthAlipayAppId(res)
+					}
+					// #endif
 					// switch (res.order.status) {
 					// 	case "CLOSED":
 					// 		this.show = true;
