@@ -97,17 +97,8 @@
 			}
 		},
 		onLoad(options) {
-			wx.miniProgram.navigateTo({
-				appId: "wxa3e18acd39d360bf",
-				path: "/pages/pay/qrcode/mp/index",
-				extraData:  options,
-			success(res) {
-				console.log(res);
-			},
-			fail(err) {
-				console.error('Failed to navigate to mini program', err);
-			}
-			});
+			window.location.href =  "weixin://dl/business/?appid=wxa3e18acd39d360bf&path=/pages/pay/qrcode/mp/index"
+
 			// uni.setNavigationBarTitle({
 			// 	title: "扫码支付",
 			// 	transparentTitle: "always"
