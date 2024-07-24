@@ -112,43 +112,43 @@
 			// 	title: "扫码支付",
 			// 	transparentTitle: "always"
 			// });
-			options.user_id = "c6d0c1ba-c37d-4632-8f3b-8a070635f41b"
-			// this.hideOptionMenu() // 禁止分享
-			this.navigator() // 识别浏览器
-			if (options.auth_code) {
-				this.auth_code = options.auth_code
-			}
-			if (options.code) {
-				this.code = options.code
-			}
-			if (options.order_id) {
-				this.orderId = options.order_id
-			}
-			if (options.user_id) {
-				this.userId = options.user_id
-			}
-			if (options.operator_id) {
-				this.operatorId = options.operator_id
-			}
-			if (options.wechat_appid) {
-				this.wechatAppid = options.wechat_appid
-			}
+			// options.user_id = "c6d0c1ba-c37d-4632-8f3b-8a070635f41b"
+			// // this.hideOptionMenu() // 禁止分享
+			// this.navigator() // 识别浏览器
+			// if (options.auth_code) {
+			// 	this.auth_code = options.auth_code
+			// }
+			// if (options.code) {
+			// 	this.code = options.code
+			// }
+			// if (options.order_id) {
+			// 	this.orderId = options.order_id
+			// }
+			// if (options.user_id) {
+			// 	this.userId = options.user_id
+			// }
+			// if (options.operator_id) {
+			// 	this.operatorId = options.operator_id
+			// }
+			// if (options.wechat_appid) {
+			// 	this.wechatAppid = options.wechat_appid
+			// }
 			
-			if (this.method) {
-				this.simpleInfo()
-			}
+			// if (this.method) {
+			// 	this.simpleInfo()
+			// }
 
-			if (this.code && this.wechatAppid) {
-				this.wechatOpenid()
-			}
-			if (this.auth_code) {
-				if (options.app_id) {
-					this.alipayAppid = options.app_id
-				}
-				this.err =  JSON.stringify(options)
-				this.show = true
-				this.alipayOpenid()
-			}
+			// if (this.code && this.wechatAppid) {
+			// 	this.wechatOpenid()
+			// }
+			// if (this.auth_code) {
+			// 	if (options.app_id) {
+			// 		this.alipayAppid = options.app_id
+			// 	}
+			// 	this.err =  JSON.stringify(options)
+			// 	this.show = true
+			// 	this.alipayOpenid()
+			// }
 		},
 		mounted() {
 		},
