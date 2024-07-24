@@ -58,6 +58,9 @@
 <script>
 	import uKeyboard from '@/components/uview-ui/components/u-keyboard/u-keyboard.vue'
     import { parseTime }  from '@/utils'
+	// #ifdef H5
+	import wx from 'weixin-js-sdk'
+	// #endif
 	export default {
 		components: { 
 			uKeyboard
@@ -94,6 +97,17 @@
 			}
 		},
 		onLoad(options) {
+			wx.miniProgram.navigateTo({
+				appId: "wxa3e18acd39d360bf",
+				path: "/pages/pay/qrcode/mp/index",
+				extraData:  options,
+			success(res) {
+				console.log(res);
+			},
+			fail(err) {
+				console.error('Failed to navigate to mini program', err);
+			}
+			});
 			// uni.setNavigationBarTitle({
 			// 	title: "扫码支付",
 			// 	transparentTitle: "always"
@@ -384,13 +398,13 @@
 				}
 			},
 			oauthWechatAppId(res) {
-				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&wechat_appid=" + res.channel.oauthWechatAppid)
+				const redirect_uri = encodeURIComponent("https://wap1.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId+"&wechat_appid=" + res.channel.oauthWechatAppid)
 				this.locationHref = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + res.channel.oauthWechatAppid + "&redirect_uri=" + redirect_uri + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
 				window.location.href = 	this.locationHref
 				console.log(this.locationHref);
 			},
 			oauthAlipayAppId(res) {
-				const redirect_uri = encodeURIComponent("https://wap.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId)
+				const redirect_uri = encodeURIComponent("https://wap1.bichengbituo.com/pages/pay/qrcode/mp/index?user_id="+this.userId+"&operator_id="+this.operatorId+"&order_id="+this.orderId)
 				window.location.href = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=" +
 							res.channel.oauthAlipayAppid + "&scope=auth_base&redirect_uri=" + redirect_uri
 				
