@@ -106,16 +106,6 @@ const install = (Vue, vm) => {
 				Deposit: (params = {}) => vm.$u.post('/pay-api/balances/deposit', params),	//
 				Token: (params = {}) => vm.$u.post('/pay-api/balances/token', params),	//
 			},
-			// tradeAuth: {
-			// 	AopF2F: (params = {}) => vm.$u.post('/pay-api/TradeAuth/aopF2F', params),  // 下单
-			// 	Query: (params = {}) => vm.$u.post('/pay-api/TradeAuth/query', params),  // 查询
-			// 	Refund: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refund', params),  // 退款
-			// 	RefundQuery: (params = {}) => vm.$u.post('/pay-api/TradeAuth/refundQuery', params),  // 退款查询
-			// 	QRCode: (params = {}) => vm.$u.post('/pay-api/TradeAuth/QRCode', params),
-			// 	JsApi: (params = {}) => vm.$u.post('/pay-api/TradeAuth/JsApi', params),
-			// 	OauthAppId: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthAppId', params),
-			// 	OauthToken: (params = {}) => vm.$u.post('/pay-api/TradeAuth/oauthToken', params),
-			// },
 			oauth: {
 				Token: (params = {}) => vm.$u.post('/pay-api/oauths/token', params),
 				List: (params = {}) => vm.$u.post('/pay-api/oauths/list', params),
@@ -154,6 +144,15 @@ const install = (Vue, vm) => {
 			}
 		},
 		v3: {
+			user: {
+				auth: {
+					Auth: (params = {}) => vm.$u.post(V3+'/user/auth/login', params),
+					UserInfo: (params = {}) => vm.$u.post(V3+'/user/auth/userInfo', params),
+				},
+				order: {
+					Search: (params = {}) => vm.$u.post(V3+'/user/order/search', params),
+				},
+			},
 			profit: {
 				my: {
 					ProfitList: (params = {}) => vm.$u.post(V3+'/profit/my/search', params), // 报表统计
@@ -167,7 +166,10 @@ const install = (Vue, vm) => {
 				}
 			},
 			order: {
-				Search: (params = {}) => vm.$u.post(V3+'/order/order/search', params), // 报表统计
+				order: {
+					Search: (params = {}) => vm.$u.post(V3+'/order/order/search', params), // 
+					Amount: (params = {}) => vm.$u.post(V3+'/order/order/amount', params), // 
+				}
 			},
 			wechat: {
 			    Code2openid: (params = {}) => vm.$u.post(V3+'/wechat/appid/code2openid', params), // 
@@ -179,13 +181,29 @@ const install = (Vue, vm) => {
 				Search: (params = {}) => vm.$u.post(V3+'/message/message/search', params), // 
 			},
 			trade: {
-			    SimpleInfo: (params = {}) => vm.$u.post(V3+'/trade/public/simpleInfo', params), // 
-			    JsApi: (params = {}) => vm.$u.post(V3+'/trade/public/jsApi', params), // 
-			    QRCode: (params = {}) => vm.$u.post(V3+'/trade/public/qrCode', params), // 
+				public: {
+					SimpleInfo: (params = {}) => vm.$u.post(V3+'/trade/public/simpleInfo', params), // 
+					JsApi: (params = {}) => vm.$u.post(V3+'/trade/public/jsApi', params), // 
+					QRCode: (params = {}) => vm.$u.post(V3+'/trade/public/qrCode', params), // 	
+				},
+				auth: {
+					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),
+					JsApi: (params = {}) => vm.$u.post(V3+'/trade/auth/jsApi', params),
+	
+					AopF2F: (params = {}) => vm.$u.post(V3+'/trade/auth/aopF2F', params),  // 下单
+					Query: (params = {}) => vm.$u.post(V3+'/trade/auth/query', params),  // 查询
+					Refund: (params = {}) => vm.$u.post(V3+'/trade/auth/refund', params),  // 退款
+					RefundQuery: (params = {}) => vm.$u.post(V3+'/trade/auth/refundQuery', params),  // 退款查询
+				},
 			},
 			report: {
 				ReportSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportSearch', params), // 
 			},
+			seller: {
+				seller: {
+					Search: (params = {}) => vm.$u.post(V3+'/seller/seller/search', params), // 
+				}
+			}
 		},
 	};
 }

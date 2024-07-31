@@ -13,7 +13,7 @@
 					<u-dropdown-item title="筛选">
 						<view class="slot-content">
 							<view class="dropdown-center">
-								<view class="type" v-if="roles.indexOf('sellerBrand')!=-1">
+								<view class="type" v-if="roles.indexOf('BrandMerchant')!=-1">
 									<view class="title">
 										门店
 									</view>
@@ -438,7 +438,7 @@
 				this.listQuery.startTime= Math.floor(this.query.date[0].getTime() / 1000),
 				this.listQuery.endTime=Math.floor(this.query.date[1].getTime() / 1000),
 				this.status = 'loading';
-				this.$u.api.v3.order.Search(this.listQuery).then(res => {
+				this.$u.api.v3.order.order.Search(this.listQuery).then(res => {
 					if (res.items) {
 						res.items.forEach(item => {
 							this.list.push(item)

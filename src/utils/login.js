@@ -3,10 +3,10 @@
  */
 import store from '@/store'
 const login = {
-    api : store.state.$u.api,
+    api : store.state.$u.api.v3,
     Auth(user) {
         return new Promise((resolve, reject) => {
-            this.api.user.auth.Auth({ user }).then(res => {
+            this.api.user.auth.Auth(user).then(res => {
                 resolve(res)
             }).catch(err => {
                 reject(err)

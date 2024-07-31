@@ -1,9 +1,16 @@
+/*
+ * @Author: BigRocs
+ * @Date: 2022-01-14 22:04:12
+ * @LastEditTime: 2024-07-26 15:32:39
+ * @LastEditors: BigRocs
+ * @Description: QQ: 532388887, Email:bigrocs@qq.com
+ */
 import store from '@/store'
 const state = {
   versionCode: '',
   version: '',
   icpBeiAn: '',
-  payQrcodeUrl: '',
+  payQrcodeUrl: 'https://wap.bichengbituo.com/pages/pay/qrcode/index',
   sysName: '',
 }
 

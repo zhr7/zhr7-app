@@ -110,7 +110,7 @@
 					title:'收款下单中'
 				})
 				const order = {
-					brandId: this.$store.state.institution.sellerBrandId,
+					userId: this.$store.state.user.userId,
 					bizContent: {
 						authCode: code,
 						outTradeNo: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}') + Math.round(Math.random()*1000),
@@ -119,8 +119,8 @@
 						terminalId: this.deviceId,
 					}
 				}
-				this.$u.api.institution.tradeAuth.AopF2F(order).then(res=>{
-					if (res.content.returnCode === 'SUCCESS' && res.content.status === 'SUCCESS') {
+				this.$u.api.v3.trade.auth.AopF2F(order).then(res=>{
+					if (res.returnCode === 'SUCCESS' && res.status === 'SUCCESS') {
 						uni.showToast({
                             duration: 5000,
                             icon:'success',
@@ -132,6 +132,7 @@
 						this.Query(order)
 					}
 				}).catch(err => {
+					console.log(err);
 					this.Query(order)
 				})
 			},
@@ -147,9 +148,9 @@
 				uni.showLoading({
 					title:'收款查询中'
 				})
-				this.$u.api.institution.tradeAuth.Query(order).then(res => {
-					if (res.content.returnCode === 'SUCCESS') {
-						switch (res.content.status) {
+				this.$u.api.v3.trade.auth.Query(order).then(res => {
+					if (res.returnCode === 'SUCCESS') {
+						switch (res.status) {
 							case 'SUCCESS':
 								uni.showToast({
                                     duration: 10000,

@@ -45,6 +45,7 @@
 </template>
 <script>
 	import { mapState, mapGetters } from 'vuex'
+    import { parseTime } from '@/utils'
 	export default {
 		computed: {
             ...mapGetters([
@@ -93,8 +94,8 @@
                 this.listQuery = {
 					page: 1,
 					limit: 15,
-					where: '',
-					sort: 'created_at desc'
+					where: 'WHERE true',
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
@@ -111,17 +112,14 @@
 				return fee ? Number(fee)  : 0
 			},
             replaceTime(time){
-                // 替换字符串T为空格替换+08:00为空
-                return time.replace(/T/g,' ').replace(/\+08:00/g,'')
+                return parseTime(time)
 			},
             
             getList() {
 				this.status = 'loading';
-				this.$u.api.user.order.List({
-					listQuery: this.listQuery
-				}).then(res => {
-					if (res.orders) {
-						res.orders.forEach(item => {
+				this.$u.api.v3.user.order.Search(this.listQuery).then(res => {
+					if (res.items) {
+						res.items.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)

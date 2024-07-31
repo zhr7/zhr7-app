@@ -136,7 +136,8 @@
 								},
 								type: 'username'
 							}).then(res =>{
-								uni.setStorageSync('token', res.token)
+								console.log(res)
+								uni.setStorageSync('token', res.accessToken)
 								let users = uni.getStorageSync('users')
 								if (!users) {
 									users = {}
@@ -144,8 +145,8 @@
 								users[this.form.username] = {
 									username: this.form.username,
 									password: this.form.password,
-									name: res.user.name,
-									token: res.token,
+									name: res.name,
+									token: res.accessToken,
 								}
 								if (Object.keys(users).length > 8) {
 									Object.keys(users).forEach((index,key) => {

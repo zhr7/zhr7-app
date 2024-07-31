@@ -1,7 +1,7 @@
 <template>
 	<view class="">
 		<view class="top">
-			<seller-select v-if="roles.indexOf('sellerBrand')!=-1" @sellerId="handlerSellerId"/>
+			<seller-select v-if="roles.indexOf('BrandMerchant')!=-1" @sellerId="handlerSellerId"/>
 			<view class="line">
 				<view class="title">
 					今日交易统计
@@ -21,7 +21,7 @@
 					交易笔数
 				</view>
 				<view class="right">
-					{{amount.count-amount.refundCount}}
+					{{amount.total-amount.refundTotal}}
 				</view>
 			</view>
 			<view class="line">
@@ -53,7 +53,7 @@
 					退款笔数
 				</view>
 				<view class="right">
-					{{amount.refundCount}}
+					{{amount.refundTotal}}
 				</view>
 			</view>
 			<u-line/>
@@ -99,9 +99,9 @@
 					fee: 0,
 					buyerPayFee: 0,
 					rebate: 0,
-					count: 0,
+					total: 0,
 					refundFee: 0,
-					refundCount: 0
+					refundTotal: 0
 				},
 				qrcodeSrc: '',
 				sellerId: 'all'
@@ -139,13 +139,13 @@
 				this.query = {
 					date: [
 						new Date(new Date(new Date().toLocaleDateString()).getTime()),
-						new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1000)
+						new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000)
 					]
 				}
 				this.getAmount()
 			},
 			getAmount() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.query.date) {
 					if (this.query.date[1] - this.query.date[0] > 31 * 24 * 60 * 60 * 1000) {
 						uni.showToast({
@@ -156,30 +156,30 @@
 						return
 					}
 					const start = parseTime(this.query.date[0])
-					const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
+					const end = parseTime(new Date(this.query.date[1].getTime()))
 					where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
 				}
 				if (this.sellerId != 'all') {
 					where = where + " And user_id = '" + this.sellerId + "'"
 				}
-				this.$u.api.institution.order.Amount({
-					listQuery: {
-						where: where
-					}
+				this.$u.api.v3.order.order.Amount({
+					where: where,
+					startTime: Math.floor(this.query.date[0].getTime() / 1000),
+					endTime: Math.floor(this.query.date[1].getTime() / 1000)
 				}).then(res => {
 					this.amount = {
 						totalFee: 0,
 						fee: 0,
 						buyerPayFee: 0,
 						rebate: 0,
-						count: 0,
+						total: 0,
 						refundFee: 0,
-						refundCount: 0
+						refundTotal: 0
 					}
-					if (res.amount) {
-						const amount = res.amount
-						if (amount.count) {
-							this.amount.count = amount.count
+					if (res) {
+						const amount = res
+						if (amount.total) {
+							this.amount.total = amount.total
 						}
 						if (amount.totalFee) {
 							this.amount.totalFee = amount.totalFee
@@ -190,11 +190,8 @@
 						if (amount.refundFee) {
 							this.amount.refundFee = amount.refundFee
 						}
-						if (amount.count) {
-							this.amount.count = amount.count
-						}
-						if (amount.refundCount) {
-							this.amount.refundCount = amount.refundCount
+						if (amount.refundTotal) {
+							this.amount.refundTotal = amount.refundTotal
 						}
 						if (amount.buyerPayFee) {
 							this.amount.buyerPayFee = amount.buyerPayFee

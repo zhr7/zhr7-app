@@ -1,7 +1,7 @@
 /*
  * @Author: BigRocs
  * @Date: 2023-01-08 15:28:46
- * @LastEditTime: 2023-03-17 15:53:40
+ * @LastEditTime: 2024-07-26 11:54:40
  * @LastEditors: BigRocs
  * @Description: QQ: 532388887, Email:bigrocs@qq.com
  */
@@ -42,7 +42,7 @@ const install = (Vue, vm) => {
 		// config.header.token = token;
 
 		const token = uni.getStorageSync('token');
-		if (config.url.indexOf('www.bichengbituo.com/api')!=-1) {
+		if (config.url.indexOf('www.bichengbituo.com/api')!=-1||config.url.indexOf('127.0.0.1:8081')!=-1) {
 			config.header['Authorization'] = token;
 		}else{
 			config.header['X-CSRF-Token'] = token;

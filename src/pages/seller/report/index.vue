@@ -1,6 +1,6 @@
 <template>
 	<view class="report">
-		<view class="top-seller-select" v-if="roles.indexOf('sellerBrand')!=-1">
+		<view class="top-seller-select" v-if="roles.indexOf('BrandMerchant')!=-1">
 			<seller-select @sellerId="handlerSellerId"/>
 		</view>
 		<view class="top-time">

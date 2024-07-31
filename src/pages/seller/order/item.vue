@@ -127,25 +127,25 @@
 			// this.init()
 		},
 		onPullDownRefresh() {
-			// this.init()
+			this.init()
 		},
 		methods: {
 			init() {	//  初始化加载查询
 				if (this.item.totalFee>0) {
-					this.$u.api.institution.tradeAuth.Query({
+					this.$u.api.v3.trade.auth.Query({
 						userId: this.item.userId,
 						bizContent: {
 							outTradeNo: this.item.outTradeNo
 						}
 					}).then(res => {
-						if (res.content.totalFee) {
-							this.$set(this.item,'totalFee', res.content.totalFee)
+						if (res.totalFee) {
+							this.$set(this.item,'totalFee', res.totalFee)
 						}
-						if (res.content.refundFee) {
-							this.$set(this.item,'refundFee', res.content.refundFee)
+						if (res.refundFee) {
+							this.$set(this.item,'refundFee', res.refundFee)
 						}
-						if (res.content.status) {
-							switch (res.content.status) {
+						if (res.status) {
+							switch (res.status) {
 								case "SUCCESS":
 									this.$set(this.item,'status', "1")
 									break;
@@ -172,14 +172,14 @@
 						uni.stopPullDownRefresh()
 					})
 				} else {
-					this.$u.api.institution.tradeAuth.RefundQuery({
+					this.$u.api.v3.trade.auth.RefundQuery({
 						userId: this.item.userId,
 						bizContent: {
 							outRefundNo: this.item.outTradeNo
 						}
 					}).then(res => {
-						if (res.content.status) {
-							switch (res.content.status) {
+						if (res.status) {
+							switch (res.status) {
 								case "SUCCESS":
 									this.$set(this.item,'status', "1")
 									break;

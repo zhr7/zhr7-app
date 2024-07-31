@@ -176,14 +176,14 @@ const actions = {
     commit('INIT_USER')
     return new Promise((resolve, reject) => {
       const Api = store.state.$u.api
-      Api.user.user.UserInfo().then(res => {
+      Api.v3.user.auth.UserInfo().then(res => {
         // 用户相关信息设置
-        const { username, name, balance, avatar, id } = res.user
-        // const { username, realName, avatar,  userId } = res
-        commit('SET_NAME', name)
+        // const { username, name, balance, avatar, id } = res.user
+        const { username, realName, balance, avatar,  userId } = res
+        commit('SET_NAME', realName)
         commit('SET_USERNAME', username)
         commit('SET_BALANCE', balance)
-        commit('SET_USER_ID', id)
+        commit('SET_USER_ID', userId)
         commit('SET_AVATAR', avatar)
         // 角色相关信息设置
         let roles = [] 
@@ -191,12 +191,12 @@ const actions = {
           roles = res.roles
         }
         commit('SET_ROLES', roles)
-        // 前端权限相关设置
-        let front_permits = []
-        if ('front_permits' in res) {
-          front_permits = res.front_permits
-        }
-        commit('SET_FRONT_PEIMITS', front_permits)
+        // // 前端权限相关设置
+        // let front_permits = []
+        // if ('front_permits' in res) {
+        //   front_permits = res.front_permits
+        // }
+        // commit('SET_FRONT_PEIMITS', front_permits)
         resolve()
       }).catch(error => {
         reject(error)

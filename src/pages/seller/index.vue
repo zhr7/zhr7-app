@@ -82,7 +82,7 @@
 			}
 		},
 		mounted() {
-			this.init()
+			// this.init()
 			// #ifdef MP-ALIPAY
 			if (typeof my.ix !== "undefined") {
 				this.facePay = 'alipay'
@@ -93,9 +93,9 @@
 			// #endif
 		},
 		methods: {
-			init() {
-				this.$store.dispatch('institution/sellerSimpleInfo')
-			},
+			// init() {
+			// 	this.$store.dispatch('institution/sellerSimpleInfo')
+			// },
 			navChange(nav){
 				this.path = nav.path
 				if (this.facePay!==''&&this.path==='pay') {

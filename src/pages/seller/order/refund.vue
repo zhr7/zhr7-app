@@ -93,7 +93,7 @@
 			},
 			refund(item) {
 				const refundFee = String(this.form.refundFee*100)
-				this.$u.api.institution.tradeAuth.Refund({ 
+				this.$u.api.v3.trade.auth.Refund({ 
 					userId: this.item.userId,
 					bizContent: {
 						outTradeNo: this.item.outTradeNo,
@@ -102,20 +102,20 @@
 						attach: this.form.attach
 					}
 				}).then(res =>{
-					if (res.content.returnCode === "SUCCESS" && res.content.status == "SUCCESS") {
+					if (res.returnCode === "SUCCESS" && res.status == "SUCCESS") {
 						uni.showToast({
                             duration: 3000,
                             icon:'success',
                             title:'退款成功',
                         })
-					} else if(res.content.returnCode === "SUCCESS" && res.content.status == "USERPAYING" ) {
+					} else if(res.returnCode === "SUCCESS" && res.status == "USERPAYING" ) {
 						this.$refs.uToast.show({
 							title: "正在退款中。",
 							duration: 3000
 						})
 					} else {
 						this.$refs.uToast.show({
-							title: res.content.returnMsg,
+							title: res.returnMsg,
 							duration: 3000
 						})
 					}
