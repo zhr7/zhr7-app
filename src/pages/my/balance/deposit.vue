@@ -97,16 +97,14 @@
 			},
             onConfirm(){
 				uni.vibrateShort()
-				this.$u.api.pay.balance.Deposit({
-					bizContent: {
-                        method: this.method,
-						totalFee: String(Math.round(this.totalFee * 100)),
-						openId: this.openid,
-						appId: this.appid
-					}
+				this.$u.api.v3.trade.auth.BalanceDeposit({
+					method: this.method,
+					totalFee: String(Math.round(this.totalFee * 100)),
+					openId: this.openid,
+					appId: this.appid
 				}).then(res=>{
-					if (res.content.returnCode === "SUCCESS") {
-						const wechatPackage = JSON.parse(res.content.wechatPackage)
+					if (res.returnCode === "SUCCESS") {
+						const wechatPackage = JSON.parse(res.wechatPackage)
 						wx.requestPayment({
 							"timeStamp": String(wechatPackage.timeStamp),
 							"nonceStr":  wechatPackage.nonceStr,
@@ -132,7 +130,7 @@
 						})
 					}else{
 						this.$refs.uToast.show({
-							title: res.content.returnMsg
+							title: res.returnMsg
 						})
 					}
 				}).catch(err => {

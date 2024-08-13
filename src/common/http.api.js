@@ -194,6 +194,8 @@ const install = (Vue, vm) => {
 					Query: (params = {}) => vm.$u.post(V3+'/trade/auth/query', params),  // 查询
 					Refund: (params = {}) => vm.$u.post(V3+'/trade/auth/refund', params),  // 退款
 					RefundQuery: (params = {}) => vm.$u.post(V3+'/trade/auth/refundQuery', params),  // 退款查询
+
+					BalanceDeposit: (params = {}) => vm.$u.post(V3+'/trade/auth/balanceDeposit', params),	//
 				},
 			},
 			report: {

@@ -97,49 +97,47 @@
 			}
 		},
 		onLoad(options) {
-			window.location.href =  "weixin://dl/business/?appid=wxa3e18acd39d360bf&path=/pages/pay/qrcode/mp/index"
-
-			// uni.setNavigationBarTitle({
-			// 	title: "扫码支付",
-			// 	transparentTitle: "always"
-			// });
+			uni.setNavigationBarTitle({
+				title: "扫码支付",
+				transparentTitle: "always"
+			});
 			// options.user_id = "c6d0c1ba-c37d-4632-8f3b-8a070635f41b"
-			// // this.hideOptionMenu() // 禁止分享
-			// this.navigator() // 识别浏览器
-			// if (options.auth_code) {
-			// 	this.auth_code = options.auth_code
-			// }
-			// if (options.code) {
-			// 	this.code = options.code
-			// }
-			// if (options.order_id) {
-			// 	this.orderId = options.order_id
-			// }
-			// if (options.user_id) {
-			// 	this.userId = options.user_id
-			// }
-			// if (options.operator_id) {
-			// 	this.operatorId = options.operator_id
-			// }
-			// if (options.wechat_appid) {
-			// 	this.wechatAppid = options.wechat_appid
-			// }
+			// this.hideOptionMenu() // 禁止分享
+			this.navigator() // 识别浏览器
+			if (options.auth_code) {
+				this.auth_code = options.auth_code
+			}
+			if (options.code) {
+				this.code = options.code
+			}
+			if (options.order_id) {
+				this.orderId = options.order_id
+			}
+			if (options.user_id) {
+				this.userId = options.user_id
+			}
+			if (options.operator_id) {
+				this.operatorId = options.operator_id
+			}
+			if (options.wechat_appid) {
+				this.wechatAppid = options.wechat_appid
+			}
 			
-			// if (this.method) {
-			// 	this.simpleInfo()
-			// }
+			if (this.method) {
+				this.simpleInfo()
+			}
 
-			// if (this.code && this.wechatAppid) {
-			// 	this.wechatOpenid()
-			// }
-			// if (this.auth_code) {
-			// 	if (options.app_id) {
-			// 		this.alipayAppid = options.app_id
-			// 	}
-			// 	this.err =  JSON.stringify(options)
-			// 	this.show = true
-			// 	this.alipayOpenid()
-			// }
+			if (this.code && this.wechatAppid) {
+				this.wechatOpenid()
+			}
+			if (this.auth_code) {
+				if (options.app_id) {
+					this.alipayAppid = options.app_id
+				}
+				this.err =  JSON.stringify(options)
+				this.show = true
+				this.alipayOpenid()
+			}
 		},
 		mounted() {
 		},
@@ -170,13 +168,11 @@
 						this.wechatMiniProgramOpenid()
 					}
 					// #endif
-					if (this.qrcodeType == "jsapi" && this.code == "") {
-						if (this.method == "wechat") {
-							this.oauthWechatAppId(res)
-						}
+					if (this.qrcodeType == "jsapi" && this.code == "" && this.method == "wechat") {
+						this.oauthWechatAppId(res)
 					}
 					// #ifdef H5
-					if (this.method == "alipay") {
+					if (this.qrcodeType == "jsapi" && this.auth_code == "" &&this.method == "alipay") {
 						this.oauthAlipayAppId(res)
 					}
 					// #endif
@@ -420,11 +416,11 @@
 					if (res.openid) {
 						this.openid = res.openid
 					}else{
-					uni.showToast({
-						duration: 5000,
-						icon:'error',
-						title:'未能获取openid',
-					})
+						uni.showToast({
+							duration: 5000,
+							icon:'error',
+							title:'未能获取openid',
+						})
 					}
 				}).catch(err => {
 					console.error(err)
