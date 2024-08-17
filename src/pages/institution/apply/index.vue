@@ -328,7 +328,7 @@
                             uni.showToast({
                                 duration: 3000,
                                 icon:'error',
-                                title: "获取上传凭证失败:"+ err.data.detail,
+                                title: "获取上传凭证失败:"+ err.datal,
                             })
                         })
             },
@@ -491,7 +491,7 @@
                             uni.showToast({
                                 duration: 3000,
                                 icon:'error',
-                                title: err.data.detail,
+                                title: err.datal,
                             })
                         })
                     }

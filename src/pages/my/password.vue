@@ -144,7 +144,7 @@
                             uni.showToast({
                                 duration: 3000,
                                 icon:'error',
-                                title: err.data.detail,
+                                title: err.datal,
                             })
                         })
                     }

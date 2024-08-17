@@ -162,7 +162,7 @@
 								});
 							}).catch(err => {
 								this.$refs.uToast.show({
-									title: err.data.detail
+									title: err.data
 								})
 							})
 						} else {

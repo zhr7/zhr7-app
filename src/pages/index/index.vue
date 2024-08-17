@@ -112,7 +112,7 @@
 					//  #endif
 				}).catch(err => {
 					this.$refs.uToast.show({
-						title: err.data.detail
+						title: err.datal
 					})
 					this.$u.route({
 						type: 'redirect',
