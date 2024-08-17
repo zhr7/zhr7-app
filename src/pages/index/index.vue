@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<seller ref="seller" v-if="roles.indexOf('BrandMerchant')===0||roles.indexOf('Merchant')===0"/>
-		<institution v-if="roles.indexOf('HeadOffice')===0||roles.indexOf('Institution2')===0||roles.indexOf('Institution3')===0||roles.indexOf('Institution4')===0||roles.indexOf('Institution5')===0"/>
+		<seller ref="seller" v-if="roles.indexOf('BrandMerchant')>=0||roles.indexOf('Merchant')>=0"/>
+		<institution v-if="roles.indexOf('HeadOffice')>=0||roles.indexOf('Institution2')>=0||roles.indexOf('Institution3')>=0||roles.indexOf('Institution4')>=0||roles.indexOf('Institution5')>=0"/>
 		<u-back-top :scroll-top="scrollTop"></u-back-top>
 		<u-toast ref="uToast" />
 	</view>
