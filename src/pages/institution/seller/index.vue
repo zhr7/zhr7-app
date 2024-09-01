@@ -40,7 +40,7 @@
 						{{item.username}}
 					</view>
 					<view class="status">
-						{{replaceTime(item.updatedAt)}}
+						{{parseTime(item.updatedAt)}}
 					</view>
 				</view>
 				<view class="arrow-right">
@@ -119,7 +119,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
@@ -143,7 +143,7 @@
 				return fee ? Number(fee)  : 0
 			},
 			getList() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (!this.options.brandId) {
 					where = where + ` And brand_id=id`
 				}
@@ -155,15 +155,14 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.seller.List({
-					list_query: this.listQuery,
-					seller: {
-						brandId: this.options.brandId,
-						institutionId: this.options.institutionId
-					}
+				this.$u.api.v3.seller.seller.Search({
+					page: 1,
+					pageSize: 15,
+					sort: "ORDER BY created_at DESC, id DESC",
+					where: where
 				}).then(res => {
-					if (res.sellers) {
-						res.sellers.forEach(item => {
+					if (res.items) {
+						res.items.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -185,7 +184,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()

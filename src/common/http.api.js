@@ -202,6 +202,11 @@ const install = (Vue, vm) => {
 				ReportSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportSearch', params), //
 				ReportInstitutionSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportInstitutionSearch', params),  
 			},
+			institution: {
+			    institution: {
+					Search: (params = {}) => vm.$u.post(V3+'/institution/institution/search', params), // 
+				}
+			},
 			seller: {
 				seller: {
 					Search: (params = {}) => vm.$u.post(V3+'/seller/seller/search', params), // 

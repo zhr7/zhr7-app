@@ -26,7 +26,7 @@
 						{{item.username}}
 					</view>
 					<view class="status">
-						{{replaceTime(item.updatedAt)}}
+						{{parseTime(item.updatedAt)}}
 					</view>
 				</view>
 				<view class="arrow-right">
@@ -125,20 +125,22 @@
 				return fee ? Number(fee)  : 0
 			},
 			getList() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.query.search) {
 					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.institution.List({
-						list_query: this.listQuery,
-						institution: {
-							id: this.institution.id,
-						},
-					}).then(res => {
-						if (res.institutions) {
-							res.institutions.forEach(item => {
+
+				this.$u.api.v3.institution.institution.Search({
+					institutionId: this.institution.id,
+					page: 1,
+					pageSize: 15,
+					sort: "ORDER BY created_at DESC, id DESC",
+					where: where
+				}).then(res => {
+						if (res.items) {
+							res.items.forEach(item => {
 								this.list.push(item)
 							});
 							this.total = Number(res.total)
@@ -160,7 +162,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()

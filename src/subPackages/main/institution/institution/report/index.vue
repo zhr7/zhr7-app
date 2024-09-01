@@ -61,7 +61,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'机构报表'
+				title:'商家报表'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -77,14 +77,14 @@
 			init() {
 				if (this.options.name) {
 					uni.setNavigationBarTitle({
-						title:this.options.name+' 机构报表'
+						title:this.options.name+' 商家报表'
 					})
 				}
 				this.listQuery = {
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'date DESC,id DESC'
+					sort: 'ORDER BY date DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
@@ -110,20 +110,20 @@
 				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.query.search) {
 					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.institutionReport.List({
-					listQuery: this.listQuery,
-					institutionReport: {
-						institutionId: this.options.id
-					}
+				this.$u.api.v3.report.ReportSearch({
+					page: 1,
+					pageSize: 15,
+					sort: "ORDER BY date DESC, id DESC",
+					where: where
 				}).then(res => {
-					if (res.institutionReports) {
-						res.institutionReports.forEach(item => {
+					if (res.items) {
+						res.items.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -145,7 +145,7 @@
 					page: 1,
 					limit: 15,
 					where: '',
-					sort: 'date DESC,id DESC'
+					sort: 'ORDER BY date DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
