@@ -193,7 +193,7 @@
 				this.getAmount()
 			},
 			getAmount(name) {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (name === "currentReport") {
 					this.dateRange = [
 						new Date(new Date(new Date().setDate(1)).getTime()),
@@ -213,13 +213,14 @@
 				} else {
 					where = where + " And date = '" + parseTime(this.date,'{y}{m}{d}') + "'"
 				}
-				this.$u.api.institution.institutionReport.Amount({
-					listQuery: {
-						where: where
-					}
+				this.$u.api.v3.report.ReportInstitutionSearch({
+					page: 1,
+					pageSize: 0,
+					sort: "ORDER BY created_at DESC, id DESC",
+					where: where
 				}).then(res => {
-					if (res.institutionReport) {
-						this[name] = res.institutionReport
+					if (res.sum) {
+						this[name] = res.sum
 					}
 				})
 			},
