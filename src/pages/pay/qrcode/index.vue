@@ -60,8 +60,7 @@
 	// #ifdef H5
 	import wx from 'weixin-js-sdk'
 	// #endif
-    import { parseTime }  from '@/utils'
-	export default {
+    import { parseTime }  from '@/utils'	export default {
 		components: { 
 			uKeyboard
 		},
