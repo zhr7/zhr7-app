@@ -70,9 +70,9 @@
 				total: 0,
 				listQuery: {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				},
 				query: {
 				},
@@ -117,7 +117,7 @@
 			init() {
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
 					sort: 'ORDER BY created_at DESC, id DESC'
 				}
@@ -155,12 +155,7 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.v3.seller.seller.Search({
-					page: 1,
-					pageSize: 15,
-					sort: "ORDER BY created_at DESC, id DESC",
-					where: where
-				}).then(res => {
+				this.$u.api.v3.seller.seller.Search(this.listQuery).then(res => {
 					if (res.items) {
 						res.items.forEach(item => {
 							this.list.push(item)
@@ -182,7 +177,7 @@
 				}
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
 					sort: 'ORDER BY created_at DESC, id DESC'
 				}
