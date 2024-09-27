@@ -49,9 +49,9 @@
 				total: 0,
 				listQuery: {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'date DESC,id DESC'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				},
 				query: {
 				},
@@ -82,7 +82,7 @@
 				}
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
 					sort: 'ORDER BY date DESC, id DESC'
 				}
@@ -116,12 +116,7 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.v3.report.ReportSearch({
-					page: 1,
-					pageSize: 15,
-					sort: "ORDER BY date DESC, id DESC",
-					where: where
-				}).then(res => {
+				this.$u.api.v3.report.ReportSearch(this.listQuery).then(res => {
 					if (res.items) {
 						res.items.forEach(item => {
 							this.list.push(item)
@@ -143,7 +138,7 @@
 				}
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
 					sort: 'ORDER BY date DESC, id DESC'
 				}

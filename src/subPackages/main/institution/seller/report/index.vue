@@ -42,9 +42,9 @@
 				total: 0,
 				listQuery: {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'date DESC,id DESC'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				},
 				query: {
 				},
@@ -75,10 +75,12 @@
 			init() {
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'date DESC,id DESC'
+					// sort: 'date DESC,id DESC' 
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
+				console.log(this.listQuery.page)
 				this.list = []
 				this.getList()
 				uni.$on('uOnReachBottom',()=>{
@@ -109,12 +111,13 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.sellerReport.List({
-					listQuery: this.listQuery,
-					sellerReport: {
-						userId: this.routes.sellerId
-					}
-				}).then(res => {
+				// {
+				// 	listQuery: this.listQuery,
+				// 	sellerReport: {
+				// 		userId: this.routes.sellerId
+				// 	}
+				// }
+				this.$u.api.institution.sellerReport.List(this.listQuery).then(res => {
 					if (res.sellerReports) {
 						res.sellerReports.forEach(item => {
 							this.list.push(item)
@@ -136,9 +139,10 @@
 				}
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					// sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
