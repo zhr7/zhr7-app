@@ -148,10 +148,11 @@
 					where = where + ` And brand_id=id`
 				}
 				if (this.options.seller) {
-					where = ' true'
+					where = 'WHERE true'
 				}
 				if (this.query.search) {
 					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
+				//  where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
