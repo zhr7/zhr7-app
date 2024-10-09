@@ -84,8 +84,8 @@
 	},
 	"subPackages": [
 		{
-			"root": "subPackages/main",
-			"name": "subMain",
+			"root": "subPackages/institution",
+			"name": "subInstitution",
 			"pages": [
 				{
 					"path": "institution/seller/qrcode/index",
@@ -225,20 +225,6 @@
 					"path": "cashAccount",
 					"style": {
 						"enablePullDownRefresh": true
-					}
-				}
-			]
-		},
-		{
-			"root": "subPackages/pay",
-			"name": "subPay",
-			"pages": [
-				{
-					"path": "qrcode/index",
-					"style": {
-						"navigationBarTitleText": "快速买单",
-						"navigationStyle":"custom",
-						"transparentTitle":"always" 
 					}
 				}
 			]
