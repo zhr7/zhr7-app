@@ -132,7 +132,7 @@
                 const where = "WHERE drive='wechat' And types='[\"MINIPROGRAM_WECHAT\"]' And user_id='"+this.userId+"'"
                 this.$u.api.v3.message.Search({
 					page: 1,
-					limit: 20,
+					pageSize: 20,
 					where: where,
 					sort: 'ORDER BY created_at DESC, id DESC'
                 }).then(res=>{

@@ -145,7 +145,7 @@
                     this.$u.api.institution.seller.SimpleList({
                         list_query:{
                             page: 1,
-                            limit: 100,
+                            pageSize: 100,
                             where: 'id=brand_id And name LIKE \'%' + v + '%\''
                         }
                     }).then(res => {

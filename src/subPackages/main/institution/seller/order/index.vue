@@ -164,9 +164,9 @@
 				total: 0,
 				listQuery: {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				},
 				query: {
 					date: [
@@ -307,9 +307,9 @@
 			init() {
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.list = []
 				this.getList()
@@ -434,9 +434,9 @@
 				this.query.date[1] = new Date(e.endDate + " 23:59:59")
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.query.search = ''
 				this.search = ''
@@ -446,9 +446,9 @@
 			clickFilter() {
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.query.search = ''
 				this.search = ''
@@ -485,9 +485,9 @@
 				}
 				this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 				this.query.date = []
 				this.list = []

@@ -65,9 +65,9 @@
 				total: 0,
 				listQuery: {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: '',
-					sort: 'created_at desc'
+					sort: 'ORDER BY created_at DESC, id DESC'
 				}
 			}
 		},
@@ -93,7 +93,7 @@
 				})
                 this.listQuery = {
 					page: 1,
-					limit: 15,
+					pageSize: 15,
 					where: 'WHERE true',
 					sort: 'ORDER BY created_at DESC, id DESC'
 				}
