@@ -49,7 +49,7 @@
 </template>
 <script>
     import { RouteParams } from '@/utils'
-	export default {
+    export default {
 		data() {
 			return {
                 options: {
@@ -82,7 +82,7 @@
 		},
 		methods: {
             init() {
-                this.$u.api.user.secretKey.selfGet().then(res => {
+                this.$u.api.user.secretKey.SelfGet().then(res => {
                     if (res.secretKey) {
                         this.formData = res.secretKey
                         if (this.formData.appId == 'undefined') {
@@ -119,42 +119,39 @@
                 })
             },
             submitForm(formName) {
-                // this.$refs[formName].validate((valid) => {
-                //     if (valid) {
-                //         this.$u.api.institution.institution.Password({
-                //             user: {
-                //                 id: this.options.id,
-                //                 password: this.formData.password
-                //             }
-                //         }).then(res => {
-                //             if (res.valid) {
-                //                 uni.showToast({
-                //                     duration: 3000,
-                //                     icon:'success',
-                //                     title:'密码修改成功',
-                //                 })
-                //                 setTimeout(()=>{ 
-                //                     this.$u.route({
-                //                         type: 'back', 
-                //                     })
-                //                 }, 3000);
-                //             } else {
-                //                 uni.showToast({
-                //                     duration: 3000,
-                //                     icon:'error',
-                //                     title:'密码修改失败',
-                //                 })
-                //             }
-                //         }).catch(err => {
-                //             console.log(err);
-                //             uni.showToast({
-                //                 duration: 3000,
-                //                 icon:'error',
-                //                 title: err.datal,
-                //             })
-                //         })
-                //     }
-                // })
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$u.api.user.secretKey.SelfUpdate({
+                            secretKey: this.formData
+                        }).then(res => {
+                            if (res.valid) {
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'success',
+                                    title:'密钥更新成功',
+                                })
+                                setTimeout(()=>{ 
+                                    this.$u.route({
+                                        type: 'back', 
+                                    })
+                                }, 3000);
+                            } else {
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title:'密钥更新失败',
+                                })
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                            uni.showToast({
+                                duration: 3000,
+                                icon:'error',
+                                title: err.datal,
+                            })
+                        })
+                    }
+                })
             },
             clipboardData(data) {
                 uni.setClipboardData({

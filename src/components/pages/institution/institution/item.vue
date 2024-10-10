@@ -156,7 +156,7 @@
 					case "institution":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/institution/index',
+							url: '/pages/institution/index',
 							params: this.item
 						})
 						break;
@@ -169,28 +169,28 @@
 					case "report":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/report/index',
+							url: '/subPackages/institution/report/index',
 							params: this.item
 						})
 						break;
 					case "password":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/password/index',
+							url: '/subPackages/institution/password/index',
 							params: this.item
 						})
 						break;
 					case "setting":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/setting/index',
+							url: '/subPackages/institution/setting/index',
 							params: this.item
 						})
 						break;
 					case "secretKey":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/secretKey/index',
+							url: '/subPackages/institution/secretKey/index',
 							params: this.item
 						})
 						break;

@@ -90,19 +90,19 @@
 					case "sellerCreate":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/create/index?item=0'
+							url: '/subPackages/seller/create/index?item=0'
 						})
 						break;
 					case "institutionCreate":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/create/index?item=0'
+							url: '/subPackages/institution/create/index?item=0'
 						})
 						break;
 					case "institutionReport":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/report/index'
+							url: '/subPackages/institution/report/index'
 						})
 						break;
 					case "sellerBrand":

@@ -88,101 +88,101 @@
 			"name": "subInstitution",
 			"pages": [
 				{
-					"path": "institution/seller/qrcode/index",
+					"path": "seller/qrcode/index",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/qrcode/item",
+					"path": "seller/qrcode/item",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/device/index",
+					"path": "seller/device/index",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/device/item",
+					"path": "seller/device/item",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/setting/index",
+					"path": "seller/setting/index",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/order/index",
+					"path": "seller/order/index",
 					"style": {
 						"enablePullDownRefresh": true
 					}
 				},
 				{
-					"path": "institution/seller/order/item",
+					"path": "seller/order/item",
 					"style": {
 						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path": "institution/seller/report/index",
+					"path": "seller/report/index",
 					"style": {
 						"enablePullDownRefresh": true
 					}
 				},
 				{
-					"path": "institution/seller/password/index",
+					"path": "seller/password/index",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/create/index",
+					"path": "seller/create/index",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/seller/item",
+					"path": "seller/item",
 					"style": {
 						"enablePullDownRefresh": false
 					}
 				},{
-					"path": "institution/institution/create/index",
+					"path": "institution/create/index",
 					"style": {
 					}
 				},
 				{
-					"path": "institution/institution/password/index",
+					"path": "institution/password/index",
 					"style": {
 					}
 				},{
-					"path": "institution/institution/setting/index",
+					"path": "institution/setting/index",
 					"style": {
-					}
-				},{
-					"path": "institution/institution/secretKey/index",
-					"style": {
-					}
-				},
-				{
-					"path": "institution/institution/report/index",
-					"style": {
-					}
-				},
-				{
-					"path": "institution/institution/item",
-					"style": {
-						"enablePullDownRefresh": false
 					}
 				},{
 					"path": "institution/secretKey/index",
 					"style": {
 					}
+				},
+				{
+					"path": "institution/report/index",
+					"style": {
+					}
+				},
+				{
+					"path": "institution/item",
+					"style": {
+						"enablePullDownRefresh": false
+					}
 				},{
-					"path": "institution/oauth/index",
+					"path": "secretKey/index",
 					"style": {
 					}
 				},{
-					"path": "institution/oauth/item",
+					"path": "oauth/index",
+					"style": {
+					}
+				},{
+					"path": "oauth/item",
 					"style": {
 					}
 				}
