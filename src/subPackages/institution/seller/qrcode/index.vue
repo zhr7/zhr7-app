@@ -116,7 +116,7 @@
 				if (item) {
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/main/institution/seller/qrcode/item?id='+item.id
+						url: '/subPackages/institution/seller/qrcode/item?id='+item.id
 						+ '&name=' + item.name
 						+ '&userId=' + item.userId
 						+ '&userName=' + item.userName
@@ -124,7 +124,7 @@
 				}else{
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/main/institution/seller/qrcode/item?userId='+this.seller.id
+						url: '/subPackages/institution/seller/qrcode/item?userId='+this.seller.id
 						+ '&userName=' + this.seller.name
 					})
 				}

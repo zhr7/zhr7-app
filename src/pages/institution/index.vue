@@ -90,19 +90,19 @@
 					case "sellerCreate":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/seller/create/index?item=0'
+							url: '/subPackages/institution/seller/create/index?item=0'
 						})
 						break;
 					case "institutionCreate":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/institution/create/index?item=0'
+							url: '/subPackages/institution/institution/create/index?item=0'
 						})
 						break;
 					case "institutionReport":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/institution/report/index'
+							url: '/subPackages/institution/institution/report/index'
 						})
 						break;
 					case "sellerBrand":
@@ -117,7 +117,7 @@
 					case "institutionSecretKey":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/secretKey/index'
+							url: '/subPackages/institution/institution/secretKey/index'
 						})
 						break;
 					case "institution-secret-key":
@@ -127,7 +127,7 @@
 					case "institutionOauth":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/oauth/index'
+							url: '/subPackages/institution/oauth/index'
 						})
 						break;
 					default:

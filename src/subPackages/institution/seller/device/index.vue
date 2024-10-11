@@ -135,7 +135,7 @@
 				if (item) {
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/main/institution/seller/device/item?id='+item.id
+						url: '/subPackages/institution/seller/device/item?id='+item.id
 						+ '&build=' + item.build
 						+ '&deviceId=' + item.deviceId
 						+ '&deviceKey=' + item.deviceKey
@@ -149,7 +149,7 @@
 				}else{
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/main/institution/seller/device/item?userId='+this.seller.id
+						url: '/subPackages/institution/seller/device/item?userId='+this.seller.id
 						+ '&userName=' + this.seller.name
 					})
 				}

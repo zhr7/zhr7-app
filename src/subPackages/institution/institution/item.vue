@@ -169,28 +169,28 @@
 					case "report":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/report/index',
+							url: '/subPackages/institution/institution/report/index',
 							params: this.item
 						})
 						break;
 					case "password":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/password/index',
+							url: '/subPackages/institution/institution/password/index',
 							params: this.item
 						})
 						break;
 					case "setting":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/setting/index',
+							url: '/subPackages/institution/institution/setting/index',
 							params: this.item
 						})
 						break;
 					case "secretKey":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/institution/secretKey/index',
+							url: '/subPackages/institution/institution/secretKey/index',
 							params: this.item
 						})
 						break;

@@ -161,37 +161,37 @@
 					case "sellerOrder":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/order/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+							url: '/subPackages/institution/seller/order/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
 						})
 						break;
 					case "sellerReport":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/report/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+							url: '/subPackages/institution/seller/report/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
 						})
 						break;
 					case "sellerPassword":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/password/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+							url: '/subPackages/institution/seller/password/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
 						})
 						break;
 					case "sellerSetting":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/setting/index?id=' + this.item.id 
+							url: '/subPackages/institution/seller/setting/index?id=' + this.item.id 
 						})
 						break;
 					case "sellerDevice":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/device/index?id=' + this.item.id + '&name=' + this.item.name
+							url: '/subPackages/institution/seller/device/index?id=' + this.item.id + '&name=' + this.item.name
 						})
 						break;
 					case "sellerQrcode":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/main/institution/seller/qrcode/index?id=' + this.item.id + '&name=' + this.item.name
+							url: '/subPackages/institution/seller/qrcode/index?id=' + this.item.id + '&name=' + this.item.name
 						})
 						break;
 					case "delete":

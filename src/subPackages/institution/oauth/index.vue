@@ -111,7 +111,7 @@
 			click(item){
 				this.$u.route({
 					type: 'to',
-					url: '/subPackages/main/institution/oauth/item',
+					url: '/subPackages/institution/oauth/item',
 					params: item
 				})
 			}
