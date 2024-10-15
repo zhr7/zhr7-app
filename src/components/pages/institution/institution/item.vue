@@ -183,14 +183,14 @@
 					case "setting":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/institution/setting/index',
+							url: '/subPackages/institution/institution/setting/index',
 							params: this.item
 						})
 						break;
 					case "secretKey":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/institution/secretKey/index',
+							url: '/subPackages/institution/institution/secretKey/index',
 							params: this.item
 						})
 						break;

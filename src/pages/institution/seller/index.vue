@@ -146,6 +146,8 @@
 				let where = 'WHERE true'
 				if (!this.options.brandId) {
 					where = where + ` And brand_id=id`
+				}else {
+					where = where + ` And brand_id=` + this.options.brandId
 				}
 				if (this.options.seller) {
 					where = 'WHERE true'
