@@ -92,7 +92,8 @@
 				this.init()
 			},
 			refund(item) {
-				const refundFee = String(this.form.refundFee*100)
+				// const refundFee = String(this.form.refundFee*100)
+				const refundFee = String(Math.round(this.form.refundFee * 100));
 				this.$u.api.v3.trade.auth.Refund({ 
 					userId: this.item.userId,
 					bizContent: {
