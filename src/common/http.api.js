@@ -75,6 +75,7 @@ const install = (Vue, vm) => {
 			order: {
 				Amount: (params = {}) => vm.$u.post('/institution-api/orders/amount', params),
 				List: (params = {}) => vm.$u.post('/institution-api/orders/list', params),	
+				// List: (params = {}) => vm.$u.post('/api/order/order/search', params),
 			},
 			provider: {
 				SimpleInfo: (params = {}) => vm.$u.post('/institution-api/providers/simpleInfo', params),	// 
@@ -95,6 +96,7 @@ const install = (Vue, vm) => {
 			sellerReport: {
 				Amount: (params = {}) => vm.$u.post('/institution-api/sellerReports/amount', params), // 报表统计
 				List: (params = {}) => vm.$u.post('/institution-api/sellerReports/list', params) // 报表统计
+				// List: (params = {}) => vm.$u.post('/api/report/report/reportSearch', params) // 报表统计
 			},
 			institutionReport: {
 				Amount: (params = {}) => vm.$u.post('/institution-api/institutionReports/amount', params), // 报表统计
@@ -199,8 +201,10 @@ const install = (Vue, vm) => {
 				},
 			},
 			report: {
-				ReportSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportSearch', params), //
-				ReportInstitutionSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportInstitutionSearch', params),  
+				report: {
+				    ReportSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportSearch', params), //
+					ReportInstitutionSearch: (params = {}) => vm.$u.post(V3+'/report/report/reportInstitutionSearch', params),  
+				}
 			},
 			institution: {
 			    institution: {

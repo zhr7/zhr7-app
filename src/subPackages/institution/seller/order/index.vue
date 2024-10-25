@@ -396,7 +396,7 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.institution.order.List({
+				this.$u.api.v3.order.order.Search({
 					listQuery: this.listQuery,
 					order: {
 						userId: this.options.sellerId,

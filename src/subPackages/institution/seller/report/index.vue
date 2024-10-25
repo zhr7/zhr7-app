@@ -44,7 +44,7 @@
 					page: 1,
 					pageSize: 15,
 					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					sort: 'ORDER BY created_at DESC, id DESC',
 				},
 				query: {
 				},
@@ -67,9 +67,11 @@
 			uni.setNavigationBarTitle({
 				title: this.routes.sellerName
 			})
+			console.log(this.routes)
 		},
 		onShow() {
 			this.init()
+			console.log(this.routes)
 		},
 		methods: {
 			init() {
@@ -105,7 +107,7 @@
 				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.query.search) {
 					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
 				}
@@ -117,9 +119,17 @@
 				// 		userId: this.routes.sellerId
 				// 	}
 				// }
-				this.$u.api.institution.sellerReport.List(this.listQuery).then(res => {
-					if (res.sellerReports) {
-						res.sellerReports.forEach(item => {
+				this.$u.api.v3.report.report.ReportSearch(
+					{
+						page: 1,
+						pageSize: 100000,
+						where: 'WHERE true',
+						sort: 'ORDER BY created_at DESC, id DESC',
+						userId: this.routes.sellerId,
+						// brandId: this.routes.brandId
+					}).then(res => {
+					if (res.items) {
+						res.items.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)

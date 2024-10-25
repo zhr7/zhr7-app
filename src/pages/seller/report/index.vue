@@ -472,7 +472,7 @@
 					where = where + " And user_id = '" + this.sellerId + "'"
 				}
 				this.listQuery.where = where
-				this.$u.api.v3.report.ReportSearch(this.listQuery).then(res => {
+				this.$u.api.v3.report.report.ReportSearch(this.listQuery).then(res => {
 					if (res.sum) {
 						this.report = res.sum
 					}
