@@ -116,7 +116,7 @@
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
-				this.$u.api.v3.report.ReportSearch(this.listQuery).then(res => {
+				this.$u.api.v3.report.report.ReportInstitutionSearch(this.listQuery).then(res => {
 					if (res.items) {
 						res.items.forEach(item => {
 							this.list.push(item)

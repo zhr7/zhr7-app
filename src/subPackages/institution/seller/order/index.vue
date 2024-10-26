@@ -112,7 +112,8 @@
 						{{item.title}}
 					</view>
 					<view class="time">
-						{{replaceTime(item.createdAt)}}
+						<!-- {{replaceTime(item.createdAt)}} -->
+						{{parseTime(item.createdAt)}}
 					</view>
 				</view>
 				<view class="right">
@@ -340,7 +341,7 @@
 				})
 			},
 			getList() {
-				let where = ' true'
+				let where = 'WHERE true'
 				if (this.query.date.length===2) {
 					if (this.query.date[1] - this.query.date[0] > 31 * 24 * 60 * 60 * 1000) {
 						uni.showToast({
@@ -350,9 +351,14 @@
                         })
 						return
 					}
-					const start = parseTime(this.query.date[0])
-					const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
-					where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
+					// const start = parseTime(this.query.date[0])
+					// const end = parseTime(new Date(this.query.date[1].getTime() + 1000))
+					// where = where + " And created_at >= '" + start + "' And created_at < '" + end + "'"
+
+					const start = this.query.date[0]
+					const end = new Date(this.query.date[1].getTime() + 1000)
+					this.listQuery.startTime = Math.floor(start.getTime() / 1000)
+					this.listQuery.endTime = Math.floor(end.getTime() / 1000)
 				}
 				if (this.query.type) {
 					if (this.query.type === 1) {
@@ -394,16 +400,14 @@
 				if (this.query.terminalId) {
 					where = where + " And terminal_id = '" + this.query.terminalId + "'"
 				}
+				
 				this.listQuery.where = where
+				this.listQuery.userId = this.options.sellerId
 				this.status = 'loading';
-				this.$u.api.v3.order.order.Search({
-					listQuery: this.listQuery,
-					order: {
-						userId: this.options.sellerId,
-					}
-				}).then(res => {
-					if (res.orders) {
-						res.orders.forEach(item => {
+
+				this.$u.api.v3.order.order.Search(this.listQuery).then(res => {
+					if (res.items) {
+						res.items.forEach(item => {
 							this.list.push(item)
 						});
 						this.total = Number(res.total)

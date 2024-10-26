@@ -112,6 +112,7 @@
 					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
 				}
 				this.listQuery.where = where
+				this.listQuery.userId = this.routes.sellerId
 				this.status = 'loading';
 				// {
 				// 	listQuery: this.listQuery,
@@ -119,15 +120,15 @@
 				// 		userId: this.routes.sellerId
 				// 	}
 				// }
-				this.$u.api.v3.report.report.ReportSearch(
-					{
-						page: 1,
-						pageSize: 100000,
-						where: 'WHERE true',
-						sort: 'ORDER BY created_at DESC, id DESC',
-						userId: this.routes.sellerId,
-						// brandId: this.routes.brandId
-					}).then(res => {
+				// {
+				// 	page: 1,
+				// 	pageSize: 100000,
+				// 	where: 'WHERE true',
+				// 	sort: 'ORDER BY created_at DESC, id DESC',
+				// 	userId: this.routes.sellerId,
+				// 	// brandId: this.routes.brandId
+				// }
+				this.$u.api.v3.report.report.ReportSearch(this.listQuery).then(res => {
 					if (res.items) {
 						res.items.forEach(item => {
 							this.list.push(item)
