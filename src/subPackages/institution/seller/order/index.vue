@@ -341,6 +341,13 @@
 				})
 			},
 			getList() {
+				let now = new Date()
+				let threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000)
+				now = Math.floor(now.getTime() / 1000)
+				threeDaysAgo = Math.floor(threeDaysAgo.getTime() / 1000)
+				this.listQuery.startTime = threeDaysAgo
+				this.listQuery.endTime = now
+
 				let where = 'WHERE true'
 				if (this.query.date.length===2) {
 					if (this.query.date[1] - this.query.date[0] > 31 * 24 * 60 * 60 * 1000) {
@@ -403,6 +410,7 @@
 				
 				this.listQuery.where = where
 				this.listQuery.userId = this.options.sellerId
+				// this.listQuery.startTime = 
 				this.status = 'loading';
 
 				this.$u.api.v3.order.order.Search(this.listQuery).then(res => {

@@ -153,8 +153,8 @@
 					where = 'WHERE true'
 				}
 				if (this.query.search) {
-					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
-				//  where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%')`
+					// where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
+					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%')` 
 				}
 				this.listQuery.where = where
 				this.status = 'loading';
@@ -173,6 +173,7 @@
 				})
 			},
 			handlerSearch(res) {
+				console.log(res)
 				if (res) {
 					this.query.search = res
 				}else{
