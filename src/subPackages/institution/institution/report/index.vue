@@ -1,27 +1,28 @@
 <template>
 	<view>
-		<view class="top">
+		<!-- <view class="top">
 			<view class="search">
 				<u-search placeholder="商家品牌/门店名称" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
-		</view>
+		</view> -->
 		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="center">
-					<view class="title">
+					<!-- <view class="title">
 						{{item.userName}}
 					</view>
 					<view class="time">
 						品牌:{{item.brandName}}
+					</view> -->
+					<view>
+						{{fee(item.totalFee)}}
 					</view>
 					<view class="time">
 						[笔:{{item.count}}] <span v-if="item.rebate">预估佣金:{{fee(item.rebate/10000)}}</span>
 					</view>
 				</view>
 				<view class="right">
-					<view>
-						{{fee(item.totalFee)}}
-					</view>
+					
 					<view class="fee">
 						手续费:{{fee(item.fee)}}
 					</view>
@@ -61,7 +62,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'商家报表'
+				title:'机构报表'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -77,7 +78,7 @@
 			init() {
 				if (this.options.name) {
 					uni.setNavigationBarTitle({
-						title:this.options.name+' 商家报表'
+						title:this.options.name+' 机构报表'
 					})
 				}
 				this.listQuery = {

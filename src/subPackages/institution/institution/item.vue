@@ -140,7 +140,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'商家详情'
+				title:'机构详情'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
