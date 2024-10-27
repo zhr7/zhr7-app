@@ -213,7 +213,7 @@
 				} else {
 					where = where + " And date = '" + parseTime(this.date,'{y}{m}{d}') + "'"
 				}
-				this.$u.api.v3.report.ReportInstitutionSearch({
+				this.$u.api.v3.report.report.ReportInstitutionSearch({
 					page: 1,
 					pageSize: 0,
 					sort: "ORDER BY created_at DESC, id DESC",
