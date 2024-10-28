@@ -162,10 +162,18 @@
 				this.getList()
 			},
 			click(item){
+				// delete item.channels
 				this.$u.route({
 					type: 'to',
 					url: '/subPackages/institution/institution/item', 
-					params: item
+					// params: item
+					params: {
+					    level: item.level,
+						id: item.id,
+						name: item.name,
+						mobile: item.mobile,
+						username: item.username,
+					}
 				})
 			}
 			
