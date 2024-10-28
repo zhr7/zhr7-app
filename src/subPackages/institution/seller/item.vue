@@ -28,7 +28,7 @@
 						:size="58"
 						@click="handler('seller')"
 					></m-icon>
-					<text class="grid-text">相关门店</text>
+					<text class="grid-text">相关店</text>
 				</u-grid-item>
 				<u-grid-item>
 					<m-icon
