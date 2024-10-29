@@ -126,6 +126,11 @@
 			},
 			getList() {
 				let where = 'WHERE true'
+
+				if (this.institution.id) {
+					this.listQuery.institutionId = this.institution.id
+				}
+
 				if (this.query.search) {
 					where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%')`
 				}
