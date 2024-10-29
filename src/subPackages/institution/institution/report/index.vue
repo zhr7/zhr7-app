@@ -111,7 +111,6 @@
 				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
-				console.log(this.options)
 				let where = 'WHERE true'
 				if (this.query.search) {
 					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
