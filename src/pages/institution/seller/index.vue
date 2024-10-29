@@ -149,6 +149,11 @@
 				}else {
 					where = where + ` And brand_id=` + `'` + this.options.brandId + `'`
 				}
+
+				if (this.options.institutionId) {
+					where = where + ` And institution_id=` + `'` + this.options.institutionId + `'`
+				}
+
 				if (this.options.seller) {
 					where = 'WHERE true'
 				}
