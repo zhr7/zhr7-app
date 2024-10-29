@@ -111,10 +111,16 @@
 				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
+				console.log(this.options)
 				let where = 'WHERE true'
 				if (this.query.search) {
 					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
 				}
+
+				if (this.options.institutionId) {
+					this.listQuery.institutionId = this.options.institutionId
+				}
+
 				this.listQuery.where = where
 				this.status = 'loading';
 				this.$u.api.v3.report.report.ReportInstitutionSearch(this.listQuery).then(res => {
