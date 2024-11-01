@@ -1,12 +1,12 @@
 <template>
 	<view class="content">
 		<home v-if="path==='home'" @handlerPath="handlerPath"/>
-		<!-- <institution v-if="path==='institution'"/> -->
-		<!-- <seller v-if="path==='sellerBrand'"/> -->
+		<institution v-if="path==='institution'"/>
+		<seller v-if="path==='sellerBrand'"/>
 		<apply v-if="path==='apply'"/>
 		<pay v-if="path==='pay'"/>
 		<my v-if="path==='my'" @handlerPath="handlerPath"/>
-		跳转成功
+		跳转subP成功
 		<tabbar
 			ref="tabbar"
 			:list="list"
@@ -19,8 +19,8 @@
 <script>
 	import tabbar from '@/components/tabbar'
 	import home from './home'
-	// import institution from '@/pages/institution/institution/index.vue'
-	// import seller from '@/pages/institution/seller/index.vue'
+	import institution from '@/subPackages/institution/institution/index.vue'
+	import seller from '@/subPackages/institution/seller/index.vue'
 	import apply from './apply'
 	import pay from './pay'
 	import my from './my'
@@ -28,8 +28,8 @@
 		components: { 
 			tabbar,
 			home,
-			// institution,
-			// seller,
+			institution,
+			seller,
 			apply,
 			pay,
 			my,
