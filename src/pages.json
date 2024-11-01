@@ -185,6 +185,11 @@
 					"path": "oauth/item",
 					"style": {
 					}
+				},
+				{
+					"path": "index",
+					"style": {
+					}
 				}
 			]
 		},

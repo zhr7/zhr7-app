@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<seller ref="seller" v-if="roles.indexOf('BrandMerchant')>=0||roles.indexOf('Merchant')>=0"/>
-		<institution v-if="roles.indexOf('HeadOffice')>=0||roles.indexOf('Institution2')>=0||roles.indexOf('Institution3')>=0||roles.indexOf('Institution4')>=0||roles.indexOf('Institution5')>=0"/>
+		<!-- <institution v-if="roles.indexOf('HeadOffice')>=0||roles.indexOf('Institution2')>=0||roles.indexOf('Institution3')>=0||roles.indexOf('Institution4')>=0||roles.indexOf('Institution5')>=0"/> -->
 		<u-back-top :scroll-top="scrollTop"></u-back-top>
 		<u-toast ref="uToast" />
 	</view>
@@ -100,6 +100,16 @@
 			},
 			userInfo(){
 				this.$store.dispatch('user/getInfo').then(()=>{
+					if (this.roles.indexOf('HeadOffice')>=0||this.roles.indexOf('Institution2')>=0||this.roles.indexOf('Institution3')>=0||this.roles.indexOf('Institution4')>=0||this.roles.indexOf('Institution5')>=0) {
+						console.log('机构1')
+						this.$u.route({
+							type: 'redirect',
+							url: '/subPackages/institution/index', 
+						})
+						
+					}
+
+
 					// #ifdef APP-PLUS || MP-ALIPAY
 					this.$store.dispatch('tts/init')
 					this.$store.dispatch('socket/closeSocket') // 关闭wss
