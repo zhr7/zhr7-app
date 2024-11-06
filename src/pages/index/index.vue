@@ -10,7 +10,7 @@
 	import { mapGetters } from 'vuex'
 	import { baseAppUrl } from '@/settings.js'
 	import seller from '@/pages/seller/index.vue'
-	import institution from '@/pages/institution/index.vue'
+	import institution from '@/subPackages/institution/index.vue'
 	export default {
 		components: { 
 			seller,
@@ -101,7 +101,6 @@
 			userInfo(){
 				this.$store.dispatch('user/getInfo').then(()=>{
 					if (this.roles.indexOf('HeadOffice')>=0||this.roles.indexOf('Institution2')>=0||this.roles.indexOf('Institution3')>=0||this.roles.indexOf('Institution4')>=0||this.roles.indexOf('Institution5')>=0) {
-						console.log('机构1')
 						this.$u.route({
 							type: 'redirect',
 							url: '/subPackages/institution/index', 

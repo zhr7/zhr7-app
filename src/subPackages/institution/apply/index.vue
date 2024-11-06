@@ -6,7 +6,7 @@
                     <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
                 </u-form-item>
                 
-                <u-form-item label="主体类型" prop="subjectType">
+                <u-form-item label="营业执照主体类型" prop="subjectType">
 					<u-radio-group v-model="formData.subjectType">
 						<u-radio key="individual" name="individual">个体户</u-radio>
 						<u-radio key="enterprise" name="enterprise">企业</u-radio>

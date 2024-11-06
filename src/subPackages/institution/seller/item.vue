@@ -153,9 +153,10 @@
 			handler(e){
 				switch (e) {
 					case "seller":
+						console.log(this.item)
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/seller/index?brandId=' + this.item.brandId
+							url: '/subPackages/institution/seller/index?brandId=' + this.item.brandId
 						})
 						break;
 					case "sellerOrder":

@@ -6,7 +6,6 @@
 		<apply v-if="path==='apply'"/>
 		<pay v-if="path==='pay'"/>
 		<my v-if="path==='my'" @handlerPath="handlerPath"/>
-		跳转subP成功
 		<tabbar
 			ref="tabbar"
 			:list="list"
@@ -19,8 +18,8 @@
 <script>
 	import tabbar from '@/components/tabbar'
 	import home from './home'
-	import institution from '@/subPackages/institution/institution/index.vue'
-	import seller from '@/subPackages/institution/seller/index.vue'
+	import institution from './list.vue'
+	import seller from './seller/index.vue'
 	import apply from './apply'
 	import pay from './pay'
 	import my from './my'
@@ -112,7 +111,7 @@
 					case "seller":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/seller/index?seller=true'
+							url: '/subPackages/institution/seller/index?seller=true'
 						})
 						break;
 					case "institutionSecretKey":

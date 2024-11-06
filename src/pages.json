@@ -59,17 +59,6 @@
 			"style": {
 				"enablePullDownRefresh": true
 			}
-		},
-		{
-			"path": "pages/institution/institution/index",
-			"style": {
-			}
-		},
-		{
-			"path": "pages/institution/seller/index",
-			"style": {
-				"enablePullDownRefresh": false
-			}
 		}
 	],
 	"globalStyle": {
@@ -145,7 +134,14 @@
 					"style": {
 						"enablePullDownRefresh": false
 					}
-				},{
+				},
+				{
+					"path": "seller/index",
+					"style": {
+						"enablePullDownRefresh": false
+					}
+				},
+				{
 					"path": "institution/create/index",
 					"style": {
 					}
@@ -173,7 +169,14 @@
 					"style": {
 						"enablePullDownRefresh": false
 					}
-				},{
+				},
+				{
+					"path": "institution/index",
+					"style": {
+						"enablePullDownRefresh": false
+					}
+				},
+				{
 					"path": "secretKey/index",
 					"style": {
 					}
@@ -188,6 +191,12 @@
 				},
 				{
 					"path": "index",
+					"style": {
+					}
+				}
+				,
+				{
+					"path": "list",
 					"style": {
 					}
 				}

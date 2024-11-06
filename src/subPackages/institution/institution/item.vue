@@ -156,14 +156,14 @@
 					case "institution":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/institution/index',
+							url: '/subPackages/institution/institution/index',
 							params: this.item
 						})
 						break;
 					case "seller":
 						this.$u.route({
 							type: 'to',
-							url: '/pages/institution/seller/index?institutionId='+this.item.id,
+							url: '/subPackages/institution/seller/index?institutionId='+this.item.id,
 						})
 						break;
 					case "report":
