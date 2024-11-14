@@ -52,7 +52,7 @@
 					page: 1,
 					pageSize: 15,
 					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					sort: 'ORDER BY created_at DESC, id DESC' 
 				},
 				query: {
 				},
@@ -72,6 +72,7 @@
 		},
 		mounted() {
 			this.options = RouteParams()
+			console.log(this.options)
 			this.init()
 		},
 		methods: {
@@ -85,7 +86,7 @@
 					page: 1,
 					pageSize: 15,
 					where: '',
-					sort: 'ORDER BY date DESC, id DESC'
+					sort: 'ORDER BY created_at DESC, id DESC' 
 				}
 				this.list = []
 				this.getList()
@@ -117,7 +118,7 @@
 				}
 
 				if (this.options.institutionId) {
-					this.listQuery.institutionId = this.options.institutionId
+					this.listQuery.institutionId = this.options.id
 				}
 
 				this.listQuery.where = where

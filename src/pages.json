@@ -61,6 +61,9 @@
 			}
 		}
 	],
+	"permission": {
+    	"scope.chooseMedia": { "desc": "上传图片" }
+  	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
@@ -168,6 +171,21 @@
 					"path": "institution/item",
 					"style": {
 						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "apply/index2",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/index3",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/index4",
+					"style": {
 					}
 				},
 				{
