@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="item">
+            <u-steps :list="numList" :current="1" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="250">
                 <u-form-item label="法人姓名" prop="legalPerson">
                     <u-input v-model="formData.legalPerson" placeholder="请输入法人姓名"/>
@@ -78,6 +79,15 @@
 	export default {
 		data() {
 			return {
+                numList: [{
+					name: '主体信息'
+				}, {
+					name: '法人信息'
+				}, {
+					name: '结算信息'
+				}, {
+					name: '门店信息'
+				}, ],
                 item: {},
                 channels: [],
                 storageToken:'',

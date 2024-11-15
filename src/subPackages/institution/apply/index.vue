@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="item">
+            <u-steps :list="numList" :current="0" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="260">
                 <u-form-item label="申请编号" prop="businessCode">
                     <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
@@ -85,6 +86,15 @@
 	export default {
 		data() {
 			return {
+                numList: [{
+					name: '主体信息'
+				}, {
+					name: '法人信息'
+				}, {
+					name: '结算信息'
+				}, {
+					name: '门店信息'
+				}, ],
                 channels: [],
                 storageToken:'',
                 subjectType: [
@@ -155,7 +165,7 @@
                     ],
                     licenseBusinessRange: [
                         { required: true, message: '请输入营业执照经营范围', trigger: 'blur' },
-                        { min: 3, max: 64, message: '长度在 3 到 256 个字符', trigger: 'blur' }
+                        { min: 3, max: 256, message: '长度在 3 到 256 个字符', trigger: 'blur' }
                     ],
                     licensePersonCardPeriodBegin: [
                         { required: true, message: '请选择营业执照有效期开始时间', trigger: 'blur' },
@@ -249,6 +259,17 @@
                 // }).then(res => {
                     
                 // })
+                
+                // if (e.tempFilePaths[0].size > 1024 * 1024) {
+                //     console.log('图片超过1m');
+                //     this.$toast('文件大小不能超过1M');
+                //     uni.showToast({
+                //         duration: 3000,
+                //         icon:'error',
+                //         title: "图片大小超过1M",
+                //     }) 
+                //     return false;
+                // }
                 OCR(e.tempFilePaths[0],'biz_license').then(res => {
                     console.log(res);
                     if (res.bizLicense) {
@@ -327,22 +348,21 @@
                 return dateString.replace(/[\u4e00-\u9fa5]/g, '');
             },
             nextPage(formName) {
-                console.log(formName);
-                this.$u.route({
-                    type: 'to',
-                    url: 'subPackages/institution/apply/index2',
-                    params: { formData: JSON.stringify(this.formData) }
-                })
-                // this.$refs[formName].validate((valid) => {
-                //     if (valid) {
-                //         this.$u.route({
-                //             type: 'to',
-                //             url: 'subPackages/institution/apply/index2',
-                //             params: { formData: JSON.stringify(this.formData) }
-                //         })
-                //     }
-                    
+                // console.log(formName);
+                // this.$u.route({
+                //     type: 'to',
+                //     url: 'subPackages/institution/apply/index2',
+                //     params: { formData: JSON.stringify(this.formData) }
                 // })
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.$u.route({
+                            type: 'to',
+                            url: 'subPackages/institution/apply/index2',
+                            params: { formData: JSON.stringify(this.formData) }
+                        })
+                    } 
+                })
                
             },
             // submitForm(formName) {

@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="item">
+            <u-steps :list="numList" :current="2" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="250">
                 <u-form-item label="银行卡照片" prop="bankCardPic">
                     <uni-file-picker 
@@ -20,9 +21,8 @@
                     <u-input v-model="formData.bankAccountBank" placeholder="请输入开户银行"/>
                 </u-form-item>
                 <u-form-item label="银行通道编号" prop="bankChannelNo">
-                    <!-- <u-input v-model="formData.bankChannelNo" @click="show = true" placeholder="请选择银行通道编号"/> -->
-                    <!-- <u-select v-model="show" mode="single-column" :list="list" @confirm="confirm"></u-select> -->
-                    <uni-combox :candidates="lists" placeholder="请选择银行通道编号" v-model="formData.bankChannelNo"></uni-combox>
+                    <u-input v-model="bankChannelNoName"  placeholder="请选择银行通道编号" @click="showBankChannel = !showBankChannel"/>
+                    <u-select v-model="showBankChannel" mode="mutil-column-auto" :list="bankChannelList" @confirm="confirmBankChannelNo"></u-select>
                 </u-form-item>
                 <u-form-item label="银行账号" prop="bankAccountNo">
                     <u-input v-model="formData.bankAccountNo" placeholder="请输入银行账号"/>
@@ -57,46 +57,54 @@
     import { parseTime, OCR, RouteParams } from '@/utils'
     import { mapState } from 'vuex'
     import uniCombox from '@/components/uni-combox/uni-combox.vue'
-    // import bankInfoSettings from '@/assets/json/bankInfoSettings.json'
-    // const bankInfoSettings = require('@/path/to/bankInfoSettings.json')
 	export default {
 		data() {
 			return {
-                lists: ['中国工商银行股份有限公司北京通州支行新华分理处','中国工商银行股份有限公司北京东铁匠营支行','中国工商银行股份有限公司北京崇文门外大街支行','中国工商银行股份有限公司北京市分行营业部'],
-				// list: [
-				// 	{
-				// 		value: '102100000021',
-				// 		name: '中国工商银行股份有限公司北京通州支行新华分理处'
-				// 	},
-				// 	{
-				// 		value: '102100000030',
-				// 		name: '中国工商银行股份有限公司北京市分行营业部'
-				// 	},
-				// 	{
-				// 		value: '102100000048',
-				// 		label: '中国工商银行股份有限公司北京东铁匠营支行'
-				// 	},
-				// 	{
-				// 		value: '102100000056',
-				// 		name: '中国工商银行股份有限公司北京崇文门外大街支行'
-				// 	},
-				// 	{
-				// 		value: '102100000064',
-				// 		name: '中国工商银行股份有限公司北京樱桃园支行'
-				// 	},
-				// 	{
-				// 		value: '102100000072',
-				// 		name: '中国工商银行股份有限公司北京王府井金街支行'
-				// 	},
-				// 	{
-				// 		value: '102100000089',
-				// 		name: '中国工商银行股份有限公司北京南苑支行'
-				// 	},
-				// 	{
-				// 		value: '102100000097',
-				// 		name: '中国工商银行股份有限公司北京南中轴路支行'
-				// 	}
-				// ],
+                numList: [{
+					name: '主体信息'
+				}, {
+					name: '法人信息'
+				}, {
+					name: '结算信息'
+				}, {
+					name: '门店信息'
+				}, ],
+                bankChannelNoName: '',
+                showBankChannel: false,
+                bankChannelList: [
+					{
+						value: '102100000021',
+						label: '中国工商银行股份有限公司北京通州支行新华分理处'
+					},
+					{
+						value: '102100000030',
+						label: '中国工商银行股份有限公司北京市分行营业部'
+					},
+					{
+						value: '102100000048',
+						label: '中国工商银行股份有限公司北京东铁匠营支行'
+					},
+					{
+						value: '102100000056',
+						label: '中国工商银行股份有限公司北京崇文门外大街支行'
+					},
+					{
+						value: '102100000064',
+						label: '中国工商银行股份有限公司北京樱桃园支行'
+					},
+					{
+						value: '102100000072',
+						label: '中国工商银行股份有限公司北京王府井金街支行'
+					},
+					{
+						value: '102100000089',
+						label: '中国工商银行股份有限公司北京南苑支行'
+					},
+					{
+						value: '102100000097',
+						label: '中国工商银行股份有限公司北京南中轴路支行'
+					}
+				],
                 channels: [],
                 storageToken:'',
                 formData: {
@@ -104,7 +112,7 @@
                     bankCardPic: '',    // 银行卡照片
                     bankAccountType: '', // 账户类型[对公银行账户、经营者个人银行卡]
                     bankAccountBank: '', // 开户银行
-                    bankChannelNo: '102100000021',  // 银行通道编号
+                    bankChannelNo: '',  // 银行通道编号
                     bankAccountNo: '',     // 银行账号
                     bankAccountName: ''   // 开户名称
                 },
@@ -117,7 +125,7 @@
                         { required: true, message: '请选择银行账户类型', trigger: 'blur' },
                     ],
                     bankChannelNo: [
-                        { required: true, message: '请选择银行通道编号', trigger: 'blur' },
+                        { required: false, message: '请选择银行通道编号', trigger: 'blur' },
                     ],
                     bankAccountNo: [
                         { required: true, message: '请输入银行账号', trigger: 'blur' },
@@ -182,8 +190,10 @@
                 this.formData.bankChannelNo = region[2].code
             },
             // 银行通道编号下拉框
-            confirm(e) {
-				console.log(e[0].value);
+            confirmBankChannelNo(e) {
+                this.showBankChannel = !this.showBankChannel
+				console.log(e);
+                this.bankChannelNoName = e[0].label
                 this.formData.bankChannelNo = e[0].value
 			},
             // OCR识别

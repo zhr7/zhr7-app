@@ -211,11 +211,11 @@ const install = (Vue, vm) => {
 					Search: (params = {}) => vm.$u.post(V3+'/institution/institution/search', params), // 
 				},
 				apply: {	//  进件
-					List: (params = {}) => vm.$u.post(v3+'/institution-api/applys/list', params),	// 
-					Create: (params = {}) => vm.$u.post(v3+'/application/application/create', params),	// 
-					Update: (params = {}) => vm.$u.post(v3+'/institution-api/applys/update', params),
-					Delete: (params = {}) => vm.$u.post(v3+'/institution-api/applys/delete', params),	// 
-					Get: (params = {}) => vm.$u.post(v3+'/institution-api/applys/get', params),
+					List: (params = {}) => vm.$u.post(V3+'/institution-api/applys/list', params),	// 
+					Create: (params = {}) => vm.$u.post(V3+'/application/application/create', params),	// 
+					Update: (params = {}) => vm.$u.post(V3+'/institution-api/applys/update', params),
+					Delete: (params = {}) => vm.$u.post(V3+'/institution-api/applys/delete', params),	// 
+					Get: (params = {}) => vm.$u.post(V3+'/institution-api/applys/get', params),
 				},
 			},
 			seller: {

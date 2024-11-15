@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="item">
+            <u-steps :list="numList" :current="3" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="250">
                 <u-form-item label="门店简称" prop="storeShortName">
                     <u-input v-model="formData.storeShortName" placeholder="请输入门店简称"/>
@@ -21,11 +22,12 @@
                     <u-input v-model="formData.storeAddress" placeholder="请输入门店地址"/>
                 </u-form-item>
                 <u-form-item label="微信经营类目" prop="wechatCategoryCode">
-                    <u-select v-model="formData.wechatCategoryCode" mode="single-column" :list="list" @confirm="confirm"></u-select>
-                    <!-- <uni-combox :candidates="wechatMerchantCategories" placeholder="请选择微信经营类目" v-model="formData.wechatCategoryCode"></uni-combox> -->
+                    <u-input v-model="wechatCategoryCodeName"  placeholder="请选择微信经营类目" @click="showWechat = !showWechat"/>
+                    <u-select v-model="showWechat" mode="mutil-column-auto" :list="wechatMerchantCategories" @confirm="confirmWechatCategoryCode"></u-select>
                 </u-form-item>
                 <u-form-item label="MCC类目" prop="mccCategoryCode">
-					<!-- <uni-combox :candidates="mccCategoryCodes" placeholder="请选择MCC类目" v-model="formData.mccCategoryCode"></uni-combox> -->
+					<u-input v-model="mccCategoryCodeName"  placeholder="请选择MCC类目" @click="showMcc = !showMcc"/>
+                    <u-select v-model="showMcc" mode="mutil-column-auto" :list="mccCategoryCodes" @confirm="confirmMccCategoryCode"></u-select>
                 </u-form-item>
                 <u-form-item label="门店门头照片" prop="storeEntrancePic">
                     <uni-file-picker 
@@ -75,22 +77,19 @@
 	export default {
 		data() {
 			return {
-                show: true,
-                list: [
-                    {
-                        "value": "商业及生活服务",
-                        "label": "商业及生活服务"
-                    },
-    
-                    {
-                        "value": "金融服务",
-                        "label": "金融服务"
-                    },
-                    {
-                        "value": "公共事业",
-                        "label": "公共事业"
-                    }
-                ],
+                numList: [{
+					name: '主体信息'
+				}, {
+					name: '法人信息'
+				}, {
+					name: '结算信息'
+				}, {
+					name: '门店信息'
+				}, ],
+                wechatCategoryCodeName: '',
+                mccCategoryCodeName: '',
+                showWechat: false,
+                showMcc: false,
                 mccCategoryCodes: mccCategoryCodes,
                 wechatMerchantCategories: wechatMerchantCategories,
                 channels: [],
@@ -152,14 +151,14 @@
                     ],
                     wechatCategoryCode: [
                         {
-                            required: true,
+                            required: false,
                             message: '请选择微信经营类目',
                             trigger: ['blur', 'change']
                         }
                     ],
                     mccCategoryCode: [
                         {
-                            required: true,
+                            required: false,
                             message: '请选择MCC类目',
                             trigger: ['blur', 'change']
                         }
@@ -182,8 +181,12 @@
 		},
         onShow() {
 			this.item = RouteParams()
-            this.item.formData = JSON.parse(this.item.formData)
-            this.formData = {...this.item.formData, ...this.formData}
+            try {
+                this.item.formData = JSON.parse(this.item.formData)
+                this.formData = {...this.item.formData, ...this.formData}
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
             console.log(this.formData);
 		},
 		methods: {
@@ -258,41 +261,87 @@
                     }
                 })
 			},
-            confirm(e) {
-                this.show = !this.show
-				console.log(e);
+            confirmWechatCategoryCode(e) {
+                this.showWechat = !this.showWechat
+				console.log(e[3].value);
+                this.wechatCategoryCodeName = e[3].label
+                this.formData.wechatCategoryCode = e[3].value.toString()
 			},
+            confirmMccCategoryCode(e) {
+                console.log(e[2].value);
+                this.showMcc = !this.showMcc
+                this.mccCategoryCodeName = e[2].label
+                this.formData.mccCategoryCode = e[2].value
+            },
             submitForm(formName) {
                 console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.v3.institution.apply.Create({
-                            apply: this.formData
-                        }).then(res => {
-                            if (res.valid) {
-                                this.initFormData()
-                                uni.showToast({
-                                    duration: 5000,
-                                    icon:'success',
-                                    title:'进件成功',
-                                })
-                            } else {
-                                uni.showToast({
-                                    duration: 3000,
-                                    icon:'error',
-                                    title:'进件失败',
-                                })
-                            }
-                        }).catch(err => {
-                            console.log(err);
-                            uni.showToast({
-                                duration: 3000,
-                                icon:'error',
-                                title: err.datal,
-                            })
+                        this.$u.api.v3.institution.apply.Create(
+                    this.formData
+                ).then(res => {
+                    if (res.valid) {
+                        this.initFormData()
+                        uni.showToast({
+                            duration: 5000,
+                            icon:'success',
+                            title:'进件成功',
+                        })
+                        // setTimeout(function() {
+                        //     this.$u.route({
+                        //     type: 'to',
+                        //     url: 'subPackages/institution/index',
+                        //     params: { formData: JSON.stringify(this.formData) }
+                        // })
+                        // }, 3000);
+                    } else {
+                        uni.showToast({
+                            duration: 3000,
+                            icon:'error',
+                            title:'进件失败',
                         })
                     }
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title: err.datal,
+                    })
                 })
+                    }
+                })
+               
+
+                // this.$refs[formName].validate((valid) => {
+                //     if (valid) {
+                //         this.$u.api.v3.institution.apply.Create({
+                //             apply: this.formData
+                //         }).then(res => {
+                //             if (res.valid) {
+                //                 this.initFormData()
+                //                 uni.showToast({
+                //                     duration: 5000,
+                //                     icon:'success',
+                //                     title:'进件成功',
+                //                 })
+                //             } else {
+                //                 uni.showToast({
+                //                     duration: 3000,
+                //                     icon:'error',
+                //                     title:'进件失败',
+                //                 })
+                //             }
+                //         }).catch(err => {
+                //             console.log(err);
+                //             uni.showToast({
+                //                 duration: 3000,
+                //                 icon:'error',
+                //                 title: err.datal,
+                //             })
+                //         })
+                //     }
+                // })
             }
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
