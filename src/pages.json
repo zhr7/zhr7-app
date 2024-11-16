@@ -33,22 +33,6 @@
 			}
 		},
 		{
-			"path": "pages/pay/qrcode/index",
-			"style": {
-				"navigationBarTitleText": "快速买单",
-				"navigationStyle":"custom",
-				"transparentTitle":"always" 
-			}
-		},
-		{
-			"path": "pages/register/index",
-			"style": {
-				"navigationBarTitleText": "商户H5注册",
-				"navigationStyle":"custom",
-				"transparentTitle":"always" 
-			}
-		},
-		{
 			"path": "pages/seller/order/item",
 			"style": {
 				"enablePullDownRefresh": true
@@ -257,6 +241,20 @@
 					"path": "cashAccount",
 					"style": {
 						"enablePullDownRefresh": true
+					}
+				}
+			]
+		},
+		{
+			"root": "subPackages/h5",
+			"name": "subH5",
+			"pages": [
+				{
+					"path": "register/index",
+					"style": {
+						"navigationBarTitleText": "商户H5注册",
+						"navigationStyle":"custom",
+						"transparentTitle":"always" 
 					}
 				}
 			]

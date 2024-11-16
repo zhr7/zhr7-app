@@ -72,8 +72,8 @@
     import { parseTime, OCR, RouteParams } from '@/utils'
     import { mapState } from 'vuex'
     import uniCombox from '@/components/uni-combox/uni-combox.vue'
-    import mccCategoryCodes from '@/subPackages/assets/json/mccCategoryCodesSetting.json'
-    import wechatMerchantCategories from '@/subPackages/assets/json/wechatMerchantCategoriesSetting.json'
+    import mccCategoryCodes from '@/subPackages/institution/assets/json/mccCategoryCodesSetting.json'
+    import wechatMerchantCategories from '@/subPackages/institution/assets/json/wechatMerchantCategoriesSetting.json'
 	export default {
 		data() {
 			return {

@@ -10,11 +10,11 @@
 	import { mapGetters } from 'vuex'
 	import { baseAppUrl } from '@/settings.js'
 	import seller from '@/pages/seller/index.vue'
-	import institution from '@/subPackages/institution/index.vue'
+	// import institution from '@/subPackages/institution/index.vue'
 	export default {
 		components: { 
 			seller,
-			institution,
+			// institution,
 		},
 		computed: {
 			...mapGetters([

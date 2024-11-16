@@ -42,13 +42,11 @@
 	</view>
 </template>
 <script>
-    import uKeyboard from '@/components/uview-ui/components/u-keyboard/u-keyboard.vue'
 	import { AccountType } from './bankSetting';
 	import { AddressTree } from './addressSetting';
 	import { mapGetters } from 'vuex'
 	export default {
 		components: { 
-			uKeyboard
 		},
 		computed: {
             ...mapGetters([
