@@ -64,7 +64,6 @@
     "@vue/shared": "^3.0.0",
     "core-js": "^3.6.5",
     "flyio": "^0.6.2",
-    "qiniu": "^7.14.0",
     "regenerator-runtime": "^0.12.1",
     "urlencode": "^1.1.0",
     "uview-ui": "^1.8.4",
@@ -94,7 +93,6 @@
     "miniprogram-api-typings": "*",
     "node-sass": "^4.9.2",
     "postcss-comment": "^2.0.0",
-    "qiniu-js": "^3.4.0",
     "sass-loader": "^7.0.3",
     "vue-template-compiler": "^2.6.11"
   },
