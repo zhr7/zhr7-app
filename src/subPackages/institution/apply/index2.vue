@@ -230,7 +230,7 @@
                 }
             },
             initStorageToken() {
-                this.$u.api.v3.storage.file.Token().then(res => {
+                this.$u.api.v3.storage.file.GetUploadToken().then(res => {
                     // if (res.token.type == 'qiniu') {
                     //     this.storageToken = res.token.token
                     // }
@@ -248,57 +248,110 @@
             handleGetRegion(region){
                 this.formData.bankAddressCode = region[2].code
             },
-            selectIdCardCopy(e){
-                console.log(e.tempFilePaths[0])
-                OCR(e.tempFilePaths[0],'idcard').then(res => {      
-                    if (res.idcard) {
-                        this.formData.legalPerson = res.idcard.name
-                        this.formData.legalPersonCardNo = res.idcard.id
-                        this.formData.legalPersonCardCardAddress = res.idcard.address
-                    } else {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title: "身份证识别失败",
-                        })
-                    }
-                }).catch(err => {
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title: "身份证识别失败:"+err,
-                    })
-                })
-                this.select(e, 'legalPersonCardPic')
-            },
-            selectIdCardNational(e){
-                console.log(e.tempFilePaths[0])
-                OCR(e.tempFilePaths[0],'idcard').then(res => {      
+            // selectIdCardCopy(e){
+            //     console.log(e.tempFilePaths[0])
+            //     OCR(e.tempFilePaths[0],'idcard').then(res => {      
+            //         if (res.idcard) {
+            //             this.formData.legalPerson = res.idcard.name
+            //             this.formData.legalPersonCardNo = res.idcard.id
+            //             this.formData.legalPersonCardCardAddress = res.idcard.address
+            //         } else {
+            //             uni.showToast({
+            //                 duration: 3000,
+            //                 icon:'error',
+            //                 title: "身份证识别失败",
+            //             })
+            //             return
+            //         }
+            //     }).catch(err => {
+            //         uni.showToast({
+            //             duration: 3000,
+            //             icon:'error',
+            //             title: "身份证识别失败:"+err,
+            //         })
+            //         return
+            //     })
+            //     this.select(e, 'legalPersonCardPic')
+            // },
+            // selectIdCardNational(e){
+            //     console.log(e.tempFilePaths[0])
+            //     OCR(e.tempFilePaths[0],'idcard').then(res => {      
                     
-                    console.log(res.idcard.valid_date);
-                    if (res.idcard) {
-                        let idCardDate = res.idcard.valid_date.split('-');
-                        console.log(idCardDate);
-                        this.formData.legalPersonCardPeriodBegin = idCardDate[0]
-                        this.formData.legalPersonCardPeriodEnd = idCardDate[1]
-                    } else {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title: "身份证识别失败",
-                        })
-                    }
-                }).catch(err => {
+            //         console.log(res.idcard.valid_date);
+            //         if (res.idcard) {
+            //             let idCardDate = res.idcard.valid_date.split('-');
+            //             console.log(idCardDate);
+            //             this.formData.legalPersonCardPeriodBegin = idCardDate[0]
+            //             this.formData.legalPersonCardPeriodEnd = idCardDate[1]
+            //         } else {
+            //             uni.showToast({
+            //                 duration: 3000,
+            //                 icon:'error',
+            //                 title: "身份证识别失败",
+            //             })
+            //             return
+            //         }
+            //     }).catch(err => {
+            //         uni.showToast({
+            //             duration: 3000,
+            //             icon:'error',
+            //             title: "身份证识别失败:"+err,
+            //         })
+            //         return
+            //     })
+            //     this.select(e, 'legalPersonCardNationalPic')
+            //     // this.formData['legalPersonCardNationalPic'] to url
+            //     // api url
+            // },
+            // 获取上传状态
+			// select(e,type){
+            //     if (e.tempFiles[0].size > 1024 * 1024) {
+            //         uni.showToast({
+            //             duration: 3000,
+            //             icon:'error',
+            //             title:'图片大小超过1M',
+            //         })
+            //         return;
+            //     }
+            //     const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
+            //     const filePath =  e.tempFilePaths[0]
+            //     uni.uploadFile({
+            //         url: 'https://upload.qiniup.com/', 
+            //         filePath: filePath,
+            //         name: 'file',
+            //         formData: {
+            //             'token': this.storageToken,
+            //             'key': path
+            //         },
+            //         success: (uploadFileRes) => {
+            //             if (uploadFileRes.statusCode===200) {
+            //                 this.formData[type] = path
+            //                 uni.showToast({
+            //                     duration: 3000,
+            //                     icon:'success',
+            //                     title:'上传成功',
+            //                 })
+            //             }else{
+            //                 uni.showToast({
+            //                     duration: 3000,
+            //                     icon:'error',
+            //                     title:'上传失败',
+            //                 })
+            //             }
+            //         }
+            //     })
+			// },
+
+            selectIdCardCopy(e){
+                console.log(e);
+                if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
-                        title: "身份证识别失败:"+err,
+                        title:'图片大小超过1M',
                     })
-                })
-                this.select(e, 'legalPersonCardNationalPic')
-            },
-            // 获取上传状态
-			select(e,type){
+                    return;
+                }
                 const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
                 const filePath =  e.tempFilePaths[0]
                 uni.uploadFile({
@@ -311,22 +364,122 @@
                     },
                     success: (uploadFileRes) => {
                         if (uploadFileRes.statusCode===200) {
-                            this.formData[type] = path
+                            this.formData.legalPersonCardPic = path
+                           //获取图片地址并识别图片信息
+                           this.$u.api.v3.storage.file.GetUploadImage({
+                                provider: 'qiniu',
+                                key: path
+                            }).then(res => {
+                                console.log(res)
+                                this.$u.api.v3.storage.file.IDCardOCR({
+                                    imageBase64: '',
+                                    imageUrl: res.url,
+                                    cardSide: 'FRONT',
+                                }).then(res => {
+                                    console.log('res')
+                                    console.log(res)
+                                    this.formData.legalPerson = res.name
+                                    this.formData.legalPersonCardNo = res.idNum
+                                    this.formData.legalPersonCardCardAddress = res.address
+                                }).catch(err => {
+                                    uni.showToast({
+                                        duration: 3000,
+                                        icon:'error',
+                                        title: "身份证识别失败:"+err,
+                                    })
+                                })
+                            }).catch(err => {
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title: "身份证识别失败:"+err,
+                                })
+                            })
                             uni.showToast({
                                 duration: 3000,
                                 icon:'success',
-                                title:'上传成功',
+                                title:'上传成功'
                             })
                         }else{
                             uni.showToast({
                                 duration: 3000,
                                 icon:'error',
-                                title:'上传失败',
+                                title:'上传失败'
                             })
                         }
                     }
                 })
 			},
+            selectIdCardNational(e) {
+                console.log(e);
+                if (e.tempFiles[0].size > 1024 * 1024) {
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title:'图片大小超过1M',
+                    })
+                    return;
+                }
+                const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
+                const filePath =  e.tempFilePaths[0]
+                uni.uploadFile({
+                    url: 'https://upload.qiniup.com/', 
+                    filePath: filePath,
+                    name: 'file',
+                    formData: {
+                        'token': this.storageToken,
+                        'key': path
+                    },
+                    success: (uploadFileRes) => {
+                        if (uploadFileRes.statusCode===200) {
+                            this.formData.legalPersonCardNationalPic = path
+                           //获取图片地址并识别图片信息
+                           this.$u.api.v3.storage.file.GetUploadImage({
+                                provider: 'qiniu',
+                                key: path
+                            }).then(res => {
+                                console.log(res)
+                                this.$u.api.v3.storage.file.IDCardOCR({
+                                    imageBase64: '',
+                                    imageUrl: res.url,
+                                    cardSide: 'BACK',
+                                }).then(res => {
+                                    console.log('res')
+                                    console.log(res)
+                                    let idCardDate = res.validDate.split('-');
+                                    console.log(idCardDate);
+                                    this.formData.legalPersonCardPeriodBegin = idCardDate[0].replaceAll('.', '');
+                                    this.formData.legalPersonCardPeriodEnd = idCardDate[1].replaceAll('.', '');
+
+                                }).catch(err => {
+                                    uni.showToast({
+                                        duration: 3000,
+                                        icon:'error',
+                                        title: "身份证识别失败:"+err,
+                                    })
+                                })
+                            }).catch(err => {
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title: "身份证识别失败:"+err,
+                                })
+                            })
+                            uni.showToast({
+                                duration: 3000,
+                                icon:'success',
+                                title:'上传成功'
+                            })
+                        }else{
+                            uni.showToast({
+                                duration: 3000,
+                                icon:'error',
+                                title:'上传失败'
+                            })
+                        }
+                    }
+                })
+            },
             nextPage(formName) {
                 console.log(this.formData);
                 this.$refs[formName].validate((valid) => {

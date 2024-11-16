@@ -29,7 +29,7 @@
                         fileMediatype="image" 
                         mode="grid" 
                         limit="1"
-                        @select="selectLicenseCopy" 
+                        @select="selectLicensePic" 
                     />
                 </u-form-item>
                 <u-form-item label="营业执照商户名称" prop="licenseMerchantName">
@@ -209,7 +209,7 @@
                 }
             },
             initStorageToken() {
-                this.$u.api.v3.storage.file.Token().then(res => {
+                this.$u.api.v3.storage.file.GetUploadToken().then(res => {
                     // console.log(res.token.type);
                     this.storageToken = res.token
                     // if (res.token.type == 'qiniu') {
@@ -230,90 +230,15 @@
                 this.formData.licenseAddressCode = region[2].code
             },
             selectHandPic(e){
-                // OCR(e.tempFilePaths[0],'id_card').then(res => {
-                //     if (res.idCard) {
-                //         this.formData.idCardName = res.idCard.name
-                //         this.formData.idCardNumber = res.idCard.id_number
-                //         this.formData.idCardAddress = res.idCard.address
-                //     } else {
-                //         uni.showToast({
-                //             duration: 3000,
-                //             icon:'error',
-                //             title: "身份证识别失败",
-                //         })
-                //     }
-                // }).catch(err => {
-                //     uni.showToast({
-                //         duration: 3000,
-                //         icon:'error',
-                //         title: "身份证识别失败:"+err,
-                //     })
-                // })
-                // console.log(e);
-                this.select(e, 'legalPersonCardHandPic')
-            },
-            
-            selectLicenseCopy(e){
-                // GetUploadToken({
-                //     provider: 'qiniu',
-                // }).then(res => {
-                    
-                // })
-                
-                // if (e.tempFilePaths[0].size > 1024 * 1024) {
-                //     console.log('图片超过1m');
-                //     this.$toast('文件大小不能超过1M');
-                //     uni.showToast({
-                //         duration: 3000,
-                //         icon:'error',
-                //         title: "图片大小超过1M",
-                //     }) 
-                //     return false;
-                // }
-                OCR(e.tempFilePaths[0],'biz_license').then(res => {
-                    console.log(res);
-                    if (res.bizLicense) {
-                        // if (res.bizLicense.type_of_enterprise.indexOf("公司") != -1 ) {
-                        //     this.formData.subjectType = "enterprise"
-                        // }
-                        // if (res.bizLicense.type_of_enterprise.indexOf("个体") != -1 ) {
-                        //     this.formData.subjectType = "individual"
-                        // }
-                        this.formData.licenseCode = res.bizLicense.reg_num
-                        this.formData.licenseMerchantName = res.bizLicense.enterprise_name
-                        if (res.bizLicense.period) {
-                            const periods = res.bizLicense.period
-                                .replace('年', '')
-                                .replace('月', '')
-                                .replace('日', '')
-                                .split('至');
-                            this.formData.licensePersonCardPeriodBegin = periods[0]
-                            this.formData.licensePersonCardPeriodEnd = periods[1]
-                        } else {
-                            this.formData.licensePersonCardPeriodBegin = this.formatDate(res.bizLicense.registered_date) 
-                            this.formData.licensePersonCardPeriodEnd = '长期'
-                        }
-                        this.formData.licenseAddress = res.bizLicense.address
-                        this.formData.licenseBusinessRange = res.bizLicense.business_scope
-                    }else{
-                       uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title: "营业执照识别失败",
-                        }) 
-                    }
-                }).catch(err => {
+                // this.select(e, 'legalPersonCardHandPic')
+                if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
-                        title: "营业执照识别失败:"+err,
+                        title:'图片大小超过1M',
                     })
-                })
-                this.select(e, 'licensePic')
-            },
-            // 获取上传状态
-			select(e,type){
-                // console.log(e, type);
+                    return;
+                }
                 const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
                 const filePath =  e.tempFilePaths[0]
                 uni.uploadFile({
@@ -326,18 +251,146 @@
                     },
                     success: (uploadFileRes) => {
                         if (uploadFileRes.statusCode===200) {
-                            this.formData[type] = path
-                            // console.log(uploadFileRes)
+                            this.formData.legalPersonCardHandPic = path
                             uni.showToast({
                                 duration: 3000,
                                 icon:'success',
-                                title:'上传成功',
+                                title:'上传成功'
                             })
                         }else{
                             uni.showToast({
                                 duration: 3000,
                                 icon:'error',
-                                title:'上传失败',
+                                title:'上传失败'
+                            })
+                        }
+                    }
+                })
+            },
+            // selectLicenseCopy(e){
+            //     // if (e.tempFilePaths[0].size > 1024 * 1024) {
+            //     //     console.log('图片超过1m');
+            //     //     this.$toast('文件大小不能超过1M');
+            //     //     uni.showToast({
+            //     //         duration: 3000,
+            //     //         icon:'error',
+            //     //         title: "图片大小超过1M",
+            //     //     }) 
+            //     //     return false;
+            //     // }
+            //     OCR(e.tempFilePaths[0],'biz_license').then(res => {
+            //         console.log(res);
+            //         if (res.bizLicense) {
+            //             this.formData.licenseCode = res.bizLicense.reg_num
+            //             this.formData.licenseMerchantName = res.bizLicense.enterprise_name
+            //             if (res.bizLicense.period) {
+            //                 const periods = res.bizLicense.period
+            //                     .replace('年', '')
+            //                     .replace('月', '')
+            //                     .replace('日', '')
+            //                     .split('至');
+            //                 this.formData.licensePersonCardPeriodBegin = periods[0]
+            //                 this.formData.licensePersonCardPeriodEnd = periods[1]
+            //             } else {
+            //                 this.formData.licensePersonCardPeriodBegin = this.formatDate(res.bizLicense.registered_date) 
+            //                 this.formData.licensePersonCardPeriodEnd = '长期'
+            //             }
+            //             this.formData.licenseAddress = res.bizLicense.address
+            //             this.formData.licenseBusinessRange = res.bizLicense.business_scope
+            //         }else{
+            //            uni.showToast({
+            //                 duration: 3000,
+            //                 icon:'error',
+            //                 title: "营业执照识别失败",
+            //             }) 
+            //             return
+            //         }
+            //     }).catch(err => {
+            //         uni.showToast({
+            //             duration: 3000,
+            //             icon:'error',
+            //             title: "营业执照识别失败:"+err,
+            //         })
+            //     })
+            //     this.select(e, 'licensePic')
+            // },
+
+            // 获取上传状态
+			selectLicensePic(e){
+                console.log(e);
+                if (e.tempFiles[0].size > 1024 * 1024) {
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title:'图片大小超过1M',
+                    })
+                    return;
+                }
+                const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
+                const filePath =  e.tempFilePaths[0]
+                uni.uploadFile({
+                    url: 'https://upload.qiniup.com/', 
+                    filePath: filePath,
+                    name: 'file',
+                    formData: {
+                        'token': this.storageToken,
+                        'key': path
+                    },
+                    success: (uploadFileRes) => {
+                        if (uploadFileRes.statusCode===200) {
+                            this.formData.licensePic = path
+                           //获取图片地址并识别图片信息
+                           this.$u.api.v3.storage.file.GetUploadImage({
+                                provider: 'qiniu',
+                                key: path
+                            }).then(res => {
+                                console.log(res)
+                                this.$u.api.v3.storage.file.BizLicenseOCR({
+                                    imageBase64: '',
+                                    imageUrl: res.url,
+                                }).then(res => {
+                                    console.log('res')
+                                    console.log(res)
+                                    this.formData.licenseCode = res.regNum
+                                    this.formData.licenseMerchantName = res.name
+                                    if (res.period) {
+                                        const periods = res.period
+                                            .replace('年', '')
+                                            .replace('月', '')
+                                            .replace('日', '')
+                                            .split('至');
+                                        this.formData.licensePersonCardPeriodBegin = periods[0]
+                                        this.formData.licensePersonCardPeriodEnd = periods[1]
+                                    } else {
+                                        this.formData.licensePersonCardPeriodBegin = this.formatDate(res.registrationDate) 
+                                        this.formData.licensePersonCardPeriodEnd = '长期'
+                                    }
+                                    this.formData.licenseAddress = res.address
+                                    this.formData.licenseBusinessRange = res.business
+                                }).catch(err => {
+                                    uni.showToast({
+                                        duration: 3000,
+                                        icon:'error',
+                                        title: "营业执照识别失败:"+err,
+                                    })
+                                })
+                            }).catch(err => {
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title: "营业执照识别失败:"+err,
+                                })
+                            })
+                            uni.showToast({
+                                duration: 3000,
+                                icon:'success',
+                                title:'上传成功'
+                            })
+                        }else{
+                            uni.showToast({
+                                duration: 3000,
+                                icon:'error',
+                                title:'上传失败'
                             })
                         }
                     }
@@ -348,12 +401,6 @@
                 return dateString.replace(/[\u4e00-\u9fa5]/g, '');
             },
             nextPage(formName) {
-                // console.log(formName);
-                // this.$u.route({
-                //     type: 'to',
-                //     url: 'subPackages/institution/apply/index2',
-                //     params: { formData: JSON.stringify(this.formData) }
-                // })
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$u.route({
@@ -363,7 +410,6 @@
                         })
                     } 
                 })
-               
             },
             // submitForm(formName) {
             //     // console.log(this.formData.subjectType);

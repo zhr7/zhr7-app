@@ -225,8 +225,12 @@ const install = (Vue, vm) => {
 			},
 			storage: {
 				file: {
-					Token: (params = {}) => vm.$u.post(V3+'/storage/file/getUploadToken', params),
-					PrivateURL: (params = {}) => vm.$u.post('/storage-api/files/privateURL', params)
+					GetUploadToken: (params = {}) => vm.$u.post(V3+'/storage/file/getUploadToken', params),
+					PrivateURL: (params = {}) => vm.$u.post(V3+'/storage/files/getUploadImage', params),
+					GetUploadImage: (params = {}) => vm.$u.post(V3+'/storage/file/getUploadImage', params),
+					BizLicenseOCR: (params = {}) => vm.$u.post(V3+'/aggregator/ocr/bizLicenseOCR', params),
+					IDCardOCR: (params = {}) => vm.$u.post(V3+'/aggregator/ocr/iDCardOCR', params),
+					BankCardOCR: (params = {}) => vm.$u.post(V3+'/aggregator/ocr/bankCardOCR', params),
 				}
 			},
 

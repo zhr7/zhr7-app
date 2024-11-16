@@ -22,11 +22,11 @@
                     <u-input v-model="formData.storeAddress" placeholder="请输入门店地址"/>
                 </u-form-item>
                 <u-form-item label="微信经营类目" prop="wechatCategoryCode">
-                    <u-input v-model="wechatCategoryCodeName"  placeholder="请选择微信经营类目" @click="showWechat = !showWechat"/>
+                    <u-input v-model="wechatCategoryCodeName" disabled  placeholder="请选择微信经营类目" @click="showWechat = !showWechat"/>
                     <u-select v-model="showWechat" mode="mutil-column-auto" :list="wechatMerchantCategories" @confirm="confirmWechatCategoryCode"></u-select>
                 </u-form-item>
                 <u-form-item label="MCC类目" prop="mccCategoryCode">
-					<u-input v-model="mccCategoryCodeName"  placeholder="请选择MCC类目" @click="showMcc = !showMcc"/>
+					<u-input v-model="mccCategoryCodeName" disabled  placeholder="请选择MCC类目" @click="showMcc = !showMcc"/>
                     <u-select v-model="showMcc" mode="mutil-column-auto" :list="mccCategoryCodes" @confirm="confirmMccCategoryCode"></u-select>
                 </u-form-item>
                 <u-form-item label="门店门头照片" prop="storeEntrancePic">
@@ -204,7 +204,7 @@
                 }
             },
             initStorageToken() {
-                this.$u.api.v3.storage.file.Token().then(res => {
+                this.$u.api.v3.storage.file.GetUploadToken().then(res => {
                     // if (res.token.type == 'qiniu') {
                     //     this.storageToken = res.token.token
                     // }
@@ -233,6 +233,14 @@
             },
             // 获取上传状态
 			select(e,type){
+                if (e.tempFiles[0].size > 1024 * 1024) {
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title:'图片大小超过1M',
+                    })
+                    return;
+                }
                 const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
                 const filePath =  e.tempFilePaths[0]
                 uni.uploadFile({
@@ -277,23 +285,18 @@
                 console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$u.api.v3.institution.apply.Create(
-                    this.formData
-                ).then(res => {
+                        this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
                     if (res.valid) {
                         this.initFormData()
+                        // this.$u.route({
+                        //     type: 'to',
+                        //     url: 'subPackages/institution/apply/index',
+                        // })
                         uni.showToast({
                             duration: 5000,
                             icon:'success',
                             title:'进件成功',
                         })
-                        // setTimeout(function() {
-                        //     this.$u.route({
-                        //     type: 'to',
-                        //     url: 'subPackages/institution/index',
-                        //     params: { formData: JSON.stringify(this.formData) }
-                        // })
-                        // }, 3000);
                     } else {
                         uni.showToast({
                             duration: 3000,
