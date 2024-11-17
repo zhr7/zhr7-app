@@ -264,8 +264,17 @@
                                 title:'上传失败'
                             })
                         }
+                    },
+                    fail: (err) => {
+                        console.log(err);
+                        uni.showToast({
+                            duration: 3000,
+                            icon:'error',
+                            title:'上传失败'+err,
+                        })
                     }
                 })
+                
             },
             // selectLicenseCopy(e){
             //     // if (e.tempFilePaths[0].size > 1024 * 1024) {
@@ -393,6 +402,15 @@
                                 title:'上传失败'
                             })
                         }
+                    },
+                    fail: (err) => {
+                        console.log('err')
+                        console.log(err);
+                        uni.showToast({
+                            duration: 3000,
+                            icon:'error',
+                            title:'上传失败'+err,
+                        })
                     }
                 })
 			},

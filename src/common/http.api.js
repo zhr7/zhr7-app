@@ -217,6 +217,14 @@ const install = (Vue, vm) => {
 					Delete: (params = {}) => vm.$u.post(V3+'/institution-api/applys/delete', params),	// 
 					Get: (params = {}) => vm.$u.post(V3+'/institution-api/applys/get', params),
 				},
+				tradeAuth: {
+					QRCode: (params = {}) => vm.$u.post(V3+'/trade/secure/qrCode', params),
+					JsApi: (params = {}) => vm.$u.post(V3+'/trade/secure/jsApi', params),
+					AopF2F: (params = {}) => vm.$u.post(V3+'/trade/secure/aopF2F', params),  // 下单
+					Query: (params = {}) => vm.$u.post(V3+'/trade/secure/query', params),  // 查询
+					Refund: (params = {}) => vm.$u.post(V3+'/trade/secure/refund', params),  // 退款
+					RefundQuery: (params = {}) => vm.$u.post(V3+'/trade/secure/refundQuery', params),  // 退款查询
+				},
 			},
 			seller: {
 				seller: {

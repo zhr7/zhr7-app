@@ -261,7 +261,15 @@
                                 title:'上传失败'
                             })
                         }
-                    }
+                    },
+                    fail: (err) => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title:'上传失败'+err
+                    })
+                }
                 })
             },
             // selectBankCardCopy(e){
