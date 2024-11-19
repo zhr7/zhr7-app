@@ -210,6 +210,7 @@
 		},
         onShow() {
 			this.item = RouteParams();
+            console.log(this.item.formData)
             this.item.formData = JSON.parse(this.item.formData);
             this.formData = {...this.item.formData, ...this.formData}; // 合并数据
             console.log(this.formData)
@@ -343,7 +344,7 @@
 			// },
 
             selectIdCardCopy(e){
-                console.log(e);
+                // console.log(e);
                 if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
                         duration: 3000,
@@ -370,14 +371,14 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                console.log(res)
+                                // console.log(res)
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
                                     cardSide: 'FRONT',
                                 }).then(res => {
-                                    console.log('res')
-                                    console.log(res)
+                                    // console.log('res')
+                                    // console.log(res)
                                     this.formData.legalPerson = res.name
                                     this.formData.legalPersonCardNo = res.idNum
                                     this.formData.legalPersonCardCardAddress = res.address
@@ -409,17 +410,17 @@
                         }
                     },
                     fail: (err) => {
-                    console.log(err);
+                    console.log(err.errMsg);
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
-                        title:'上传失败'+err,
+                        title:'上传失败'+err.errMsg,
                     })
                 }
                 })
 			},
             selectIdCardNational(e) {
-                console.log(e);
+                // console.log(e);
                 if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
                         duration: 3000,
@@ -446,16 +447,16 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                console.log(res)
+                                // console.log(res)
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
                                     cardSide: 'BACK',
                                 }).then(res => {
-                                    console.log('res')
-                                    console.log(res)
+                                    // console.log('res')
+                                    // console.log(res)
                                     let idCardDate = res.validDate.split('-');
-                                    console.log(idCardDate);
+                                    // console.log(idCardDate);
                                     this.formData.legalPersonCardPeriodBegin = idCardDate[0].replaceAll('.', '');
                                     this.formData.legalPersonCardPeriodEnd = idCardDate[1].replaceAll('.', '');
 
@@ -487,17 +488,17 @@
                         }
                     },
                     fail: (err) => {
-                    console.log(err);
+                    console.log(err.errMsg);
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
-                        title:'上传失败'+err
+                        title:'上传失败'+err.errMsg
                     })
                 }
                 })
             },
             nextPage(formName) {
-                console.log(this.formData);
+                // console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$u.route({

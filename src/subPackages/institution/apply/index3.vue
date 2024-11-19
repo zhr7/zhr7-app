@@ -263,11 +263,11 @@
                         }
                     },
                     fail: (err) => {
-                    console.log(err);
+                    console.log(err.errMsg);
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
-                        title:'上传失败'+err
+                        title:'上传失败'+err.errMsg
                     })
                 }
                 })

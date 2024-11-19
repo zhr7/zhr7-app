@@ -111,7 +111,7 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 微信小程序特有相关 */
-        "appid" : "wxa3e18acd39d360bf",
+        "appid" : "wx88c19e4bdb3d47b3",
         "setting" : {
             "urlCheck" : false,
             "minified" : true,

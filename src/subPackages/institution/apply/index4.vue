@@ -53,6 +53,9 @@
                         @select="selectStoreFrontDeskPic" 
                     />
                 </u-form-item>
+                <u-form-item label="快捷填写信息">
+                    <u-switch v-model="checked" @change="quickFill"></u-switch>
+                </u-form-item>
             </u-form>
             <u-line />
             <view class="bottom">	
@@ -77,6 +80,7 @@
 	export default {
 		data() {
 			return {
+                checked: false,
                 numList: [{
 					name: '主体信息'
 				}, {
@@ -190,6 +194,29 @@
             console.log(this.formData);
 		},
 		methods: {
+            quickFill(){
+                console.log('quickFill');
+                // this.checked = !this.checked
+                if(this.checked){
+                    if(this.formData.licenseSubjectType == 'enterprise'){
+                        this.formData.storeShortName = this.formData.licenseMerchantName
+                        this.formData.storeBusinessName = this.formData.licenseMerchantName
+                        this.formData.storePerson = this.formData.legalPerson
+                        this.formData.storeAddress = this.formData.licenseAddress
+                        this.formData.storePhone = this.formData.legalPersonPhone
+                    }else {
+                        this.formData.storePerson = this.formData.legalPerson
+                        this.formData.storePhone = this.formData.legalPersonPhone
+                    }
+                }else {
+                        this.formData.storeShortName = ''
+                        this.formData.storeBusinessName = ''
+                        this.formData.storePerson = ''
+                        this.formData.storeAddress = ''
+                        this.formData.storePhone = ''
+                }
+                
+            },
             initFormData() {
                 this.formData = {
                      // 门店资料
@@ -268,11 +295,11 @@
                         }
                     },
                     fail: (err) => {
-                    console.log(err);
+                    console.log(err.errMsg);
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
-                        title:'上传失败'+err,
+                        title:'上传失败'+err.errMsg,
                     })
                 }
                 })
