@@ -23,8 +23,6 @@
                 <u-form-item label="银行通道编号" prop="bankChannelNo"> 
                     <!-- <u-input v-model="bankChannelNoName"  placeholder="请选择银行通道编号" @click="confirmBankChannelNo"/> -->
                     <!-- <u-select v-model="showBankChannel" :list="filteredBankChannelList"></u-select> -->
-                    <u-input v-model="searchKeyword" @update:modelValue="filterOptions" placeholder="输入关键字搜索"/>
-                    <u-select v-model="selectedOption" :list="filteredOptions" @confirm="confirmOption" :show="showSelect"></u-select>
                 </u-form-item>
                 <u-form-item label="银行账号" prop="bankAccountNo">
                     <u-input v-model="formData.bankAccountNo" placeholder="请输入银行账号"/>
@@ -62,10 +60,10 @@
 		data() {
 			return {
                 searchKeyword: '',
-      options: [], // 假设这是从 API 获取的数据
-      filteredOptions: [],
-      selectedOption: null,
-      showSelect: false,
+                options: [], // 假设这是从 API 获取的数据
+                filteredOptions: [],
+                selectedOption: null,
+                showSelect: false,
 
                 filteredBankChannelList: [], // 银行通道编号
                 numList: [{
