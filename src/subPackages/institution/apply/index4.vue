@@ -195,8 +195,6 @@
 		},
 		methods: {
             quickFill(){
-                console.log('quickFill');
-                // this.checked = !this.checked
                 if(this.checked){
                     if(this.formData.licenseSubjectType == 'enterprise'){
                         this.formData.storeShortName = this.formData.licenseMerchantName

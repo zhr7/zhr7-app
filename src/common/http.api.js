@@ -216,6 +216,7 @@ const install = (Vue, vm) => {
 					Update: (params = {}) => vm.$u.post(V3+'/institution-api/applys/update', params),
 					Delete: (params = {}) => vm.$u.post(V3+'/institution-api/applys/delete', params),	// 
 					Get: (params = {}) => vm.$u.post(V3+'/institution-api/applys/get', params),
+					SearchBankInfo: (params = {}) => vm.$u.post(V3+'/application/bankInfo/searchBankInfo', params),	//
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/secure/qrCode', params),

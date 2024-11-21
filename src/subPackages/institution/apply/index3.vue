@@ -20,9 +20,11 @@
                 <u-form-item label="开户银行" prop="bankAccountBank">
                     <u-input v-model="formData.bankAccountBank" placeholder="请输入开户银行"/>
                 </u-form-item>
-                <u-form-item label="银行通道编号" prop="bankChannelNo">
-                    <u-input v-model="bankChannelNoName" disabled  placeholder="请选择银行通道编号" @click="showBankChannel = !showBankChannel"/>
-                    <u-select v-model="showBankChannel" mode="mutil-column-auto" :list="bankChannelList" @confirm="confirmBankChannelNo"></u-select>
+                <u-form-item label="银行通道编号" prop="bankChannelNo"> 
+                    <!-- <u-input v-model="bankChannelNoName"  placeholder="请选择银行通道编号" @click="confirmBankChannelNo"/> -->
+                    <!-- <u-select v-model="showBankChannel" :list="filteredBankChannelList"></u-select> -->
+                    <u-input v-model="searchKeyword" @update:modelValue="filterOptions" placeholder="输入关键字搜索"/>
+                    <u-select v-model="selectedOption" :list="filteredOptions" @confirm="confirmOption" :show="showSelect"></u-select>
                 </u-form-item>
                 <u-form-item label="银行账号" prop="bankAccountNo">
                     <u-input v-model="formData.bankAccountNo" placeholder="请输入银行账号"/>
@@ -56,10 +58,16 @@
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
     import { parseTime, OCR, RouteParams } from '@/utils'
     import { mapState } from 'vuex'
-    import uniCombox from '@/components/uni-combox/uni-combox.vue'
 	export default {
 		data() {
 			return {
+                searchKeyword: '',
+      options: [], // 假设这是从 API 获取的数据
+      filteredOptions: [],
+      selectedOption: null,
+      showSelect: false,
+
+                filteredBankChannelList: [], // 银行通道编号
                 numList: [{
 					name: '主体信息'
 				}, {
@@ -103,6 +111,18 @@
 					{
 						value: '102100000097',
 						label: '中国工商银行股份有限公司北京南中轴路支行'
+					},
+                    {
+						value: '102100000072',
+						label: '中国农业银行股份有限公司北京王府井金街支行'
+					},
+					{
+						value: '102100000089',
+						label: '中国农业银行股份有限公司北京南苑支行'
+					},
+					{
+						value: '102100000097',
+						label: '中国农业银行股份有限公司北京南中轴路支行'
 					}
 				],
                 channels: [],
@@ -151,6 +171,13 @@
 		},
 		mounted() {
             this.initStorageToken()
+            // this.$u.api.v3.institution.apply.SearchBankInfo({
+            //     filter:'中国农业银行'
+            // }).then(res => {
+            //     console.log(res);
+            //     this.bankChannelList = res;
+            //     this.filteredBankChannelList = res; // 初始化时显示所有数据
+            // });
 		},
         onShow() {
 			this.item = RouteParams()
@@ -159,6 +186,33 @@
             console.log(this.formData);
 		},
 		methods: {
+            // filterOptions() {
+            //     console.log('过滤选项');
+            //     const keyword = this.searchKeyword.toLowerCase();
+            //     this.filteredOptions = this.bankChannelList.filter(item => {
+            //         return item.label.toLowerCase().includes(keyword);
+            //     });
+            //     this.showSelect = true; // 显示下拉框
+            // },
+            // confirmOption() {
+            // // 处理选中的值
+            // console.log(this.selectedOption);
+            // this.showSelect = false; // 隐藏下拉框
+            // },
+            // // 银行通道编号下拉框
+            // confirmBankChannelNo(e) {
+            //     console.log('111');
+            //     this.showBankChannel = !this.showBankChannel
+			// 	// console.log(e);
+            //     // this.bankChannelNoName = e[0].label
+            //     // this.formData.bankChannelNo = e[0].value
+
+            //     const keyword = this.bankChannelNoName.toLowerCase();
+            //     this.filteredBankChannelList = this.bankChannelList.filter(item => {
+            //         return item.label.toLowerCase().includes(keyword);
+            //     });
+			// },
+
             initFormData() {
                 this.formData = {
                     // 银行结算资料
@@ -189,13 +243,14 @@
             handleGetRegion(region){
                 this.formData.bankChannelNo = region[2].code
             },
-            // 银行通道编号下拉框
-            confirmBankChannelNo(e) {
-                this.showBankChannel = !this.showBankChannel
-				console.log(e);
-                this.bankChannelNoName = e[0].label
-                this.formData.bankChannelNo = e[0].value
-			},
+            // filterBankChannelList() {
+            //     const keyword = this.bankChannelNoName.toLowerCase();
+            //     this.filteredBankChannelList = this.bankChannelList.filter(item => {
+            //         return item.label.toLowerCase().includes(keyword);
+            //     });
+            //     this.bankChannelList = this.filteredBankChannelList;
+            // },
+            
             // OCR识别
             selectBankCardCopy(e) {
                 console.log(e);
