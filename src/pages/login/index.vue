@@ -161,9 +161,17 @@
 									url: '/pages/index/index', 
 								});
 							}).catch(err => {
+								console.log(err);
+								// #ifdef MP_ALIPAY
+								this.$refs.uToast.show({
+									title: err.message
+								})
+								// #endif
+								// #ifdef MP_WEIXIN
 								this.$refs.uToast.show({
 									title: err.data
 								})
+								// #endif
 							})
 						} else {
 							console.log('验证失败');
