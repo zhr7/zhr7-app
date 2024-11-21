@@ -43,8 +43,8 @@
 				listQuery: {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC',
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
 				},
 				query: {
 				},
@@ -78,11 +78,9 @@
 				this.listQuery = {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					// sort: 'date DESC,id DESC' 
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
 				}
-				console.log(this.listQuery.page)
 				this.list = []
 				this.getList()
 				uni.$on('uOnReachBottom',()=>{
@@ -107,27 +105,18 @@
 				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
-				let where = 'WHERE true'
+				let filter = {}
 				if (this.query.search) {
-					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
+					 filter = {
+						$or: [
+							{ brand_name: { $regex: this.query.search, $options: 'i' } },
+							{ user_name: { $regex: this.query.search, $options: 'i' } }
+						]
+					}
 				}
-				this.listQuery.where = where
+				this.listQuery.filter = JSON.stringify(filter)
 				this.listQuery.userId = this.routes.sellerId
 				this.status = 'loading';
-				// {
-				// 	listQuery: this.listQuery,
-				// 	sellerReport: {
-				// 		userId: this.routes.sellerId
-				// 	}
-				// }
-				// {
-				// 	page: 1,
-				// 	pageSize: 100000,
-				// 	where: 'WHERE true',
-				// 	sort: 'ORDER BY created_at DESC, id DESC',
-				// 	userId: this.routes.sellerId,
-				// 	// brandId: this.routes.brandId
-				// }
 				this.$u.api.v3.report.report.ReportSearch(this.listQuery).then(res => {
 					if (res.items) {
 						res.items.forEach(item => {
@@ -151,9 +140,8 @@
 				this.listQuery = {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					// sort: 'created_at desc'
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
 				}
 				this.list = []
 				this.getList()

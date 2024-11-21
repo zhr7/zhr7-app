@@ -193,7 +193,7 @@
 				this.getAmount()
 			},
 			getAmount(name) {
-				let where = 'WHERE true'
+				let filter = {}
 				if (name === "currentReport") {
 					this.dateRange = [
 						new Date(new Date(new Date().setDate(1)).getTime()),
@@ -209,18 +209,18 @@
 				if (this.dateRange.length>0) {
 					const start = parseTime(this.dateRange[0],'{y}{m}{d}')
 					const end = parseTime(this.dateRange[1],'{y}{m}{d}')
-					where = where + " And date >= '" + start + "' And date <= '" + end + "'"
+					filter.date = { $gte: start, $lte: end }
 				} else {
-					where = where + " And date = '" + parseTime(this.date,'{y}{m}{d}') + "'"
+					filter.date = parseTime(this.date,'{y}{m}{d}')
 				}
-				this.$u.api.v3.report.report.ReportInstitutionSearch({
+				this.$u.api.v3.report.report.ReportInstitutionAmount({
 					page: 1,
-					pageSize: 0,
-					sort: "ORDER BY created_at DESC, id DESC",
-					where: where
+					pageSize: 15,
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]),
+					filter: JSON.stringify(filter)
 				}).then(res => {
-					if (res.sum) {
-						this[name] = res.sum
+					if (res.item) {
+						this[name] = res.item
 					}
 				})
 			},

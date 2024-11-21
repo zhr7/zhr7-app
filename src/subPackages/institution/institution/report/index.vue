@@ -51,8 +51,8 @@
 				listQuery: {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC' 
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
 				},
 				query: {
 				},
@@ -85,8 +85,8 @@
 				this.listQuery = {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC' 
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
 				}
 				this.list = []
 				this.getList()
@@ -112,16 +112,12 @@
 				return "￥"+(this.isNumber(number)/100).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			},
 			getList() {
-				let where = 'WHERE true'
-				if (this.query.search) {
-					where = where + ` And (brand_name like '%` + this.query.search + `%' Or user_name like '%` + this.query.search + `%')`
-				}
+				let filter = {}
 
 				if (this.options.institutionId) {
 					this.listQuery.institutionId = this.options.id
 				}
-
-				this.listQuery.where = where
+				this.listQuery.filter = JSON.stringify(filter)
 				this.status = 'loading';
 				this.$u.api.v3.report.report.ReportInstitutionSearch(this.listQuery).then(res => {
 					if (res.items) {

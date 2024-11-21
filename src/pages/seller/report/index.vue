@@ -408,8 +408,8 @@
 				listQuery: {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}])
 				},
 			}
 		},
@@ -431,8 +431,8 @@
 				this.listQuery = {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}])
 				}
 			},
 			parseTime(time, cFormat){
@@ -460,21 +460,21 @@
 				this.getAmount()
 			},
 			getAmount() {
-				let where = 'WHERE true'
+				let filter = {}
 				if (this.dateRange.length>0) {
 					const start = parseTime(this.dateRange[0],'{y}{m}{d}')
 					const end = parseTime(this.dateRange[1],'{y}{m}{d}')
-					where = where + " And date >= '" + start + "' And date <= '" + end + "'"
+					filter.date = { $gte: start, $lte: end }
 				} else {
-					where = where + " And date = '" + parseTime(this.date,'{y}{m}{d}') + "'"
+					filter.date = parseTime(this.date,'{y}{m}{d}')
 				}
 				if (this.sellerId != 'all') {
-					where = where + " And user_id = '" + this.sellerId + "'"
+					filter.userId = this.sellerId
 				}
-				this.listQuery.where = where
-				this.$u.api.v3.report.report.ReportSearch(this.listQuery).then(res => {
-					if (res.sum) {
-						this.report = res.sum
+				this.listQuery.filter = JSON.stringify(filter)
+				this.$u.api.v3.report.report.ReportAmount(this.listQuery).then(res => {
+					if (res.item) {
+						this.report = res.item
 					}
 				})
 			},
