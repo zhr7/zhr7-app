@@ -21,8 +21,8 @@
                     <u-input v-model="formData.bankAccountBank" placeholder="请输入开户银行"/>
                 </u-form-item>
                 <u-form-item label="银行通道编号" prop="bankChannelNo"> 
-                    <!-- <u-input v-model="bankChannelNoName"  placeholder="请选择银行通道编号" @click="confirmBankChannelNo"/> -->
-                    <!-- <u-select v-model="showBankChannel" :list="filteredBankChannelList"></u-select> -->
+                    <u-input v-model="searchKeyword" @input="filterOptions" placeholder="请输入关键字搜索"/>
+                    <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                 </u-form-item>
                 <u-form-item label="银行账号" prop="bankAccountNo">
                     <u-input v-model="formData.bankAccountNo" placeholder="请输入银行账号"/>
@@ -59,13 +59,15 @@
 	export default {
 		data() {
 			return {
+                //银行通道编号下拉框
                 searchKeyword: '',
-                options: [], // 假设这是从 API 获取的数据
+                options: [], 
                 filteredOptions: [],
                 selectedOption: null,
                 showSelect: false,
+                params: {filter: '',},
+    
 
-                filteredBankChannelList: [], // 银行通道编号
                 numList: [{
 					name: '主体信息'
 				}, {
@@ -75,54 +77,6 @@
 				}, {
 					name: '门店信息'
 				}, ],
-                bankChannelNoName: '',
-                showBankChannel: false,
-                bankChannelList: [
-					{
-						value: '102100000021',
-						label: '中国工商银行股份有限公司北京通州支行新华分理处'
-					},
-					{
-						value: '102100000030',
-						label: '中国工商银行股份有限公司北京市分行营业部'
-					},
-					{
-						value: '102100000048',
-						label: '中国工商银行股份有限公司北京东铁匠营支行'
-					},
-					{
-						value: '102100000056',
-						label: '中国工商银行股份有限公司北京崇文门外大街支行'
-					},
-					{
-						value: '102100000064',
-						label: '中国工商银行股份有限公司北京樱桃园支行'
-					},
-					{
-						value: '102100000072',
-						label: '中国工商银行股份有限公司北京王府井金街支行'
-					},
-					{
-						value: '102100000089',
-						label: '中国工商银行股份有限公司北京南苑支行'
-					},
-					{
-						value: '102100000097',
-						label: '中国工商银行股份有限公司北京南中轴路支行'
-					},
-                    {
-						value: '102100000072',
-						label: '中国农业银行股份有限公司北京王府井金街支行'
-					},
-					{
-						value: '102100000089',
-						label: '中国农业银行股份有限公司北京南苑支行'
-					},
-					{
-						value: '102100000097',
-						label: '中国农业银行股份有限公司北京南中轴路支行'
-					}
-				],
                 channels: [],
                 storageToken:'',
                 formData: {
@@ -169,21 +123,79 @@
 		},
 		mounted() {
             this.initStorageToken()
-            // this.$u.api.v3.institution.apply.SearchBankInfo({
-            //     filter:'中国农业银行'
-            // }).then(res => {
-            //     console.log(res);
-            //     this.bankChannelList = res;
-            //     this.filteredBankChannelList = res; // 初始化时显示所有数据
-            // });
 		},
         onShow() {
 			this.item = RouteParams()
             this.item.formData = JSON.parse(this.item.formData)
             this.formData = {...this.item.formData, ...this.formData}
-            console.log(this.formData);
+            // console.log(this.formData);
 		},
 		methods: {
+            //银行通道编号
+            filterOptions() {
+                if (this.searchKeyword.length === 0) {
+                    // 如果搜索关键字为空，清空过滤后的选项
+                    this.filteredOptions = this.options.map(item => {
+                        return {
+                            value: item.bankCode,
+                            label: item.bankName
+                        };
+                    })
+                    this.showSelect = false; // 隐藏下拉框
+                    return;
+                }
+                const keyword = this.searchKeyword.toLowerCase();
+                this.filteredOptions = this.options.filter(item => {
+                    return item.bankName.toLowerCase().includes(keyword);
+                });
+                this.filteredOptions = this.filteredOptions.map(item => {
+                    return {
+                        value: item.bankCode,
+                        label: item.bankName
+                    };
+                })
+                // console.log(this.filteredOptions);
+                this.showSelect = true; // 显示下拉框
+            },
+            confirmOption(e) {
+                // 处理选中的值
+                // console.log(e[0]);
+                this.showSelect = false; // 隐藏下拉框
+                this.searchKeyword = e[0].label;
+                //将e[0].value赋值给银行通道编号字段
+                this.formData.bankChannelNo = e[0].value;
+            },
+            // bankFocus(){
+            //     let bankName = this.formData.bankAccountBank.match(/^.*行/);
+            //     if (!bankName) {
+            //         bankName = this.formData.bankAccountBank.match(/^.*信用社/);
+            //     }
+            //     this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
+            //     this.searchBankInfo();
+            //     this.filteredOptions = this.options.map(item => {
+            //         return {
+            //             value: item.bankCode,
+            //             label: item.bankName
+            //         };
+            //     })
+            //     this.showSelect = true; // 显示下拉框
+            // },
+            searchBankInfo() {
+                // 根据银行名称查询银行信息
+                let bankName = this.formData.bankAccountBank.match(/^.*行/);
+                // console.log(bankName);
+                if (!bankName) {
+                    bankName = formModel.bankAccountBank.match(/^.*信用社/);
+                }
+                
+                this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
+
+                this.$u.api.v3.institution.apply.SearchBankInfo(this.params).then(res => {
+                    // console.log('res');
+                    // console.log(res.items);
+                    this.options = res.items;
+                });
+            },
             // filterOptions() {
             //     console.log('过滤选项');
             //     const keyword = this.searchKeyword.toLowerCase();
@@ -287,6 +299,9 @@
                                     console.log(res)
                                     this.formData.bankAccountBank = res.bankInfo
                                     this.formData.bankAccountNo = res.cardNo
+                                    if(this.formData.bankAccountBank){
+                                        this.searchBankInfo(); // 初始化时获取银行信息
+                                    }
 
                                 }).catch(err => {
                                     uni.showToast({
