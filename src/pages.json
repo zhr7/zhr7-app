@@ -173,11 +173,6 @@
 					}
 				},
 				{
-					"path": "apply/index5",
-					"style": {
-					}
-				},
-				{
 					"path": "institution/index",
 					"style": {
 						"enablePullDownRefresh": false
