@@ -221,12 +221,12 @@ const install = (Vue, vm) => {
 					SearchBankInfo: (params = {}) => vm.$u.post(V3+'/application/bankInfo/searchBankInfo', params),	//
 				},
 				tradeAuth: {
-					QRCode: (params = {}) => vm.$u.post(V3+'/trade/secure/qrCode', params),
-					JsApi: (params = {}) => vm.$u.post(V3+'/trade/secure/jsApi', params),
-					AopF2F: (params = {}) => vm.$u.post(V3+'/trade/secure/aopF2F', params),  // 下单
-					Query: (params = {}) => vm.$u.post(V3+'/trade/secure/query', params),  // 查询
-					Refund: (params = {}) => vm.$u.post(V3+'/trade/secure/refund', params),  // 退款
-					RefundQuery: (params = {}) => vm.$u.post(V3+'/trade/secure/refundQuery', params),  // 退款查询
+					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),
+					JsApi: (params = {}) => vm.$u.post(V3+'/trade/auth/jsApi', params),
+					AopF2F: (params = {}) => vm.$u.post(V3+'/trade/auth/aopF2F', params),  // 下单
+					Query: (params = {}) => vm.$u.post(V3+'/trade/auth/query', params),  // 查询
+					Refund: (params = {}) => vm.$u.post(V3+'/trade/auth/refund', params),  // 退款
+					RefundQuery: (params = {}) => vm.$u.post(V3+'/trade/auth/refundQuery', params),  // 退款查询
 				},
 			},
 			seller: {

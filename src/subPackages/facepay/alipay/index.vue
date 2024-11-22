@@ -96,22 +96,24 @@
 						title: "刷脸设备",
 						totalFee: String(totalFee),
 						terminalId: terminalId,
-					}
+					},
+					userId: this.userId
 				}
 				this.$u.api.v3.institution.tradeAuth.AopF2F(order).then(res=>{
-					if (res.content.returnCode === 'SUCCESS' && res.content.status === 'SUCCESS') {
+					console.log(res);
+					if (res.returnCode === 'SUCCESS' && res.status === 'SUCCESS') {
 						uni.showToast({
                             duration: 5000,
                             icon:'success',
                             title:'收款成功',
                         })
-						this.play(res.content) // 语音播报
+						this.play(res) // 语音播报
 						this.successTotalFee = this.totalFee
 						this.totalFee = ""
 					} else {
 						my.showToast({
 							type: 'fail',
-							content: res.content.returnMsg,
+							content: res.returnMsg,
 							duration: 5000,
 						});
 						// 等待5秒
@@ -120,6 +122,7 @@
 						},5000)
 					}
 				}).catch(err => {
+					console.log(err);
 					my.showToast({
 						type: 'fail',
 						content: JSON.stringify(err),
@@ -171,15 +174,15 @@
 					title:'收款查询中'
 				})
 				this.$u.api.v3.institution.tradeAuth.Query(order).then(res => {
-					if (res.content.returnCode === 'SUCCESS') {
-						switch (res.content.status) {
+					if (res.returnCode === 'SUCCESS') {
+						switch (res.status) {
 							case 'SUCCESS':
 								uni.showToast({
                                     duration: 10000,
                                     icon:'success',
                                     title:'收款成功',
                                 })
-								this.play(res.content) // 语音播报
+								this.play(res) // 语音播报
 								this.totalFee = ""
 								break;
 							case 'USERPAYING':
