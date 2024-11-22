@@ -161,17 +161,16 @@
 									url: '/pages/index/index', 
 								});
 							}).catch(err => {
-								console.log(err);
-								// #ifdef MP_ALIPAY
+								console.log(err)
+								if (err.data) {
+									this.$refs.uToast.show({
+										title: err.data
+									})
+								} else {
 								this.$refs.uToast.show({
-									title: err.message
-								})
-								// #endif
-								// #ifdef MP_WEIXIN
-								this.$refs.uToast.show({
-									title: err.data
-								})
-								// #endif
+										title: err.message
+									})
+								}
 							})
 						} else {
 							console.log('验证失败');
