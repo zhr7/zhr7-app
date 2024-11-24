@@ -130,6 +130,12 @@
 							url: '/subPackages/institution/oauth/index'
 						})
 						break;
+					case "activatePaymentCode":
+						// this.$u.route({
+						// 	type: 'to',
+						// 	url: '/subPackages/institution/activateCode/index'
+						// })
+						break;
 					default:
 						this.path = e
 						break;

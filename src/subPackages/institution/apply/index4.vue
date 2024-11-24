@@ -1,5 +1,6 @@
 <template>
 	<view>
+        <view v-if="userId">
 		<view class="item">
             <u-steps :list="numList" :current="3" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="250">
@@ -69,11 +70,15 @@
         </view>	
         <u-toast ref="uToast" />
 	</view>
+    <view v-if="!userId">
+        <u-form-item> 页面开发中，敬请期待</u-form-item>
+    </view>
+    </view>
 </template>
 <script>
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
     import { parseTime, OCR, RouteParams } from '@/utils'
-    import { mapState } from 'vuex'
+    import { mapState, mapGetters } from 'vuex'
     import uniCombox from '@/components/uni-combox/uni-combox.vue'
     import mccCategoryCodes from '@/subPackages/institution/assets/json/mccCategoryCodesSetting.json'
     import wechatMerchantCategories from '@/subPackages/institution/assets/json/wechatMerchantCategoriesSetting.json'
@@ -383,7 +388,11 @@
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
             this.$refs.dataForm.setRules(this.rules);
-        }
+        },
+        computed: {
+            ...mapGetters(['name','userId','avatar','roles']),
+            ...mapState({payQrcodeUrl: state => state.settings.payQrcodeUrl}),
+        },
 	}
 </script>
 

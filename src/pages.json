@@ -173,6 +173,11 @@
 					}
 				},
 				{
+					"path": "activateCode/index",
+					"style": {
+					}
+				},
+				{
 					"path": "institution/index",
 					"style": {
 						"enablePullDownRefresh": false

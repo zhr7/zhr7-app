@@ -25,6 +25,14 @@
 				</span>
 			</view>
 			<view class="list">
+				<view @click="handler('activatePaymentCode')" class="item border-bottom-style">
+					<m-icon
+						name="qrcode" 
+						custom-prefix="colour-icon" 
+						:size="38"
+					></m-icon>
+					<text class="grid-text grid-text-small">激活付款码</text>
+				</view>
 				<view @click="handler('sellerCreate')" class="item border-bottom-style">
 					<m-icon
 						name="add-seller" 
@@ -73,14 +81,14 @@
 					></m-icon>
 					<text class="grid-text">机构报表</text>
 				</view>
-				<view @click="handler('institutionSecretKey')" class="item border-bottom-style">
+				<!-- <view @click="handler('institutionSecretKey')" class="item border-bottom-style">
 					<m-icon
 						name="secretKey" 
 						custom-prefix="colour-icon" 
 						:size="38"
 					></m-icon>
 					<text class="grid-text">密钥管理</text>
-				</view>
+				</view> -->
 				<view @click="handler('institutionPay')" class="item border-bottom-style border-left-style">
 					<m-icon
 						name="pay" 
@@ -312,6 +320,9 @@
 			.grid-text{
 				color: #82848a;
 				font-size: 5vw;
+			}
+			.grid-text-small{
+				font-size: 4vw;
 			}
 		}
 	}
