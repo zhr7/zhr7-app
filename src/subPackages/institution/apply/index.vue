@@ -1,88 +1,94 @@
 <template>
 	<view>
-		<view class="item">
-            <u-steps :list="numList" :current="0" mode="number"></u-steps>
-            <u-form :model="formData" ref="dataForm" label-width="260">
-                <u-form-item label="申请编号" prop="businessCode">
-                    <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
-                </u-form-item>
-                <u-form-item label="主体类型" prop="licenseSubjectType">
-					<u-radio-group v-model="formData.licenseSubjectType">
-                        <u-radio key="personal" name="personal">小微商户</u-radio>
-						<u-radio key="enterprise" name="enterprise">企业</u-radio>
-                        <u-radio key="government" name="government">政府机关</u-radio>
-						<u-radio key="institutions" name="institutions">事业单位</u-radio>
-                        <u-radio key="others" name="others">其他 社会组织</u-radio>
-					</u-radio-group>
-                </u-form-item>
-                <u-form-item label="手持身份证照片" prop="legalPersonCardHandPic" v-if="formData.licenseSubjectType === 'personal'">
-                    <uni-file-picker 
-                        fileMediatype="image" 
-                        mode="grid" 
-                        limit="1"
-                        @select="selectHandPic" 
-                    />
-                </u-form-item>
-                <div v-if="formData.licenseSubjectType === 'enterprise'">
-                    <u-form-item label="营业执照照片" prop="licensePic">
-                    <uni-file-picker 
-                        fileMediatype="image" 
-                        mode="grid" 
-                        limit="1"
-                        @select="selectLicensePic" 
-                    />
-                </u-form-item>
-                <u-form-item label="营业执照商户名称" prop="licenseMerchantName">
-                    <u-input v-model="formData.licenseMerchantName" placeholder="请输入商户名称"/>
-                </u-form-item>
-                <u-form-item label="营业执照代码" prop="licenseCode">
-                    <u-input v-model="formData.licenseCode" placeholder="请输入营业执照代码"/>
-                </u-form-item>
-                <u-form-item label="营业执照地址" prop="licenseAddress">
-                    <u-input v-model="formData.licenseAddress" placeholder="请输入地址"/>
-                </u-form-item>
-                <u-form-item label="营业执照有效期开始" prop="licensePersonCardPeriodBegin">
-                    <u-input v-model="formData.licensePersonCardPeriodBegin" placeholder="请输入营业执照有效期"/>
-                </u-form-item>
-                <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
-                    <u-input v-model="formData.licensePersonCardPeriodEnd" placeholder="请输入营业执照有效期"/>
-                </u-form-item>
-                <!-- <u-form-item label="营业执照有效期开始" prop="licensePersonCardPeriodBegin">
-                    <uni-datetime-picker
-                        type="date"
-                        :value="formData.licensePersonCardPeriodBegin"
-                    />
-                </u-form-item>
-                <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
-                    <uni-datetime-picker
-                        type="date"
-                        :value="formData.licensePersonCardPeriodEnd"
-                    />
-                </u-form-item> -->
-                <u-form-item label="营业执照省市县" prop="licenseAddressCode">
-                    <pick-regions :defaultRegion="formData.licenseAddressCode" @getRegion="handleGetRegion"/>
-                </u-form-item>
-                <u-form-item label="营业执照经营范围" prop="licenseBusinessRange">
-                    <u-input v-model="formData.licenseBusinessRange" placeholder="请输入经营范围"/>
-                </u-form-item>
-                </div>
-            </u-form>
-            <u-line />
-            <view class="bottom">	
-                <u-button 
-                    type="warning" 
-                    @click="nextPage('dataForm')"
-                >
-                    下一步
-                </u-button>
-		    </view>
-        </view>	
-        <u-toast ref="uToast" />
-	</view>
+        <view v-if="userId">
+            <view class="item">
+                <u-steps :list="numList" :current="0" mode="number"></u-steps>
+                <u-form :model="formData" ref="dataForm" label-width="260">
+                    <u-form-item label="申请编号" prop="businessCode">
+                        <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
+                    </u-form-item>
+                    <u-form-item label="主体类型" prop="licenseSubjectType">
+                        <u-radio-group v-model="formData.licenseSubjectType">
+                            <u-radio key="personal" name="personal">小微商户</u-radio>
+                            <u-radio key="enterprise" name="enterprise">企业</u-radio>
+                            <u-radio key="government" name="government">政府机关</u-radio>
+                            <u-radio key="institutions" name="institutions">事业单位</u-radio>
+                            <u-radio key="others" name="others">其他 社会组织</u-radio>
+                        </u-radio-group>
+                    </u-form-item>
+                    <u-form-item label="手持身份证照片" prop="legalPersonCardHandPic" v-if="formData.licenseSubjectType === 'personal'">
+                        <uni-file-picker 
+                            fileMediatype="image" 
+                            mode="grid" 
+                            limit="1"
+                            @select="selectHandPic" 
+                        />
+                    </u-form-item>
+                    <div v-if="formData.licenseSubjectType === 'enterprise'">
+                        <u-form-item label="营业执照照片" prop="licensePic">
+                        <uni-file-picker 
+                            fileMediatype="image" 
+                            mode="grid" 
+                            limit="1"
+                            @select="selectLicensePic" 
+                        />
+                    </u-form-item>
+                    <u-form-item label="营业执照商户名称" prop="licenseMerchantName">
+                        <u-input v-model="formData.licenseMerchantName" placeholder="请输入商户名称"/>
+                    </u-form-item>
+                    <u-form-item label="营业执照代码" prop="licenseCode">
+                        <u-input v-model="formData.licenseCode" placeholder="请输入营业执照代码"/>
+                    </u-form-item>
+                    <u-form-item label="营业执照地址" prop="licenseAddress">
+                        <u-input v-model="formData.licenseAddress" placeholder="请输入地址"/>
+                    </u-form-item>
+                    <u-form-item label="营业执照有效期开始" prop="licensePersonCardPeriodBegin">
+                        <u-input v-model="formData.licensePersonCardPeriodBegin" placeholder="请输入营业执照有效期"/>
+                    </u-form-item>
+                    <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
+                        <u-input v-model="formData.licensePersonCardPeriodEnd" placeholder="请输入营业执照有效期"/>
+                    </u-form-item>
+                    <!-- <u-form-item label="营业执照有效期开始" prop="licensePersonCardPeriodBegin">
+                        <uni-datetime-picker
+                            type="date"
+                            :value="formData.licensePersonCardPeriodBegin"
+                        />
+                    </u-form-item>
+                    <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
+                        <uni-datetime-picker
+                            type="date"
+                            :value="formData.licensePersonCardPeriodEnd"
+                        />
+                    </u-form-item> -->
+                    <u-form-item label="营业执照省市县" prop="licenseAddressCode">
+                        <pick-regions :defaultRegion="formData.licenseAddressCode" @getRegion="handleGetRegion"/>
+                    </u-form-item>
+                    <u-form-item label="营业执照经营范围" prop="licenseBusinessRange">
+                        <u-input v-model="formData.licenseBusinessRange" placeholder="请输入经营范围"/>
+                    </u-form-item>
+                    </div>
+                </u-form>
+                <u-line />
+                <view class="bottom">	
+                    <u-button 
+                        type="warning" 
+                        @click="nextPage('dataForm')"
+                    >
+                        下一步
+                    </u-button>
+                </view>
+            </view>	
+            <u-toast ref="uToast" />
+	    </view>
+        <view v-if="!userId">
+            <u-form-item> 页面开发中，敬请期待</u-form-item>
+        </view>
+    </view>
 </template>
 <script>
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
     import { parseTime, OCR } from '@/utils'
+    import { mapState, mapGetters } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -465,7 +471,11 @@
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
             this.$refs.dataForm.setRules(this.rules);
-        }
+        },
+        computed: {
+            ...mapGetters(['name','userId','avatar','roles']),
+            ...mapState({payQrcodeUrl: state => state.settings.payQrcodeUrl}),
+        },
 	}
 </script>
 
