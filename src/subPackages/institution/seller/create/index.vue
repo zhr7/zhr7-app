@@ -1,5 +1,6 @@
 <template>
 	<view>
+        <view v-if="userId">
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="150">
                 <u-form-item prop="brandId">
@@ -36,10 +37,15 @@
         </view>	
         <u-toast ref="uToast" />
 	</view>
+    <view v-if="!userId">
+        <u-form-item> 页面开发中，敬请期待</u-form-item>
+    </view>
+    </view>
 </template>
 <script>
 	import { RouteParams } from '@/utils'
     import uniCombox from '@/components/uni-combox/uni-combox.vue'
+    import {  mapState, mapGetters } from 'vuex'
     export default {
         components: { 
 			uniCombox
@@ -213,7 +219,11 @@
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
             this.$refs.dataForm.setRules(this.rules);
-        }
+        },
+        computed: {
+            ...mapGetters(['name','userId','avatar','roles']),
+            ...mapState({payQrcodeUrl: state => state.settings.payQrcodeUrl}),
+        },
 	}
 </script>
 

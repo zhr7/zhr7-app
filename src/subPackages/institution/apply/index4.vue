@@ -324,24 +324,24 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
-                    if (res.valid) {
-                        this.initFormData()
-                        // this.$u.route({
-                        //     type: 'to',
-                        //     url: 'subPackages/institution/apply/index',
-                        // })
-                        uni.showToast({
-                            duration: 5000,
-                            icon:'success',
-                            title:'进件成功',
-                        })
-                    } else {
-                        uni.showToast({
-                            duration: 3000,
-                            icon:'error',
-                            title:'进件失败',
-                        })
-                    }
+                            if (res.valid) {
+                                this.initFormData()
+                                // this.$u.route({
+                                //     type: 'to',
+                                //     url: 'subPackages/institution/apply/index',
+                                // })
+                                uni.showToast({
+                                    duration: 5000,
+                                    icon:'success',
+                                    title:'进件成功',
+                                })
+                            } else {
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title:'进件失败',
+                                })
+                            }
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({

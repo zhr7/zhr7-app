@@ -136,31 +136,79 @@
             // console.log(this.formData);
 		},
 		methods: {
+            getBankInfo() {
+                let bankName = this.formData.bankAccountBank.match(/^.*行/);
+                if (!bankName) {
+                    bankName = this.formData.bankAccountBank.match(/^.*信用社/);
+                }
+                this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
+                this.$u.api.v3.institution.apply.SearchBankInfo(this.params).then(res => {
+                    this.options = res.items;
+                    this.options = this.options.map(item => {
+                        return {
+                            value: item.bankCode,
+                            label: item.bankName
+                        };
+                    });
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title: "获取银行信息失败",
+                    })
+                });
+            },
             //银行通道编号
-            filterOptions() {
-                if (this.searchKeyword.length === 0) {
-                    // 如果搜索关键字为空，清空过滤后的选项
+            searchBankInfo(value) {
+                // 根据银行名称查询银行信息
+                let bankName = this.formData.bankAccountBank.match(/^.*行/);
+                if (!bankName) {
+                    bankName = this.formData.bankAccountBank.match(/^.*信用社/);
+                }
+                let regexNmae1 = '';
+                let regexName2 = '';
+                if (bankName) {
+                    regexNmae1 = `.*${value}.*${bankName}.*`;
+                    regexName2 = `.*${bankName}.*${value}.*`;
+                    this.params.filter = `{"$or":[{"bankName":{"$regex":"${regexNmae1}","$options":"i"}},{"bankName":{"$regex":"${regexName2}","$options":"i"}},{"bankCode":{"$regex":"${value}","$options":"i"}}]}`;
+                } else {
+                    this.params.filter = `{"$or":[{"bankName":{"$regex":"${value}","$options":"i"}},{"bankCode":{"$regex":"${value}","$options":"i"}}]}`;
+                }
+                this.$u.api.v3.institution.apply.SearchBankInfo(this.params).then(res => {
+                    this.options = res.items;
+                    this.filteredOptions = [];
                     this.filteredOptions = this.options.map(item => {
                         return {
                             value: item.bankCode,
                             label: item.bankName
                         };
+                    });
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title: "获取银行信息失败",
                     })
+                });
+                console.log(this.options);
+                console.log(this.filteredOptions);
+            },
+            filterOptions() {
+                if (this.searchKeyword.length === 0) {
                     this.showSelect = false; // 隐藏下拉框
-                    return;
                 }
                 const keyword = this.searchKeyword.toLowerCase();
+                const regex = new RegExp(keyword, "gi");
                 this.filteredOptions = this.options.filter(item => {
-                    return item.bankName.toLowerCase().includes(keyword);
-                });
-                this.filteredOptions = this.filteredOptions.map(item => {
-                    return {
-                        value: item.bankCode,
-                        label: item.bankName
-                    };
+                    return regex.test(item.label.toLowerCase());
                 })
-                // console.log(this.filteredOptions);
+                // this.searchBankInfo(keyword);
+                console.log(this.options);
+                console.log(this.filteredOptions);
                 this.showSelect = true; // 显示下拉框
+                
             },
             confirmOption(e) {
                 // 处理选中的值
@@ -170,64 +218,7 @@
                 //将e[0].value赋值给银行通道编号字段
                 this.formData.bankChannelNo = e[0].value;
             },
-            // bankFocus(){
-            //     let bankName = this.formData.bankAccountBank.match(/^.*行/);
-            //     if (!bankName) {
-            //         bankName = this.formData.bankAccountBank.match(/^.*信用社/);
-            //     }
-            //     this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
-            //     this.searchBankInfo();
-            //     this.filteredOptions = this.options.map(item => {
-            //         return {
-            //             value: item.bankCode,
-            //             label: item.bankName
-            //         };
-            //     })
-            //     this.showSelect = true; // 显示下拉框
-            // },
-            searchBankInfo() {
-                // 根据银行名称查询银行信息
-                let bankName = this.formData.bankAccountBank.match(/^.*行/);
-                // console.log(bankName);
-                if (!bankName) {
-                    bankName = formModel.bankAccountBank.match(/^.*信用社/);
-                }
-                
-                this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
-
-                this.$u.api.v3.institution.apply.SearchBankInfo(this.params).then(res => {
-                    // console.log('res');
-                    // console.log(res.items);
-                    this.options = res.items;
-                });
-            },
-            // filterOptions() {
-            //     console.log('过滤选项');
-            //     const keyword = this.searchKeyword.toLowerCase();
-            //     this.filteredOptions = this.bankChannelList.filter(item => {
-            //         return item.label.toLowerCase().includes(keyword);
-            //     });
-            //     this.showSelect = true; // 显示下拉框
-            // },
-            // confirmOption() {
-            // // 处理选中的值
-            // console.log(this.selectedOption);
-            // this.showSelect = false; // 隐藏下拉框
-            // },
-            // // 银行通道编号下拉框
-            // confirmBankChannelNo(e) {
-            //     console.log('111');
-            //     this.showBankChannel = !this.showBankChannel
-			// 	// console.log(e);
-            //     // this.bankChannelNoName = e[0].label
-            //     // this.formData.bankChannelNo = e[0].value
-
-            //     const keyword = this.bankChannelNoName.toLowerCase();
-            //     this.filteredBankChannelList = this.bankChannelList.filter(item => {
-            //         return item.label.toLowerCase().includes(keyword);
-            //     });
-			// },
-
+            
             initFormData() {
                 this.formData = {
                     // 银行结算资料
@@ -304,10 +295,7 @@
                                     console.log(res)
                                     this.formData.bankAccountBank = res.bankInfo
                                     this.formData.bankAccountNo = res.cardNo
-                                    if(this.formData.bankAccountBank){
-                                        this.searchBankInfo(); // 初始化时获取银行信息
-                                    }
-
+                                    this.getBankInfo()
                                 }).catch(err => {
                                     uni.showToast({
                                         duration: 3000,
