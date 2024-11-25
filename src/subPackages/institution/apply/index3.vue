@@ -22,7 +22,7 @@
                     <u-input v-model="formData.bankAccountBank" placeholder="请输入开户银行"/>
                 </u-form-item>
                 <u-form-item label="银行通道编号" prop="bankChannelNo"> 
-                    <u-input v-model="searchKeyword" @input="filterOptions" placeholder="请输入关键字搜索"/>
+                    <u-input v-model="searchKeyword" @input="filterOptions" @focus="focusInputBankInfo" placeholder="请输入关键字搜索"/>
                     <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                 </u-form-item>
                 <u-form-item label="银行账号" prop="bankAccountNo">
@@ -133,35 +133,10 @@
 			this.item = RouteParams()
             this.item.formData = JSON.parse(this.item.formData)
             this.formData = {...this.item.formData, ...this.formData}
-            // console.log(this.formData);
 		},
 		methods: {
-            getBankInfo() {
-                let bankName = this.formData.bankAccountBank.match(/^.*行/);
-                if (!bankName) {
-                    bankName = this.formData.bankAccountBank.match(/^.*信用社/);
-                }
-                this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
-                this.$u.api.v3.institution.apply.SearchBankInfo(this.params).then(res => {
-                    this.options = res.items;
-                    this.options = this.options.map(item => {
-                        return {
-                            value: item.bankCode,
-                            label: item.bankName
-                        };
-                    });
-                }).catch(err => {
-                    console.log(err);
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title: "获取银行信息失败",
-                    })
-                });
-            },
             //银行通道编号
-            searchBankInfo(value) {
-                // 根据银行名称查询银行信息
+            async searchBankInfo(value) {
                 let bankName = this.formData.bankAccountBank.match(/^.*行/);
                 if (!bankName) {
                     bankName = this.formData.bankAccountBank.match(/^.*信用社/);
@@ -175,48 +150,60 @@
                 } else {
                     this.params.filter = `{"$or":[{"bankName":{"$regex":"${value}","$options":"i"}},{"bankCode":{"$regex":"${value}","$options":"i"}}]}`;
                 }
-                this.$u.api.v3.institution.apply.SearchBankInfo(this.params).then(res => {
+                try {
+                    const res = await this.$u.api.v3.institution.apply.SearchBankInfo(this.params);
                     this.options = res.items;
                     this.filteredOptions = [];
-                    this.filteredOptions = this.options.map(item => {
-                        return {
-                            value: item.bankCode,
-                            label: item.bankName
-                        };
+                    this.filteredOptions = this.options.map(item => ({
+                    value: item.bankCode,
+                    label: item.bankName
+                    }));
+                } catch (err) {
+                    console.log(err);
+                    uni.showToast({
+                    duration: 3000,
+                    icon:'error',
+                    title: "获取银行信息失败",
                     });
-                }).catch(err => {
+                }
+            },
+            async filterOptions() {
+                if (this.searchKeyword.length === 0) {
+                    this.showSelect = false; // 隐藏下拉框
+                }
+                const keyword = this.searchKeyword.toLowerCase();
+                await this.searchBankInfo(keyword);
+                this.showSelect = true; // 显示下拉框
+                
+            },
+            async focusInputBankInfo() {
+                let bankName = this.formData.bankAccountBank.match(/^.*行/);
+                if (!bankName) {
+                    bankName = this.formData.bankAccountBank.match(/^.*信用社/);
+                }
+                this.params.filter = `{"$or":[{"bankName":{"$regex":"${bankName}","$options":"i"}},{"bankCode":{"$regex":"${bankName}","$options":"i"}}]}`;
+                try {
+                    const res = await this.$u.api.v3.institution.apply.SearchBankInfo(this.params);
+                    this.options = res.items;
+                    this.filteredOptions = [];
+                    this.filteredOptions = this.options.map(item => ({
+                        value: item.bankCode,
+                        label: item.bankName
+                    }));
+                } catch (err) {
                     console.log(err);
                     uni.showToast({
                         duration: 3000,
                         icon:'error',
                         title: "获取银行信息失败",
-                    })
-                });
-                console.log(this.options);
-                console.log(this.filteredOptions);
-            },
-            filterOptions() {
-                if (this.searchKeyword.length === 0) {
-                    this.showSelect = false; // 隐藏下拉框
+                    });
                 }
-                const keyword = this.searchKeyword.toLowerCase();
-                const regex = new RegExp(keyword, "gi");
-                this.filteredOptions = this.options.filter(item => {
-                    return regex.test(item.label.toLowerCase());
-                })
-                // this.searchBankInfo(keyword);
-                console.log(this.options);
-                console.log(this.filteredOptions);
-                this.showSelect = true; // 显示下拉框
-                
             },
             confirmOption(e) {
                 // 处理选中的值
-                // console.log(e[0]);
                 this.showSelect = false; // 隐藏下拉框
                 this.searchKeyword = e[0].label;
-                //将e[0].value赋值给银行通道编号字段
-                this.formData.bankChannelNo = e[0].value;
+                this.formData.bankChannelNo = e[0].value; //将e[0].value赋值给银行通道编号字段
             },
             
             initFormData() {
@@ -249,14 +236,6 @@
             handleGetRegion(region){
                 this.formData.bankChannelNo = region[2].code
             },
-            // filterBankChannelList() {
-            //     const keyword = this.bankChannelNoName.toLowerCase();
-            //     this.filteredBankChannelList = this.bankChannelList.filter(item => {
-            //         return item.label.toLowerCase().includes(keyword);
-            //     });
-            //     this.bankChannelList = this.filteredBankChannelList;
-            // },
-            
             // OCR识别
             selectBankCardCopy(e) {
                 console.log(e);
@@ -295,7 +274,6 @@
                                     console.log(res)
                                     this.formData.bankAccountBank = res.bankInfo
                                     this.formData.bankAccountNo = res.cardNo
-                                    this.getBankInfo()
                                 }).catch(err => {
                                     uni.showToast({
                                         duration: 3000,
