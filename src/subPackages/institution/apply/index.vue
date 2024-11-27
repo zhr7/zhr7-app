@@ -10,6 +10,7 @@
                     <u-form-item label="主体类型" prop="licenseSubjectType">
                         <u-radio-group v-model="formData.licenseSubjectType">
                             <u-radio key="personal" name="personal">小微商户</u-radio>
+                            <u-radio key="individual" name="individual">个体户</u-radio>
                             <u-radio key="enterprise" name="enterprise">企业</u-radio>
                             <u-radio key="government" name="government">政府机关</u-radio>
                             <u-radio key="institutions" name="institutions">事业单位</u-radio>
@@ -24,7 +25,7 @@
                             @select="selectHandPic" 
                         />
                     </u-form-item>
-                    <div v-if="formData.licenseSubjectType === 'enterprise'">
+                    <div v-if="formData.licenseSubjectType === 'enterprise' || formData.licenseSubjectType === 'individual' ">
                         <u-form-item label="营业执照照片" prop="licensePic">
                         <uni-file-picker 
                             fileMediatype="image" 
