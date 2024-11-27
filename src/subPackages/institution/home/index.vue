@@ -33,6 +33,14 @@
 					></m-icon>
 					<text class="grid-text grid-text-small">激活付款码</text>
 				</view>
+				<view @click="handler('apply')" class="item border-bottom-style">
+					<m-icon
+						name="secret-key" 
+						custom-prefix="colour-icon" 
+						:size="38"
+					></m-icon>
+					<text class="grid-text">进件管理</text>
+				</view>
 				<view @click="handler('sellerCreate')" class="item border-bottom-style">
 					<m-icon
 						name="add-seller" 
@@ -97,14 +105,14 @@
 					></m-icon>
 					<text class="grid-text">支付通道</text>
 				</view>
-				<view @click="handler('institution-secret-key')" class="item border-bottom-style">
+				<!-- <view @click="handler('institution-secret-key')" class="item border-bottom-style">
 					<m-icon
 						name="secret-key" 
 						custom-prefix="colour-icon" 
 						:size="38"
 					></m-icon>
 					<text class="grid-text">密钥仓库</text>
-				</view>
+				</view> -->
 				<view @click="handler('institutionOauth')" class="item border-bottom-style border-left-style">
 					<m-icon
 						name="oauth" 

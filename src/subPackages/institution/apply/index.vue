@@ -9,15 +9,15 @@
                     </u-form-item>
                     <u-form-item label="主体类型" prop="licenseSubjectType">
                         <u-radio-group v-model="formData.licenseSubjectType">
-                            <u-radio key="personal" name="personal">小微商户</u-radio>
-                            <u-radio key="individual" name="individual">个体户</u-radio>
-                            <u-radio key="enterprise" name="enterprise">企业</u-radio>
-                            <u-radio key="government" name="government">政府机关</u-radio>
-                            <u-radio key="institutions" name="institutions">事业单位</u-radio>
-                            <u-radio key="others" name="others">其他 社会组织</u-radio>
+                            <u-radio key="SUBJECT_TYPE_PERSONAL" name="SUBJECT_TYPE_PERSONAL">小微商户</u-radio>
+                            <u-radio key="SUBJECT_TYPE_INDIVIDUAL" name="SUBJECT_TYPE_INDIVIDUAL">个体户</u-radio>
+                            <u-radio key="SUBJECT_TYPE_ENTERPRISE" name="SUBJECT_TYPE_ENTERPRISE">企业</u-radio>
+                            <u-radio key="SUBJECT_TYPE_GOVERNMENT" name="SUBJECT_TYPE_GOVERNMENT">政府机关</u-radio>
+                            <u-radio key="SUBJECT_TYPE_INSTITUTIONS" name="SUBJECT_TYPE_INSTITUTIONS">事业单位</u-radio>
+                            <u-radio key="SUBJECT_TYPE_OTHERS" name="SUBJECT_TYPE_OTHERS">其他 社会组织</u-radio>
                         </u-radio-group>
                     </u-form-item>
-                    <u-form-item label="手持身份证照片" prop="legalPersonCardHandPic" v-if="formData.licenseSubjectType === 'personal'">
+                    <u-form-item label="手持身份证照片" prop="legalPersonCardHandPic" v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_PERSONAL'">
                         <uni-file-picker 
                             fileMediatype="image" 
                             mode="grid" 
@@ -25,7 +25,7 @@
                             @select="selectHandPic" 
                         />
                     </u-form-item>
-                    <div v-if="formData.licenseSubjectType === 'enterprise' || formData.licenseSubjectType === 'individual' ">
+                    <div v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_ENTERPRISE' || formData.licenseSubjectType === 'SUBJECT_TYPE_INDIVIDUAL' ">
                         <u-form-item label="营业执照照片" prop="licensePic">
                         <uni-file-picker 
                             fileMediatype="image" 
@@ -49,8 +49,11 @@
                     <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
                         <u-input v-model="formData.licensePersonCardPeriodEnd" placeholder="请输入营业执照有效期"/>
                     </u-form-item>
-                    <u-form-item label="营业执照省市县" prop="licenseAddressCode">
+                    <!-- <u-form-item label="营业执照省市县" prop="licenseAddressCode">
                         <pick-regions :defaultRegion="formData.licenseAddressCode" @getRegion="handleGetRegion"/>
+                    </u-form-item> -->
+                    <u-form-item label="营业执照省市县" prop="licenseDistrictCode">
+                        <pick-regions :defaultRegion="formData.licenseDistrictCode" @getRegion="handleGetRegion"/>
                     </u-form-item>
                     <u-form-item label="营业执照经营范围" prop="licenseBusinessRange">
                         <u-input v-model="formData.licenseBusinessRange" placeholder="请输入经营范围"/>
@@ -93,11 +96,12 @@
                 channels: [],
                 storageToken:'',
                 subjectType: [
-                    'personal',   // （小微商户）
-                    'enterprise',   // （企业）：营业执照上的主体类型一般为有限公司、有限责任公司；
-                    'government', // （政府机关）：包括各级、各类政府机关，如机关党委、税务、民政、人社、工商、商务、市监等；
-                    'institutions', // （事业单位）：包括国内各类事业单位，如：医疗、教育、学校等单位；
-                    'others' // (其他 社会组织）： 包括社会团体、民办非企业、基金会、基层群众性自治组织、农村集体经济组织等组织。
+                    'SUBJECT_TYPE_PERSONAL',   // （小微商户）
+                    'SUBJECT_TYPE_INDIVIDUAL',   // （个体工商户）：营业执照上的主体类型一般为个体户、个体工商户；
+                    'SUBJECT_TYPE_ENTERPRISE',   // （企业）：营业执照上的主体类型一般为有限公司、有限责任公司；
+                    'SUBJECT_TYPE_GOVERNMENT', // （政府机关）：包括各级、各类政府机关，如机关党委、税务、民政、人社、工商、商务、市监等；
+                    'SUBJECT_TYPE_INSTITUTIONS', // （事业单位）：包括国内各类事业单位，如：医疗、教育、学校等单位；
+                    'SUBJECT_TYPE_OTHERS' // (其他 社会组织）： 包括社会团体、民办非企业、基金会、基层群众性自治组织、农村集体经济组织等组织。
                 ],
                 range: [
                     {"value": "wechat","text": "微信支付"},
@@ -110,7 +114,7 @@
                     {"value": "mfe88","text": "现代支付"}
 				],
                 formData: {
-                    businessCode: parseTime(new Date,'{y}{m}{d}'+Math.floor(Math.random() * 10000)), // 业务申请编号
+                    businessCode: parseTime(new Date,'{y}{m}{d}'+Math.floor(Math.random() * 10000).toString().padStart(4, '0')), // 业务申请编号
                     licenseSubjectType: '', // 主体类型 
                     legalPersonCardHandPic: '', // 手持身份证照片
                     // 营业执照
@@ -119,15 +123,17 @@
                     licenseMerchantName: '', // 营业执照商户名称
                     licensePersonCardPeriodBegin: '', // 营业执照有效期开始时间
                     licensePersonCardPeriodEnd: '', // 营业执照有效期结束时间
-                    licenseAddressCode: '', // 营业执照省市县
+                    licenseDistrictCode: '', // 营业执照省市县
                     licenseAddress: '', // 营业执照地址
                     licenseBusinessRange: '', // 营业执照经营范围
+                    licenseCityCode: '', 
+                    licenseProvinceCode: '',
                     
                 },
                 rules: {
                     businessCode: [
                         { required: true, message: '请输入申请编号', trigger: 'blur' },
-                        { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
+                        { min: 2, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
                     ],
                     licenseSubjectType: [
                         { required: true, message: '请选择主体类型', trigger: 'blur' },
@@ -152,15 +158,15 @@
                     ],
                     licenseMerchantName: [
                         { required: true, message: '请输入商户名称', trigger: 'blur' },
-                        { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     licenseAddress: [
                         { required: true, message: '请输入营业执照地址', trigger: 'blur' },
-                        { min: 3, max: 64, message: '长度在 3 到 256 个字符', trigger: 'blur' }
+                        { min: 2, max: 64, message: '长度在 2 到 256 个字符', trigger: 'blur' }
                     ],
                     licenseBusinessRange: [
                         { required: true, message: '请输入营业执照经营范围', trigger: 'blur' },
-                        { min: 3, max: 256, message: '长度在 3 到 256 个字符', trigger: 'blur' }
+                        { min: 2, max: 256, message: '长度在 2 到 256 个字符', trigger: 'blur' }
                     ],
                     licensePersonCardPeriodBegin: [
                         { required: true, message: '请选择营业执照有效期开始时间', trigger: 'blur' },
@@ -168,7 +174,7 @@
                     licensePersonCardPeriodEnd: [
                         { required: true, message: '请选择营业执照有效期结束时间', trigger: 'blur' },
                     ],
-                    licenseAddressCode: [
+                    licenseDistrictCode: [
                         { required: true, message: '请选择营业执照所在地', trigger: 'blur' },
                     ]
                 }
@@ -198,9 +204,11 @@
                     licenseMerchantName: '', // 营业执照商户名称
                     licensePersonCardPeriodBegin: '', // 营业执照有效期开始时间
                     licensePersonCardPeriodEnd: '', // 营业执照有效期结束时间
-                    licenseAddressCode: '', // 营业执照省市县
+                    licenseDistrictCode: '', // 营业执照省市县
                     licenseAddress: '', // 营业执照地址
                     licenseBusinessRange: '', // 营业执照经营范围
+                    licenseCityCode: '', 
+                    licenseProvinceCode: '',
                 }
             },
             initStorageToken() {
@@ -222,7 +230,9 @@
             // 获取选择的地区
             handleGetRegion(region){
                 console.log(region);
-                this.formData.licenseAddressCode = region[2].code
+                this.formData.licenseDistrictCode = region[2].code
+                this.formData.licenseCityCode = region[1].code
+                this.formData.licenseProvinceCode = region[0].code
             },
             selectHandPic(e){
                 // this.select(e, 'legalPersonCardHandPic')

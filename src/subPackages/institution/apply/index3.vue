@@ -14,8 +14,8 @@
                 </u-form-item>
                 <u-form-item label="账户类型" prop="bankAccountType">
 					<u-radio-group v-model="formData.bankAccountType">
-						<u-radio key="CORPORATE" name="corporate">对公银行账户</u-radio>
-						<u-radio key="PERSONAL" name="personal">个人银行卡</u-radio>
+						<u-radio key="CORPORATE" name="CORPORATE">对公银行账户</u-radio>
+						<u-radio key="PERSONAL" name="PERSONAL">个人银行卡</u-radio>
 					</u-radio-group>
                 </u-form-item>
                 <u-form-item label="开户银行" prop="bankAccountBank">
@@ -28,8 +28,11 @@
                 <u-form-item label="银行账号" prop="bankAccountNo">
                     <u-input v-model="formData.bankAccountNo" placeholder="请输入银行账号"/>
                 </u-form-item>
-                <u-form-item label="账户名称" prop="bankAccountName">
-                    <u-input v-model="formData.bankAccountName" placeholder="请输入账户名称"/>
+                <u-form-item label="账户户名" prop="bankAccountName">
+                    <u-input v-model="formData.bankAccountName" placeholder="请输入账户户名"/>
+                </u-form-item>
+                <u-form-item label="支行地址" prop="bankDistrictCode" v-if="formData.bankAccountType === 'CORPORATE'">
+                    <pick-regions :defaultRegion="formData.bankDistrictCode" @getRegion="handleGetRegion"/>
                 </u-form-item>
             </u-form>
             <u-line />
@@ -91,7 +94,10 @@
                     bankAccountBank: '', // 开户银行
                     bankChannelNo: '',  // 开户支行
                     bankAccountNo: '',     // 银行账号
-                    bankAccountName: ''   // 账户名称
+                    bankAccountName: '',   // 账户户名
+                    bankDistrictCode: '',   // 支行地址
+                    bankCityCode: '', 
+                    bankProvinceCode: '',
                 },
                 
                 rules: {
@@ -110,11 +116,15 @@
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     bankAccountName: [
-                        { required: true, message: '请输入账户名称', trigger: 'blur' },
+                        { required: true, message: '请输入账户户名', trigger: 'blur' },
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     bankAccountBank: [
                         { required: true, message: '请输入开户银行', trigger: 'blur' },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
+                    ],
+                    bankDistrictCode: [
+                        { required: true, message: '请选择支行地址', trigger: 'blur' },
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ]
                 }
@@ -218,7 +228,10 @@
                     bankAccountBank: '', // 开户银行
                     bankChannelNo: '',  // 开户支行
                     bankAccountNo: '',     // 银行账号
-                    bankAccountName: ''   // 账户名称
+                    bankAccountName: '',   // 账户户名
+                    bankDistrictCode: '', // 支行地址
+                    bankCityCode: '', 
+                    bankProvinceCode: '',
                 }
             },
             initStorageToken() {
@@ -238,7 +251,9 @@
             },
             // 获取选择的地区
             handleGetRegion(region){
-                this.formData.bankChannelNo = region[2].code
+                this.formData.bankDistrictCode = region[2].code
+                this.formData.bankCityCode = region[1].code
+                this.formData.bankProvinceCode = region[0].code
             },
             // OCR识别
             selectBankCardCopy(e) {

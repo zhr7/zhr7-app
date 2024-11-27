@@ -131,10 +131,25 @@
 						})
 						break;
 					case "activatePaymentCode":
-						// this.$u.route({
-						// 	type: 'to',
-						// 	url: '/subPackages/institution/activateCode/index'
-						// })
+						uni.scanCode({
+							scanType: ['qrCode'],
+							onlyFromCamera: true,
+							success: (res) => {
+								let operatorId = res.result.split("=")[1];
+								if(res.result){
+									this.$u.route({
+										type: 'to',
+										url: '/subPackages/institution/activateCode/index?operatorId=' + operatorId
+									})
+								}
+							}
+						})
+						break;
+					case "apply":
+						this.$u.route({
+							type: 'to',
+							url: '/subPackages/institution/apply/list'
+						})
 						break;
 					default:
 						this.path = e

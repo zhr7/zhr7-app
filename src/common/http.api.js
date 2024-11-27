@@ -213,7 +213,7 @@ const install = (Vue, vm) => {
 					Search: (params = {}) => vm.$u.post(V3+'/institution/institution/search', params), // 
 				},
 				apply: {	//  进件
-					List: (params = {}) => vm.$u.post(V3+'/institution-api/applys/list', params),	// 
+					List: (params = {}) => vm.$u.post(V3+'/application/application/search', params),	// 
 					Create: (params = {}) => vm.$u.post(V3+'/application/application/create', params),	// 
 					Update: (params = {}) => vm.$u.post(V3+'/institution-api/applys/update', params),
 					Delete: (params = {}) => vm.$u.post(V3+'/institution-api/applys/delete', params),	// 
@@ -228,6 +228,10 @@ const install = (Vue, vm) => {
 					Refund: (params = {}) => vm.$u.post(V3+'/trade/auth/refund', params),  // 退款
 					RefundQuery: (params = {}) => vm.$u.post(V3+'/trade/auth/refundQuery', params),  // 退款查询
 				},
+				seller: {
+				    SellerSimpleList: (params = {}) => vm.$u.post(V3+'/seller/seller/simpleList', params),  // 获取平台商家信息
+				}
+
 			},
 			seller: {
 				seller: {

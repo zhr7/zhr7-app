@@ -2,60 +2,52 @@
 	<view>
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="260">
-                <u-form-item label="激活付款码" prop="qrcode">
-                    <uni-file-picker 
-                        fileMediatype="image" 
-                        mode="grid" 
-                        limit="1"
-                        @select="selectFile" 
-                    />
+                <u-form-item label="激活付款码ID" prop="operatorId">
+                    <u-input v-model="formData.operatorId" placeholder="请输入付款码ID"/>
                 </u-form-item>
-                <u-form-item label="激活付款码ID" prop="businessCode">
-                    <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
+                <u-form-item label="付款码名称" prop="name">
+                    <u-input v-model="formData.name" placeholder="请输入付款码名称"/>
                 </u-form-item>
-                <u-form-item label="付款码名称" prop="businessCode">
-                    <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
-                </u-form-item>
-                <u-form-item label="商户存否" prop="licenseSubjectType">
-					<u-radio-group v-model="formData.licenseSubjectType">
-                        <u-radio key="personal" name="personal" >已存在商户账号</u-radio>
-						<u-radio key="enterprise" name="enterprise">无账号创建账号</u-radio>
+                <u-form-item label="商户存否" prop="SellerExist">
+					<u-radio-group v-model="formData.SellerExist">
+                        <u-radio key="true" name="true">已存在商户账号</u-radio>
+						<u-radio key="false" name="false">无账号创建账号</u-radio>
 					</u-radio-group>
                 </u-form-item>
-                <u-form-item label="平台商家" prop="bankChannelNo"> 
+                <u-form-item label="平台商家" prop="userId" v-if="formData.SellerExist === 'true'"> 
                     <u-input v-model="searchKeyword" @input="filterOptions" placeholder="请输入关键字搜索"/>
                     <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                 </u-form-item>
-                <div v-if="formData.licenseSubjectType === 'enterprise'">
-                    <u-form-item label="所属品牌商家" prop="bankChannelNo"> 
+                <div v-if="formData.SellerExist === 'false'">
+                    <u-form-item label="所属品牌商家" prop="brandId"> 
                         <u-input v-model="searchKeyword" @input="filterOptions" placeholder="请输入关键字搜索"/>
                         <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                     </u-form-item>
-                    <u-form-item label="所属机构" prop="bankChannelNo"> 
+                    <u-form-item label="所属机构" prop="institutionId"> 
                         <u-input v-model="searchKeyword" @input="filterOptions" placeholder="请输入关键字搜索"/>
                         <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                     </u-form-item>
-                    <u-form-item label="绑定软件服务商" prop="bankChannelNo"> 
+                    <u-form-item label="绑定软件服务商" prop="providerId"> 
                         <u-input v-model="searchKeyword" @input="filterOptions" placeholder="请输入关键字搜索"/>
                         <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                     </u-form-item>
-                    <u-form-item label="账号" prop="licenseMerchantName">
-                        <u-input v-model="formData.licenseMerchantName" placeholder="请输入商户名称"/>
+                    <u-form-item label="账号" prop="username">
+                        <u-input v-model="formData.username" placeholder="请输入账号"/>
                     </u-form-item>
-                    <u-form-item label="密码" prop="licenseCode">
-                        <u-input v-model="formData.licenseCode" placeholder="请输入营业执照代码"/>
+                    <u-form-item label="密码" prop="password">
+                        <u-input v-model="formData.password" placeholder="请输入密码"/>
                     </u-form-item>
-                    <u-form-item label="商家名称" prop="licenseAddress">
-                        <u-input v-model="formData.licenseAddress" placeholder="请输入地址"/>
+                    <u-form-item label="商家名称" prop="sellerName">
+                        <u-input v-model="formData.sellerName" placeholder="请输入商家名称"/>
                     </u-form-item>
-                    <u-form-item label="联系手机" prop="licensePersonCardPeriodBegin">
-                        <u-input v-model="formData.licensePersonCardPeriodBegin" placeholder="请输入营业执照有效期"/>
+                    <u-form-item label="联系手机" prop="mobile">
+                        <u-input v-model="formData.mobile" placeholder="请输入手机号"/>
                     </u-form-item>
-                    <u-form-item label="地址" prop="licenseAddressCode">
-                        <pick-regions :defaultRegion="formData.licenseAddressCode" @getRegion="handleGetRegion"/>
+                    <u-form-item label="地址" prop="addressCode">
+                        <pick-regions :defaultRegion="formData.addressCode" @getRegion="handleGetRegion"/>
                     </u-form-item>
-                    <u-form-item label="详情地址" prop="licensePersonCardPeriodEnd">
-                        <u-input v-model="formData.licensePersonCardPeriodEnd" placeholder="请输入营业执照有效期"/>
+                    <u-form-item label="详情地址" prop="address">
+                        <u-input v-model="formData.address" placeholder="请输入详细地址"/>
                     </u-form-item>
                 </div>
             </u-form>
@@ -74,71 +66,92 @@
 </template>
 <script>
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
-    import { parseTime, OCR } from '@/utils'
+    import { parseTime, OCR, RouteParams } from '@/utils'
 	export default {
 		data() {
 			return {
+                //平台商家
+                searchKeywordSeller: '',
+                optionsSeller: [], 
+                filteredOptionsSeller: [],
+                showSelectSeller: false,
+                //所属品牌商家
+                searchKeywordBrand: '',
+                optionsBrand: [], 
+                filteredOptionsBrand: [],
+                showSelectBrand: false,
+                //所属机构
+                searchKeywordInstitution: '',
+                optionsInstitution: [], 
+                filteredOptionsInstitution: [],
+                showSelectInstitution: false,
+                //绑定软件服务商
+                searchKeywordProvider: '',
+                optionsProvider: [], 
+                filteredOptionsProvider: [],
+                showSelectProvider: false,
+
                 formData: {
-                    businessCode: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}'), // 业务申请编号
-                    licenseSubjectType: 'personal', // 主体类型 
-                    qrcode: '', // 手持身份证照片
-                    // 营业执照
-                    licensePic: '', // 营业执照照片
-                    licenseCode: '', // 营业执照代码
-                    licenseMerchantName: '', // 营业执照商户名称
-                    licensePersonCardPeriodBegin: '', // 营业执照有效期开始时间
-                    licensePersonCardPeriodEnd: '', // 营业执照有效期结束时间
-                    licenseAddressCode: '', // 营业执照省市县
-                    licenseAddress: '', // 营业执照地址
-                    licenseBusinessRange: '', // 营业执照经营范围
+                    operatorId: '', // 激活付款码id
+                    SellerExist: 'true', // 商户存否 
+                    name: '', // 付款码名称
+                    userId: '', // 平台商家
+                    brandId: '', // 所属品牌商家
+                    institutionId: '', // 所属机构
+                    providerId: '', // 绑定软件服务商
+                    username: '', // 账号
+                    password: '', // 密码
+                    sellerName: '', // 商家名称
+                    mobile: '', // 联系手机
+                    addressCode: '', // 地址
+                    address: '', // 详情地址
                     
                 },
                 rules: {
-                    businessCode: [
-                        { required: true, message: '请输入申请编号', trigger: 'blur' },
+                    operatorId: [
+                        { required: true, message: '请输入激活付款码id', trigger: 'blur' },
                         { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
                     ],
-                    licenseSubjectType: [
-                        { required: true, message: '请选择主体类型', trigger: 'blur' },
+                    SellerExist: [
+                        { required: true, message: '请选择商家存否', trigger: 'blur' },
                     ],
-                    qrcode: [
-                        { required: true, message: '请上传二维码照片', trigger: 'blur' },
-                    ],
-                    licensePic: [
-                        { required: true, message: '请上传营业执照照片', trigger: 'blur' },
-                    ],
-                    licenseCode: [
-                        { required: true, message: '请输入营业执照代码', trigger: 'blur' },
-                        {
-                            validator: (rule, value, callback) => {
-                                if (!/^([0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\d{14})$/.test(value)) {
-                                    callback('请输入正确的营业执照代码')
-                                } else {
-                                    callback()
-                                }
-                            }, trigger: 'blur'
-                        }
-                    ],
-                    licenseMerchantName: [
-                        { required: true, message: '请输入商户名称', trigger: 'blur' },
+                    name: [
+                        { required: true, message: '请输入付款码名称', trigger: 'blur' },
                         { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
                     ],
-                    licenseAddress: [
-                        { required: true, message: '请输入营业执照地址', trigger: 'blur' },
-                        { min: 3, max: 64, message: '长度在 3 到 256 个字符', trigger: 'blur' }
+                    userId: [
+                        { required: true, message: '请选择平台商家', trigger: 'blur' },
                     ],
-                    licenseBusinessRange: [
-                        { required: true, message: '请输入营业执照经营范围', trigger: 'blur' },
-                        { min: 3, max: 256, message: '长度在 3 到 256 个字符', trigger: 'blur' }
+                    brandId: [
+                        { required: true, message: '请选择品牌商家', trigger: 'blur' },
                     ],
-                    licensePersonCardPeriodBegin: [
-                        { required: true, message: '请选择营业执照有效期开始时间', trigger: 'blur' },
+                    institutionId: [
+                        { required: true, message: '请选择所属机构', trigger: 'blur' },
                     ],
-                    licensePersonCardPeriodEnd: [
-                        { required: true, message: '请选择营业执照有效期结束时间', trigger: 'blur' },
+                    providerId: [
+                        { required: true, message: '请选择绑定软件服务商', trigger: 'blur' },
                     ],
-                    licenseAddressCode: [
-                        { required: true, message: '请选择营业执照所在地', trigger: 'blur' },
+                    username: [
+                        { required: true, message: '请输入账号', trigger: 'blur' },
+                        { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true, message: '请输入密码', trigger: 'blur' },
+                        { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
+                    ],
+                    sellerName: [
+                        { required: true, message: '请输入商家名称', trigger: 'blur' },
+                        { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
+                    ],
+                    mobile: [
+                        { required: true, message: '请输入手机号', trigger: 'blur' },
+
+                    ],
+                    address: [
+                        { required: true, message: '请填写详细地址', trigger: 'blur' },
+                    ],
+                    addressCode: [
+                        { required: true, message: '请选择地址', trigger: 'blur' },
                     ]
                 }
 			}
@@ -158,28 +171,24 @@
 		methods: {
             initFormData() {
                 this.formData = {
-                    qrcode: '', // 激活码
-                    operatorId: '', // 激活二维码ID
-                    SellerExist: '', // 商户存否 
-                    legalPersonCardHandPic: '', // 手持身份证照片
-                    // 营业执照
-                    licensePic: '', // 营业执照照片
-                    licenseCode: '', // 营业执照代码
-                    licenseMerchantName: '', // 营业执照商户名称
-                    licensePersonCardPeriodBegin: '', // 营业执照有效期开始时间
-                    licensePersonCardPeriodEnd: '', // 营业执照有效期结束时间
-                    licenseAddressCode: '', // 营业执照省市县
-                    licenseAddress: '', // 营业执照地址
-                    licenseBusinessRange: '', // 营业执照经营范围
+                    operatorId: '', // 激活付款码id
+                    SellerExist: 'true', // 商户存否 
+                    name: '', // 付款码名称
+                    userId: '', // 平台商家
+                    brandId: '', // 所属品牌商家
+                    institutionId: '', // 所属机构
+                    providerId: '', // 绑定软件服务商
+                    username: '', // 账号
+                    password: '', // 密码
+                    sellerName: '', // 商家名称
+                    mobile: '', // 联系手机
+                    addressCode: '', // 地址
+                    address: '', // 详情地址
                 }
             },
             initStorageToken() {
                 this.$u.api.v3.storage.file.GetUploadToken().then(res => {
-                    // console.log(res.token.type);
                     this.storageToken = res.token
-                    // if (res.token.type == 'qiniu') {
-                    //     this.storageToken = res.token
-                    // }
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
@@ -191,60 +200,7 @@
             },
             // 获取选择的地区
             handleGetRegion(region){
-                console.log(region);
                 this.formData.licenseAddressCode = region[2].code
-            },
-            selectFile(e){
-                if (e.tempFiles[0].size > 1024 * 1024) {
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title:'图片大小超过1M',
-                    })
-                    return;
-                }
-                wx.scanCode({
-                    success: (res) => {
-                        console.log(res);
-                        this.formData.operatorId = res.result
-                    }
-                })
-                // const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
-                // const filePath =  e.tempFilePaths[0]
-                // uni.uploadFile({
-                //     url: 'https://upload.qiniup.com/', 
-                //     filePath: filePath,
-                //     name: 'file',
-                //     formData: {
-                //         'token': this.storageToken,
-                //         'key': path
-                //     },
-                //     success: (uploadFileRes) => {
-                //         if (uploadFileRes.statusCode===200) {
-                //             this.formData.legalPersonCardHandPic = path
-                //             uni.showToast({
-                //                 duration: 3000,
-                //                 icon:'success',
-                //                 title:'上传成功'
-                //             })
-                //         }else{
-                //             uni.showToast({
-                //                 duration: 3000,
-                //                 icon:'error',
-                //                 title:'上传失败'
-                //             })
-                //         }
-                //     },
-                //     fail: (err) => {
-                //         console.log(err.errMsg);
-                //         uni.showToast({
-                //             duration: 3000,
-                //             icon:'error',
-                //             title:'上传失败'+err.errMsg,
-                //         })
-                //     }
-                // })
-                
             },
             // submitForm(formName) {
             //     // console.log(this.formData.subjectType);
@@ -282,6 +238,10 @@
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
             this.$refs.dataForm.setRules(this.rules);
+        },
+        onShow() {
+            this.item = RouteParams()
+            this.formData.operatorId = this.item.operatorId
         }
 	}
 </script>

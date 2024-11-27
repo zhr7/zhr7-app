@@ -46,7 +46,8 @@
 		}
 	],
 	"permission": {
-    	"scope.chooseMedia": { "desc": "上传图片" }
+    	"scope.chooseMedia": { "desc": "上传图片" },
+		"scope.camera": { "desc": "上传图片和获取摄像头信息" }
   	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -169,6 +170,16 @@
 				},
 				{
 					"path": "apply/index4",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/list",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/item",
 					"style": {
 					}
 				},

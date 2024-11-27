@@ -181,7 +181,7 @@
                             message: '请输入法人身份证地址',
                             trigger: ['blur', 'change']
                         },
-                        { min: 3, max: 64, message: '长度在 3 到 256 个字符', trigger: 'blur' }
+                        { min: 2, max: 64, message: '长度在 2 到 256 个字符', trigger: 'blur' }
                     ],
                     legalPersonCardPeriodBegin: [
                         {

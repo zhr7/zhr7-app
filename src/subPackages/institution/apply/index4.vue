@@ -113,6 +113,9 @@
                     storeAddress: '',    // 门店地址
                     wechatCategoryCode: '',  // 微信经营类目
                     mccCategoryCode: '',  // MCC类目
+                    storeEntrancePic: '',  // 门店门头照片
+                    storeIndoorPic: '',  // 店内环境照片
+                    storeFrontDeskPic: '',  // 前台照片
                 },
                 rules: {
                     storeShortName: [
@@ -121,27 +124,44 @@
                             message: '请输入门店简称',
                             trigger: ['blur', 'change']
                         },
-                        { min: 3, max: 64, message: '长度在 3 到 64 个字符', trigger: 'blur' }
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     storeBusinessName: [
                         {
                             required: true,
                             message: '请输入门店商户名称',
                             trigger: ['blur', 'change']
-                        }
+                        },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     storePerson: [
                         {
                             required: true,
                             message: '请输入门店联系人',
                             trigger: ['blur', 'change']
-                        }
+                        },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     storePhone: [
                         {
                             required: true,
                             message: '请输入门店电话',
                             trigger: ['blur', 'change']
+                        },
+                        {
+                            required: true,
+                            validator: (rule, value, callback) => {
+                                if (value === undefined) {
+                                callback('请输入门店电话')
+                                } else {
+                                if (!/^1[23456789]\d{9}$/.test(value)) {
+                                    callback('请输入正确的手机号码')
+                                } else {
+                                    callback()
+                                }
+                                }
+                            },
+                            trigger: 'blur' 
                         }
                     ],
                     storeEmail: [
@@ -149,26 +169,49 @@
                             required: true,
                             message: '请输入门店邮箱',
                             trigger: ['blur', 'change']
-                        }
+                        },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     storeAddress: [
                         {
                             required: true,
                             message: '请输入门店地址',
                             trigger: ['blur', 'change']
-                        }
+                        },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
-                    wechatCategoryCode: [
+                    // wechatCategoryCode: [
+                    //     {
+                    //         required: false,
+                    //         message: '请选择微信经营类目',
+                    //         trigger: ['blur', 'change']
+                    //     }
+                    // ],
+                    // mccCategoryCode: [
+                    //     {
+                    //         required: false,
+                    //         message: '请选择MCC类目',
+                    //         trigger: ['blur', 'change']
+                    //     }
+                    // ],
+                    storeEntrancePic: [
                         {
-                            required: false,
-                            message: '请选择微信经营类目',
+                            required: true,
+                            message: '请上传门店门头照片',
                             trigger: ['blur', 'change']
                         }
                     ],
-                    mccCategoryCode: [
+                    storeIndoorPic: [
                         {
-                            required: false,
-                            message: '请选择MCC类目',
+                            required: true,
+                            message: '请上传店内环境照片',
+                            trigger: ['blur', 'change']
+                        }
+                    ],
+                    storeFrontDeskPic: [
+                        {
+                            required: true,
+                            message: '请上传前台照片',
                             trigger: ['blur', 'change']
                         }
                     ]
@@ -201,7 +244,7 @@
 		methods: {
             quickFill(){
                 if(this.checked){
-                    if(this.formData.licenseSubjectType == 'enterprise'){
+                    if(this.formData.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL'){
                         this.formData.storeShortName = this.formData.licenseMerchantName
                         this.formData.storeBusinessName = this.formData.licenseMerchantName
                         this.formData.storePerson = this.formData.legalPerson
@@ -231,6 +274,9 @@
                     storeAddress: '',    // 门店地址
                     wechatCategoryCode: '',  // 微信经营类目
                     mccCategoryCode: '',  // MCC类目
+                    storeEntrancePic: '',  // 门店门头照片
+                    storeIndoorPic: '',  // 店内环境照片
+                    storeFrontDeskPic: '',  // 前台照片
                 }
             },
             initStorageToken() {
@@ -271,7 +317,7 @@
                     })
                     return;
                 }
-                const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
+                const path = 'apply/'+this.formData.businessCode+'/'+e.tempFiles[0].cloudPath
                 const filePath =  e.tempFilePaths[0]
                 uni.uploadFile({
                     url: 'https://upload.qiniup.com/', 
@@ -309,15 +355,17 @@
 			},
             confirmWechatCategoryCode(e) {
                 this.showWechat = !this.showWechat
-				console.log(e[3].value);
+				console.log(e);
+                const newArr = e.map(item => item.value);
                 this.wechatCategoryCodeName = e[3].label
-                this.formData.wechatCategoryCode = e[3].value.toString()
+                this.formData.wechatCategoryCode = JSON.stringify(newArr)
 			},
             confirmMccCategoryCode(e) {
-                console.log(e[2].value);
+                console.log(e);
                 this.showMcc = !this.showMcc
+                const newArr = e.map(item => item.value);
                 this.mccCategoryCodeName = e[2].label
-                this.formData.mccCategoryCode = e[2].value
+                this.formData.mccCategoryCode = JSON.stringify(newArr)
             },
             submitForm(formName) {
                 console.log(this.formData);
@@ -326,10 +374,10 @@
                         this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
                             if (res.valid) {
                                 this.initFormData()
-                                // this.$u.route({
-                                //     type: 'to',
-                                //     url: 'subPackages/institution/apply/index',
-                                // })
+                                this.$u.route({
+                                    type: 'to',
+                                    url: 'subPackages/institution/apply/index.vue',
+                                })
                                 uni.showToast({
                                     duration: 5000,
                                     icon:'success',
