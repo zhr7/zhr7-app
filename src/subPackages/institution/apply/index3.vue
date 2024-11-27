@@ -21,15 +21,15 @@
                 <u-form-item label="开户银行" prop="bankAccountBank">
                     <u-input v-model="formData.bankAccountBank" placeholder="请输入开户银行"/>
                 </u-form-item>
-                <u-form-item label="银行通道编号" prop="bankChannelNo"> 
+                <u-form-item label="开户支行" prop="bankChannelNo"> 
                     <u-input v-model="searchKeyword" @input="filterOptions" @focus="focusInputBankInfo" placeholder="请输入关键字搜索"/>
                     <u-select v-model="showSelect" :list="filteredOptions" @confirm="confirmOption" ></u-select>
                 </u-form-item>
                 <u-form-item label="银行账号" prop="bankAccountNo">
                     <u-input v-model="formData.bankAccountNo" placeholder="请输入银行账号"/>
                 </u-form-item>
-                <u-form-item label="开户名称" prop="bankAccountName">
-                    <u-input v-model="formData.bankAccountName" placeholder="请输入开户名称"/>
+                <u-form-item label="账户名称" prop="bankAccountName">
+                    <u-input v-model="formData.bankAccountName" placeholder="请输入账户名称"/>
                 </u-form-item>
             </u-form>
             <u-line />
@@ -64,7 +64,7 @@
 	export default {
 		data() {
 			return {
-                //银行通道编号下拉框
+                //开户支行下拉框
                 searchKeyword: '',
                 options: [], 
                 filteredOptions: [],
@@ -89,9 +89,9 @@
                     bankCardPic: '',    // 银行卡照片
                     bankAccountType: '', // 账户类型[对公银行账户、经营者个人银行卡]
                     bankAccountBank: '', // 开户银行
-                    bankChannelNo: '',  // 银行通道编号
+                    bankChannelNo: '',  // 开户支行
                     bankAccountNo: '',     // 银行账号
-                    bankAccountName: ''   // 开户名称
+                    bankAccountName: ''   // 账户名称
                 },
                 
                 rules: {
@@ -102,16 +102,20 @@
                         { required: true, message: '请选择银行账户类型', trigger: 'blur' },
                     ],
                     bankChannelNo: [
-                        { required: false, message: '请选择银行通道编号', trigger: 'blur' },
+                        { required: false, message: '请选择开户支行', trigger: 'blur' },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     bankAccountNo: [
                         { required: true, message: '请输入银行账号', trigger: 'blur' },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     bankAccountName: [
-                        { required: true, message: '请输入开户名称', trigger: 'blur' },
+                        { required: true, message: '请输入账户名称', trigger: 'blur' },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     bankAccountBank: [
                         { required: true, message: '请输入开户银行', trigger: 'blur' },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ]
                 }
 			}
@@ -135,7 +139,7 @@
             this.formData = {...this.item.formData, ...this.formData}
 		},
 		methods: {
-            //银行通道编号
+            //开户支行
             async searchBankInfo(value) {
                 let bankName = this.formData.bankAccountBank.match(/^.*行/);
                 if (!bankName) {
@@ -155,15 +159,15 @@
                     this.options = res.items;
                     this.filteredOptions = [];
                     this.filteredOptions = this.options.map(item => ({
-                    value: item.bankCode,
-                    label: item.bankName
+                        value: item.bankCode,
+                        label: item.bankName
                     }));
                 } catch (err) {
                     console.log(err);
-                    uni.showToast({
-                    duration: 3000,
-                    icon:'error',
-                    title: "获取银行信息失败",
+                        uni.showToast({
+                        duration: 3000,
+                        icon:'error',
+                        title: "获取银行信息失败",
                     });
                 }
             },
@@ -203,7 +207,7 @@
                 // 处理选中的值
                 this.showSelect = false; // 隐藏下拉框
                 this.searchKeyword = e[0].label;
-                this.formData.bankChannelNo = e[0].value; //将e[0].value赋值给银行通道编号字段
+                this.formData.bankChannelNo = e[0].value; //将e[0].value赋值给开户支行字段
             },
             
             initFormData() {
@@ -212,9 +216,9 @@
                     bankCardPic: '',    // 银行卡照片
                     bankAccountType: '', // 账户类型[对公银行账户、经营者个人银行卡]
                     bankAccountBank: '', // 开户银行
-                    bankChannelNo: '',  // 银行通道编号
+                    bankChannelNo: '',  // 开户支行
                     bankAccountNo: '',     // 银行账号
-                    bankAccountName: ''   // 开户名称
+                    bankAccountName: ''   // 账户名称
                 }
             },
             initStorageToken() {
