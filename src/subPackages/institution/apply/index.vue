@@ -5,7 +5,7 @@
                 <u-steps :list="numList" :current="0" mode="number"></u-steps>
                 <u-form :model="formData" ref="dataForm" label-width="260">
                     <u-form-item label="申请编号" prop="businessCode">
-                        <u-input v-model="formData.businessCode" placeholder="请输入业务申请编号"/>
+                        <u-input v-model="formData.businessCode" disabled placeholder="请输入业务申请编号"/>
                     </u-form-item>
                     <u-form-item label="主体类型" prop="licenseSubjectType">
                         <u-radio-group v-model="formData.licenseSubjectType">
@@ -48,18 +48,6 @@
                     <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
                         <u-input v-model="formData.licensePersonCardPeriodEnd" placeholder="请输入营业执照有效期"/>
                     </u-form-item>
-                    <!-- <u-form-item label="营业执照有效期开始" prop="licensePersonCardPeriodBegin">
-                        <uni-datetime-picker
-                            type="date"
-                            :value="formData.licensePersonCardPeriodBegin"
-                        />
-                    </u-form-item>
-                    <u-form-item label="营业执照有效期结束" prop="licensePersonCardPeriodEnd">
-                        <uni-datetime-picker
-                            type="date"
-                            :value="formData.licensePersonCardPeriodEnd"
-                        />
-                    </u-form-item> -->
                     <u-form-item label="营业执照省市县" prop="licenseAddressCode">
                         <pick-regions :defaultRegion="formData.licenseAddressCode" @getRegion="handleGetRegion"/>
                     </u-form-item>
@@ -121,7 +109,7 @@
                     {"value": "mfe88","text": "现代支付"}
 				],
                 formData: {
-                    businessCode: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}'), // 业务申请编号
+                    businessCode: parseTime(new Date,'{y}{m}{d}'+Math.floor(Math.random() * 10000)), // 业务申请编号
                     licenseSubjectType: '', // 主体类型 
                     legalPersonCardHandPic: '', // 手持身份证照片
                     // 营业执照
@@ -200,7 +188,7 @@
 		methods: {
             initFormData() {
                 this.formData = {
-                    businessCode: parseTime(new Date,'{y}{m}{d}{h}{i}{s}{n}'), // 业务申请编号
+                    businessCode: parseTime(new Date,'{y}{m}{d}')+Math.floor(Math.random() * 10000), // 业务申请编号
                     licenseSubjectType: '', // 主体类型 
                     legalPersonCardHandPic: '', // 手持身份证照片
                     // 营业执照
