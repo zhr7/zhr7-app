@@ -44,7 +44,7 @@
 					page: 1,
 					pageSize: 15,
 					filter: '',
-					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
 				},
 				query: {
 				},
@@ -79,7 +79,7 @@
 					page: 1,
 					pageSize: 15,
 					filter: '',
-					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
 				}
 				this.list = []
 				this.getList()
@@ -141,7 +141,7 @@
 					page: 1,
 					pageSize: 15,
 					filter: '',
-					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]) 
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
 				}
 				this.list = []
 				this.getList()

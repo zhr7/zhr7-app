@@ -57,8 +57,8 @@
 				listQuery: {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
 				},
 				query: {
 				},
@@ -98,8 +98,8 @@
 				this.listQuery = {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
 				}
 				this.list = []
 				this.getList()
@@ -123,25 +123,8 @@
 				return fee ? Number(fee)  : 0
 			},
 			getList() {
-				let where = 'WHERE true'
-				// if (!this.options.brandId) {
-				// 	where = where + ` And brand_id=id`
-				// }else {
-				// 	where = where + ` And brand_id=` + `'` + this.options.brandId + `'`
-				// }
-
-				// if (this.options.institutionId) {
-				// 	where = where + ` And institution_id=` + `'` + this.options.institutionId + `'`
-				// }
-
-				// if (this.options.seller) {
-				// 	where = 'WHERE true'
-				// }
-				// if (this.query.search) {
-				// 	// where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%' Or pay_config like '%` + this.query.search + `%')`
-				// 	where = where + ` And (name like '%` + this.query.search + `%' Or username like '%` + this.query.search + `%' Or mobile like '%` + this.query.search + `%')` 
-				// }
-				this.listQuery.where = where
+				let filter = {}
+				this.listQuery.filter = JSON.stringify(filter)
 				this.status = 'loading';
 				this.$u.api.v3.institution.apply.List(this.listQuery).then(res => {
                     console.log(res)

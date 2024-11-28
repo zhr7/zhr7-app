@@ -136,7 +136,6 @@
 								},
 								type: 'username'
 							}).then(res =>{
-								console.log(res)
 								uni.setStorageSync('token', res.accessToken)
 								let users = uni.getStorageSync('users')
 								if (!users) {

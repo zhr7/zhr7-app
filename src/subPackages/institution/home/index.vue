@@ -232,7 +232,7 @@
 				this.$u.api.v3.report.report.ReportInstitutionAmount({
 					page: 1,
 					pageSize: 15,
-					sort: JSON.stringify([{key: 'createdAt', value: -1}, {key: '_id', value: -1}]),
+					sort: JSON.stringify([{key: '_id', value: -1}]),
 					filter: JSON.stringify(filter)
 				}).then(res => {
 					if (res.item) {
