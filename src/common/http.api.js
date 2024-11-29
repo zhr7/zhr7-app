@@ -230,6 +230,9 @@ const install = (Vue, vm) => {
 				},
 				seller: {
 				    SellerSimpleList: (params = {}) => vm.$u.post(V3+'/seller/seller/simpleList', params),  // 获取平台商家信息
+					InstitutionSimpleList: (params = {}) => vm.$u.post(V3+'/institution/institution/simpleList', params),  // 获取机构信息
+					ProviderSimpleList: (params = {}) => vm.$u.post(V3+'/provider/provider/search', params), //获取软件服务商信息
+					Activate: (params = {}) => vm.$u.post(V3+'/qrcode/qrcode/activate', params), //激活付款码
 				}
 
 			},

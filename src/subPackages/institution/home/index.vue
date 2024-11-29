@@ -242,9 +242,9 @@
 			},
 			handler(e){
 				this.$emit('handlerPath', e)
-				this.$refs.uToast.show({
-					title: "努力开发中"
-				})
+				// this.$refs.uToast.show({
+				// 	title: "努力开发中"
+				// })
 			}
 		}
 	}

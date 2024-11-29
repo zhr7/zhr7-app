@@ -123,6 +123,9 @@
 					case "institution-secret-key":
 						break;
 					case "institutionPay":
+						this.$refs.uToast.show({
+							title: "努力开发中"
+						});
 						break;
 					case "institutionOauth":
 						this.$u.route({

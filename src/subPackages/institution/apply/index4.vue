@@ -250,9 +250,11 @@
                         this.formData.storePerson = this.formData.legalPerson
                         this.formData.storeAddress = this.formData.licenseAddress
                         this.formData.storePhone = this.formData.legalPersonPhone
+                        this.formData.storeEmail = this.formData.legalPersonPhone
                     }else {
                         this.formData.storePerson = this.formData.legalPerson
                         this.formData.storePhone = this.formData.legalPersonPhone
+                        this.formData.storeEmail = this.formData.legalPersonPhone
                     }
                 }else {
                         this.formData.storeShortName = ''
@@ -260,6 +262,7 @@
                         this.formData.storePerson = ''
                         this.formData.storeAddress = ''
                         this.formData.storePhone = ''
+                        this.formData.storeEmail = ''
                 }
                 
             },
@@ -374,15 +377,17 @@
                         this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
                             if (res.valid) {
                                 this.initFormData()
-                                this.$u.route({
-                                    type: 'to',
-                                    url: 'subPackages/institution/apply/index.vue',
-                                })
                                 uni.showToast({
-                                    duration: 5000,
+                                    duration: 3000,
                                     icon:'success',
                                     title:'进件成功',
                                 })
+                                setTimeout(() => {
+                                    this.$u.route({
+                                        type: 'to',
+                                        url: 'subPackages/institution/apply/list',
+                                    });
+                                }, 3000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
