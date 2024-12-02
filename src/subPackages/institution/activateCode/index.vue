@@ -1,5 +1,6 @@
 <template>
 	<view>
+        <view v-if="userId">
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="260">
                 <u-form-item label="激活付款码ID" prop="id">
@@ -59,6 +60,10 @@
         </view>	
         <u-toast ref="uToast" />
 	</view>
+    <view v-if="!userId">
+        <u-form-item> 页面开发中，敬请期待</u-form-item>
+    </view>
+    </view>
 </template>
 <script>
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
