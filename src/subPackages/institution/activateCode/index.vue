@@ -27,22 +27,22 @@
                         <u-input v-model="searchKeywordProvider" @input="filterOptionsProvider" placeholder="请输入关键字搜索"/>
                         <u-select v-model="showSelectProvider" :list="filteredOptionsProvider" @confirm="confirmOptionProvider" ></u-select>
                     </u-form-item>
-                    <u-form-item label="账号" prop="username">
+                    <u-form-item label="账号" prop="user.username">
                         <u-input v-model="formData.user.username" placeholder="请输入账号"/>
                     </u-form-item>
-                    <u-form-item label="密码" prop="password">
+                    <u-form-item label="密码" prop="user.password">
                         <u-input v-model="formData.user.password" placeholder="请输入密码"/>
                     </u-form-item>
-                    <u-form-item label="商家名称" prop="name">
+                    <u-form-item label="商家名称" prop="seller.name">
                         <u-input v-model="formData.seller.name" placeholder="请输入商家名称"/>
                     </u-form-item>
-                    <u-form-item label="联系手机" prop="mobile">
+                    <u-form-item label="联系手机" prop="seller.mobile">
                         <u-input v-model="formData.seller.mobile" placeholder="请输入手机号"/>
                     </u-form-item>
-                    <u-form-item label="地址" prop="addressCode">
+                    <u-form-item label="地址" prop="seller.addressCode">
                         <pick-regions :defaultRegion="formData.seller.addressCode" @getRegion="handleGetRegion"/>
                     </u-form-item>
-                    <u-form-item label="详情地址" prop="address">
+                    <u-form-item label="详情地址" prop="seller.address">
                         <u-input v-model="formData.seller.address" placeholder="请输入详细地址"/>
                     </u-form-item>
                 </div>
@@ -149,7 +149,26 @@
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     mobile: [
-                        { required: true, message: '请输入手机号', trigger: 'blur' },
+                        {
+                            required: true,
+                            message: '请输入手机号码',
+                            trigger: ['blur', 'change']
+                        },
+                        {
+                            required: true,
+                            validator: (rule, value, callback) => {
+                                if (value === undefined) {
+                                callback('请输入手机号码')
+                                } else {
+                                if (!/^1[23456789]\d{9}$/.test(value)) {
+                                    callback('请输入正确的手机号码')
+                                } else {
+                                    callback()
+                                }
+                                }
+                            },
+                            trigger: 'blur' 
+                        }
 
                     ],
                     address: [
@@ -351,8 +370,8 @@
                     this.formData.user = {}
                 }
                 console.log(this.formData.seller.institutionId);
-                // this.$refs[formName].validate((valid) => {
-                    // if (valid) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
                         this.$u.api.v3.institution.seller.Activate(this.formData).then(res => {
                             if (res.valid) {
                                 this.initFormData()
@@ -373,11 +392,11 @@
                             uni.showToast({
                                 duration: 3000,
                                 icon:'error',
-                                title: err.datal,
+                                title: err.data,
                             })
                         })
-                    // }
-                // })
+                    }
+                })
             }
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
