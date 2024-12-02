@@ -385,6 +385,12 @@
                                     icon:'success',
                                     title:'激活成功',
                                 })
+                                setTimeout(() => {
+                                    this.$u.route({
+                                        type: 'to',
+                                        url: 'subPackages/institution/index',
+                                    });
+                                }, 3000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
