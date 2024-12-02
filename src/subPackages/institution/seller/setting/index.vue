@@ -1,5 +1,6 @@
 <template>
 	<view>
+        <view v-if="userId">
 		<view class="item">
             <u-form :model="formData" ref="dataForm" label-width="150">
                 <!-- <u-form-item label="商家ID" prop="id">
@@ -39,9 +40,14 @@
         </view>	
         <u-toast ref="uToast" />
 	</view>
+    <view v-if="!userId">
+        <u-form-item> 页面开发中，敬请期待</u-form-item>
+    </view>
+    </view>
 </template>
 <script>
     import { RouteParams } from '@/utils'
+    import { mapGetters, mapState } from 'vuex'
     export default {
 		data() {
 			return {
@@ -275,7 +281,11 @@
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
             this.$refs.dataForm.setRules(this.rules);
-        }
+        },
+        computed: {
+            ...mapGetters(['name','userId','avatar','roles']),
+            ...mapState({payQrcodeUrl: state => state.settings.payQrcodeUrl}),
+        },
 	}
 </script>
 
