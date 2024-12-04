@@ -250,11 +250,11 @@
                         this.formData.storePerson = this.formData.legalPerson
                         this.formData.storeAddress = this.formData.licenseAddress
                         this.formData.storePhone = this.formData.legalPersonPhone
-                        this.formData.storeEmail = this.formData.legalPersonPhone
+                        this.formData.storeEmail = this.formData.legalPersonPhone+'@qq.com'
                     }else {
                         this.formData.storePerson = this.formData.legalPerson
                         this.formData.storePhone = this.formData.legalPersonPhone
-                        this.formData.storeEmail = this.formData.legalPersonPhone
+                        this.formData.storeEmail = this.formData.legalPersonPhone+'@qq.com'
                     }
                 }else {
                         this.formData.storeShortName = ''

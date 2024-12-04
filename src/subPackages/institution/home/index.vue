@@ -41,7 +41,7 @@
 					></m-icon>
 					<text class="grid-text">进件管理</text>
 				</view>
-				<view @click="handler('sellerCreate')" class="item border-bottom-style">
+				<!-- <view @click="handler('sellerCreate')" class="item border-bottom-style">
 					<m-icon
 						name="add-seller" 
 						custom-prefix="colour-icon" 
@@ -56,7 +56,7 @@
 						:size="38"
 					></m-icon>
 					<text class="grid-text">新增机构</text>
-				</view>
+				</view> -->
 				<view @click="handler('sellerBrand')" class="item border-bottom-style">
 					<m-icon
 						name="brand" 

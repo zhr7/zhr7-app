@@ -136,7 +136,7 @@
 					case "activatePaymentCode":
 						uni.scanCode({
 							scanType: ['qrCode'],
-							onlyFromCamera: true,
+							onlyFromCamera: false,
 							success: (res) => {
 								let operatorId = res.result.split("=")[1];
 								if(res.result){

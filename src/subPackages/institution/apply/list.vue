@@ -2,7 +2,8 @@
 	<view>
 		<view class="top">
 			<view class="search">
-				<u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
+				<!-- <u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search> -->
+				<u-search placeholder="商户名称/法人姓名" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
 		</view>
 		<view class="content">
@@ -124,6 +125,14 @@
 			},
 			getList() {
 				let filter = {}
+				if (this.query.search) {
+					 filter = {
+						$or: [
+							{ licenseMerchant_name: { $regex: this.query.search, $options: 'i' } },
+							{ legal_person: { $regex: this.query.search, $options: 'i' } }
+						]
+					}
+				}
 				this.listQuery.filter = JSON.stringify(filter)
 				this.status = 'loading';
 				this.$u.api.v3.institution.apply.List(this.listQuery).then(res => {
@@ -142,7 +151,6 @@
 				})
 			},
 			handlerSearch(res) {
-				console.log(res)
 				if (res) {
 					this.query.search = res
 				}else{
@@ -151,8 +159,8 @@
 				this.listQuery = {
 					page: 1,
 					pageSize: 15,
-					where: '',
-					sort: 'ORDER BY created_at DESC, id DESC'
+					filter: '',
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
 				}
 				this.list = []
 				this.getList()

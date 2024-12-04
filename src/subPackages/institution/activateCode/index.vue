@@ -6,7 +6,8 @@
                 <u-form-item label="激活付款码ID" prop="id">
                     <u-input v-model="formData.id" placeholder="请输入付款码ID"/>
                 </u-form-item>
-                <u-form-item label="付款码名称" prop="name">
+                <!-- <u-form-item label="付款码名称" prop="name"> -->
+                <u-form-item label="付款码名称">
                     <u-input v-model="formData.name" placeholder="请输入付款码名称"/>
                 </u-form-item>
                 <u-form-item label="商户存否">
@@ -28,22 +29,22 @@
                         <u-input v-model="searchKeywordProvider" @input="filterOptionsProvider" placeholder="请输入关键字搜索"/>
                         <u-select v-model="showSelectProvider" :list="filteredOptionsProvider" @confirm="confirmOptionProvider" ></u-select>
                     </u-form-item>
-                    <u-form-item label="账号" prop="user.username">
+                    <u-form-item label="账号" prop="username">
                         <u-input v-model="formData.user.username" placeholder="请输入账号"/>
                     </u-form-item>
-                    <u-form-item label="密码" prop="user.password">
+                    <u-form-item label="密码" prop="password">
                         <u-input v-model="formData.user.password" placeholder="请输入密码"/>
                     </u-form-item>
-                    <u-form-item label="商家名称" prop="seller.name">
+                    <u-form-item label="商家名称" prop="name">
                         <u-input v-model="formData.seller.name" placeholder="请输入商家名称"/>
                     </u-form-item>
-                    <u-form-item label="联系手机" prop="seller.mobile">
+                    <u-form-item label="联系手机" prop="mobile">
                         <u-input v-model="formData.seller.mobile" placeholder="请输入手机号"/>
                     </u-form-item>
-                    <u-form-item label="地址" prop="seller.addressCode">
+                    <u-form-item label="地址" prop="addressCode">
                         <pick-regions :defaultRegion="formData.seller.addressCode" @getRegion="handleGetRegion"/>
                     </u-form-item>
-                    <u-form-item label="详情地址" prop="seller.address">
+                    <u-form-item label="详情地址" prop="address">
                         <u-input v-model="formData.seller.address" placeholder="请输入详细地址"/>
                     </u-form-item>
                 </div>
@@ -113,7 +114,7 @@
                         providerId: '', // 绑定软件服务商
                         mobile: '', // 联系手机
                         name: '', // 商家名称
-                        addressCode: '', // 地址
+                        addressCode: [], // 地址
                         address: '', // 详情地址
                     }
                 },
@@ -125,13 +126,13 @@
                     SellerExist: [
                         { required: true, message: '请选择商家存否', trigger: 'blur' },
                     ],
-                    name: [
-                        { required: true, message: '请输入付款码名称', trigger: 'blur' },
-                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
-                    ],
-                    // userId: [
-                    //     { required: true, message: '请选择平台商家', trigger: 'blur' },
+                    // name: [
+                    //     { required: false, message: '请输入付款码名称', trigger: 'blur' },
+                    //     { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     // ],
+                    userId: [
+                        { required: true, message: '请选择平台商家', trigger: 'blur' },
+                    ],
                     // brandId: [
                     //     { required: true, message: '请选择品牌商家', trigger: 'blur' },
                     // ],
@@ -146,8 +147,8 @@
                         { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
                     ],
                     password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' },
-                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'blur' }
+                        { required: true, message: '请输入密码', trigger: 'change' },
+                        { min: 2, max: 64, message: '长度在 2 到 64 个字符', trigger: 'change' }
                     ],
                     name: [
                         { required: true, message: '请输入商家名称', trigger: 'blur' },
@@ -177,10 +178,10 @@
 
                     ],
                     address: [
-                        { required: true, message: '请填写详细地址', trigger: 'blur' },
+                        { required: false, message: '请填写详细地址', trigger: 'blur' },
                     ],
                     addressCode: [
-                        { required: true, message: '请选择地址', trigger: 'blur' },
+                        { required: false, message: '请选择地址', trigger: 'blur' },
                     ]
                 }
 			}
@@ -341,7 +342,7 @@
                         providerId: '', // 绑定软件服务商
                         mobile: '', // 联系手机
                         name: '', // 商家名称
-                        addressCode: '', // 地址
+                        addressCode: [], // 地址
                         address: '', // 详情地址
                     }
                 }
@@ -375,8 +376,8 @@
                     this.formData.user = {}
                 }
                 console.log(this.formData.seller.institutionId);
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
+                // this.$refs[formName].validate((valid) => {
+                    // if (valid) {
                         this.$u.api.v3.institution.seller.Activate(this.formData).then(res => {
                             if (res.valid) {
                                 this.initFormData()
@@ -406,8 +407,8 @@
                                 title: err.data,
                             })
                         })
-                    }
-                })
+                    // }
+                // })
             }
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
