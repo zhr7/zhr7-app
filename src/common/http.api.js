@@ -215,10 +215,11 @@ const install = (Vue, vm) => {
 				apply: {	//  进件
 					List: (params = {}) => vm.$u.post(V3+'/application/application/search', params),	// 
 					Create: (params = {}) => vm.$u.post(V3+'/application/application/create', params),	// 
-					Update: (params = {}) => vm.$u.post(V3+'/institution-api/applys/update', params),
-					Delete: (params = {}) => vm.$u.post(V3+'/institution-api/applys/delete', params),	// 
-					Get: (params = {}) => vm.$u.post(V3+'/institution-api/applys/get', params),
+					Update: (params = {}) => vm.$u.post(V3+'/application/application/update', params),
+					Delete: (params = {}) => vm.$u.post(V3+'/application/application/delete', params),	// 
+					Get: (params = {}) => vm.$u.post(V3+'/application/application/get', params),
 					SearchBankInfo: (params = {}) => vm.$u.post(V3+'/application/bankInfo/searchBankInfo', params),	//
+					// GetUploadImage: (params = {}) => vm.$u.post(V3+'/storage/file/getUploadImage', params),	//
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),

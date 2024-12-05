@@ -179,7 +179,22 @@
 					}
 				},
 				{
-					"path": "apply/item",
+					"path": "apply/update/update",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/update/update2",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/update/update3",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/update/update4",
 					"style": {
 					}
 				},

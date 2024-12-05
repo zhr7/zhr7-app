@@ -136,7 +136,7 @@
 				this.listQuery.filter = JSON.stringify(filter)
 				this.status = 'loading';
 				this.$u.api.v3.institution.apply.List(this.listQuery).then(res => {
-                    console.log(res)
+                    // console.log(res)
 					if (res.items) {
 						res.items.forEach(item => {
 							this.list.push(item)
@@ -168,16 +168,8 @@
 			click(item){
 				this.$u.route({
 					type: 'to',
-					url: '/subPackages/institution/apply/item', 
-					// params: item
-					params: {
-						level: item.level,
-						id: item.id,
-						name: item.name,
-						mobile: item.mobile,
-						username: item.username,
-						brandId: item.brandId,
-					}
+					url: '/subPackages/institution/apply/update/update', 
+					params: item
 				})
 			}
 			
