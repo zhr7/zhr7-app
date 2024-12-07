@@ -82,7 +82,6 @@
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
     import { parseTime, OCR, RouteParams } from '@/utils'
     import { mapState, mapGetters } from 'vuex'
-    import uniCombox from '@/components/uni-combox/uni-combox.vue'
     import mccCategoryCodes from '@/subPackages/institution/assets/json/mccCategoryCodesSetting.json'
     import wechatMerchantCategories from '@/subPackages/institution/assets/json/wechatMerchantCategoriesSetting.json'
 	export default {
@@ -238,6 +237,17 @@
         onShow() {
 			this.item = RouteParams()
             this.formData = this.item
+            //先获取返回数据中的数组中的编码，然后根据编码获取json数据中对应的值，把值赋给input框绑定的字段
+            const arr1 = JSON.parse(this.item.mccCategoryCode)
+            const arr2 = JSON.parse(this.item.wechatCategoryCode)
+            const mcc = this.findLabelByValue(this.mccCategoryCodes, arr1[2])
+            const wechat = this.findLabelByValue(this.wechatMerchantCategories, arr2[3])
+            arr1.pop()
+            arr2.pop()
+            arr1.push(mcc)
+            arr2.push(wechat)
+            this.mccCategoryCodeName = arr1.join(' / ')
+            this.wechatCategoryCodeName = arr2.join(' / ')
             this.getUploadImage(this.formData.storeEntrancePic, 'storeEntrancePic')
             this.getUploadImage(this.formData.storeIndoorPic, 'storeIndoorPic')
             this.getUploadImage(this.formData.storeFrontDeskPic, 'storeFrontDeskPic')
@@ -259,9 +269,23 @@
                     });
                 }
             },
+            findLabelByValue(data, value) {
+                for (let item of data) {
+                    if (item.value === value) {
+                        return item.label;
+                    }
+                    if (item.children && item.children.length > 0) {
+                        const result = this.findLabelByValue(item.children, value);
+                    if (result) {
+                        return result;
+                    }
+                    }
+                }
+                return null;
+            },
             quickFill(){
                 if(this.checked){
-                    if(this.formData.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL'){
+                    if(this.formData.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_STOCK_COMPANY'){
                         this.formData.storeShortName = this.formData.licenseMerchantName
                         this.formData.storeBusinessName = this.formData.licenseMerchantName
                         this.formData.storePerson = this.formData.legalPerson

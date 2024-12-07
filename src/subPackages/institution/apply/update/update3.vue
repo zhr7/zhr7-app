@@ -142,13 +142,21 @@
 			})
 			
 		},
+        onload() {
+            // this.item = RouteParams()
+            // this.formData = this.item
+            // this.searchKeyword = this.item.bankName
+            // this.getUploadImage(this.formData.bankCardPic, 'bankCardPic')
+        },
 		mounted() {
             this.initStorageToken()
+            this.item = RouteParams()
             this.formData = this.item
+            this.searchKeyword = this.item.bankName
             this.getUploadImage(this.formData.bankCardPic, 'bankCardPic')
 		},
         onShow() {
-			this.item = RouteParams()
+			// this.item = RouteParams()
 		},
 		methods: {
             async getUploadImage(path,name) {
@@ -349,6 +357,8 @@
             nextPage(formName) {
                 console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
+                    console.log(valid);
+                    delete this.formData.bankName
                     if (valid) {
                         this.$u.route({
                             type: 'to',

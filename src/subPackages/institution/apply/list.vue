@@ -126,10 +126,10 @@
 			getList() {
 				let filter = {}
 				if (this.query.search) {
-					 filter = {
+					filter = {
 						$or: [
-							{ licenseMerchant_name: { $regex: this.query.search, $options: 'i' } },
-							{ legal_person: { $regex: this.query.search, $options: 'i' } }
+							{ legalPerson: { $regex: this.query.search, $options: 'i' } },
+							{ licenseMerchantName: { $regex: this.query.search, $options: 'i' } }
 						]
 					}
 				}

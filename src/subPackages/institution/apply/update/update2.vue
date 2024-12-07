@@ -195,25 +195,29 @@
 		},
 		mounted() {
             this.initStorageToken()
-            this.item = RouteParams();
-            this.formData = this.item
-            this.getUploadImage(this.formData.legalPersonCardPic, 'legalPersonCardPic')
-            this.getUploadImage(this.formData.legalPersonCardNationalPic, 'legalPersonCardNationalPic')
+            // this.item = RouteParams();
+            // this.formData = this.item
+            // this.getUploadImage(this.formData.legalPersonCardPic, 'legalPersonCardPic')
+            // this.getUploadImage(this.formData.legalPersonCardNationalPic, 'legalPersonCardNationalPic')
 		},
         onShow() {
 			// this.item = RouteParams();
 		},
 		onLoad() {
-            this.initFormData()
+            // this.initFormData()
+            this.item = RouteParams();
+            this.formData = this.item
+            this.getUploadImage(this.formData.legalPersonCardPic, 'legalPersonCardPic')
+            this.getUploadImage(this.formData.legalPersonCardNationalPic, 'legalPersonCardNationalPic')
 		},
 		onHide() {
-            this.initFormData()
+            // this.initFormData()
 		},
 		onUnload() {
-            this.initFormData()
+            // this.initFormData()
 		},
 		onPullDownRefresh() {
-            this.initFormData()
+            // this.initFormData()
 		},
 		methods: {
             initFormData() {

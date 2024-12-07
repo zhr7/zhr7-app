@@ -12,6 +12,7 @@
                             <u-radio key="SUBJECT_TYPE_PERSONAL" name="SUBJECT_TYPE_PERSONAL">小微商户</u-radio>
                             <u-radio key="SUBJECT_TYPE_INDIVIDUAL" name="SUBJECT_TYPE_INDIVIDUAL">个体户</u-radio>
                             <u-radio key="SUBJECT_TYPE_ENTERPRISE" name="SUBJECT_TYPE_ENTERPRISE">企业</u-radio>
+                            <u-radio key="SUBJECT_TYPE_STOCK_COMPANY" name="SUBJECT_TYPE_STOCK_COMPANY">股份有限公司</u-radio>
                             <u-radio key="SUBJECT_TYPE_GOVERNMENT" name="SUBJECT_TYPE_GOVERNMENT">政府机关</u-radio>
                             <u-radio key="SUBJECT_TYPE_INSTITUTIONS" name="SUBJECT_TYPE_INSTITUTIONS">事业单位</u-radio>
                             <u-radio key="SUBJECT_TYPE_OTHERS" name="SUBJECT_TYPE_OTHERS">其他 社会组织</u-radio>
@@ -25,7 +26,7 @@
                             @select="selectHandPic" 
                         />
                     </u-form-item>
-                    <div v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_ENTERPRISE' || formData.licenseSubjectType === 'SUBJECT_TYPE_INDIVIDUAL' ">
+                    <div v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_ENTERPRISE' || formData.licenseSubjectType === 'SUBJECT_TYPE_INDIVIDUAL' || formData.licenseSubjectType === 'SUBJECT_TYPE_STOCK_COMPANY'">
                         <u-form-item label="营业执照照片" prop="licensePic">
                         <uni-file-picker 
                             fileMediatype="image" 
@@ -99,6 +100,7 @@
                     'SUBJECT_TYPE_PERSONAL',   // （小微商户）
                     'SUBJECT_TYPE_INDIVIDUAL',   // （个体工商户）：营业执照上的主体类型一般为个体户、个体工商户；
                     'SUBJECT_TYPE_ENTERPRISE',   // （企业）：营业执照上的主体类型一般为有限公司、有限责任公司；
+                    'SUBJECT_TYPE_STOCK_COMPANY',   // （股份有限公司）：营业执照上的主体类型一般为股份有限公司；
                     'SUBJECT_TYPE_GOVERNMENT', // （政府机关）：包括各级、各类政府机关，如机关党委、税务、民政、人社、工商、商务、市监等；
                     'SUBJECT_TYPE_INSTITUTIONS', // （事业单位）：包括国内各类事业单位，如：医疗、教育、学校等单位；
                     'SUBJECT_TYPE_OTHERS' // (其他 社会组织）： 包括社会团体、民办非企业、基金会、基层群众性自治组织、农村集体经济组织等组织。

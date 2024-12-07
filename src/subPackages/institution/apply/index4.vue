@@ -244,7 +244,7 @@
 		methods: {
             quickFill(){
                 if(this.checked){
-                    if(this.formData.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL'){
+                    if(this.formData.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_STOCK_COMPANY'){
                         this.formData.storeShortName = this.formData.licenseMerchantName
                         this.formData.storeBusinessName = this.formData.licenseMerchantName
                         this.formData.storePerson = this.formData.legalPerson
