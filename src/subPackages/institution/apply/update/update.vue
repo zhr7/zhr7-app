@@ -19,7 +19,7 @@
                         </u-radio-group>
                     </u-form-item>
                     <u-form-item label="手持身份证照片" prop="legalPersonCardHandPic" v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_PERSONAL'">
-                        <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardHandPic"></u-image>
+                        <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardHandPic" v-if="reUploadHandPic"></u-image>
                         <uni-file-picker 
                             fileMediatype="image" 
                             mode="image" 
@@ -29,7 +29,7 @@
                     </u-form-item>
                     <div v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_ENTERPRISE' || formData.licenseSubjectType === 'SUBJECT_TYPE_INDIVIDUAL' || formData.licenseSubjectType === 'SUBJECT_TYPE_STOCK_COMPANY'">
                     <u-form-item label="营业执照照片" prop="licensePic"> 
-                        <u-image width="100%" height="300rpx" :src="imgUrl.licensePic"></u-image>
+                        <u-image width="100%" height="300rpx" :src="imgUrl.licensePic" v-if="reUploadLicensePic"></u-image>
                         <uni-file-picker 
                             fileMediatype="image" 
                             mode="image" 
@@ -84,6 +84,8 @@
 	export default {
 		data() {
 			return {
+                reUploadHandPic: true,
+                reUploadLicensePic: true,
                 imgUrl: {
                     licensePic: '',
                     legalPersonCardHandPic: '',
@@ -325,7 +327,8 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                this.imgUrl.licensePic = res.url
+                                this.imgUrl.legalPersonCardHandPic = res.url
+                                this.reUploadHandPic = false
                             }).catch(err => {
                                 uni.showToast({
                                     duration: 3000,
@@ -387,6 +390,7 @@
                                 key: path
                             }).then(res => {
                                 this.imgUrl.licensePic = res.url
+                                this.reUploadLicensePic = false
                                 this.$u.api.v3.storage.file.BizLicenseOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,

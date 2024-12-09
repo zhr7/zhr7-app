@@ -31,7 +31,7 @@
                     <u-select v-model="showMcc" mode="mutil-column-auto" :list="mccCategoryCodes" @confirm="confirmMccCategoryCode"></u-select>
                 </u-form-item>
                 <u-form-item label="门店门头照片" prop="storeEntrancePic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.storeEntrancePic"></u-image>
+                    <u-image width="100%" height="300rpx" :src="imgUrl.storeEntrancePic" v-if="reUploadEntrancePic"></u-image>
                     <uni-file-picker 
                         fileMediatype="image" 
                         mode="image" 
@@ -40,7 +40,7 @@
                     />
                 </u-form-item>
                 <u-form-item label="店内环境照片" prop="storeIndoorPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.storeIndoorPic"></u-image>
+                    <u-image width="100%" height="300rpx" :src="imgUrl.storeIndoorPic" v-if="reUploadIndoorPic"></u-image>
                     <uni-file-picker 
                         fileMediatype="image" 
                         mode="image" 
@@ -49,7 +49,7 @@
                     />
                 </u-form-item>
                 <u-form-item label="前台照片" prop="storeFrontDeskPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.storeFrontDeskPic"></u-image>
+                    <u-image width="100%" height="300rpx" :src="imgUrl.storeFrontDeskPic" v-if="reUploadFrontDeskPic"></u-image>
                     <uni-file-picker 
                         fileMediatype="image" 
                         mode="image" 
@@ -87,8 +87,12 @@
 	export default {
 		data() {
 			return {
+                reUploadEntrancePic: true,
+                reUploadFrontDeskPic: true,
+                reUploadIndoorPic: true,
+                hasShow: true,
                 imgUrl:{},
-                checked: false,
+                checked: true,
                 numList: [{
 					name: '主体信息'
 				}, {
@@ -233,11 +237,11 @@
 		},
 		mounted() {
             this.initStorageToken()
+            
 		},
         onShow() {
 			this.item = RouteParams()
             this.formData = this.item
-            //先获取返回数据中的数组中的编码，然后根据编码获取json数据中对应的值，把值赋给input框绑定的字段
             const arr1 = JSON.parse(this.item.mccCategoryCode)
             const arr2 = JSON.parse(this.item.wechatCategoryCode)
             const mcc = this.findLabelByValue(this.mccCategoryCodes, arr1[2])
@@ -248,10 +252,16 @@
             arr2.push(wechat)
             this.mccCategoryCodeName = arr1.join(' / ')
             this.wechatCategoryCodeName = arr2.join(' / ')
-            this.getUploadImage(this.formData.storeEntrancePic, 'storeEntrancePic')
-            this.getUploadImage(this.formData.storeIndoorPic, 'storeIndoorPic')
-            this.getUploadImage(this.formData.storeFrontDeskPic, 'storeFrontDeskPic')
+            if(this.hasShow){
+                this.hasShow = false
+                this.getUploadImage(this.formData.storeEntrancePic, 'storeEntrancePic')
+                this.getUploadImage(this.formData.storeIndoorPic, 'storeIndoorPic')
+                this.getUploadImage(this.formData.storeFrontDeskPic, 'storeFrontDeskPic')
+                console.log(this.hasShow)
+            } 
 		},
+        onload() {
+        },
 		methods: {
             async getUploadImage(path,name) {
                 try {
@@ -276,9 +286,9 @@
                     }
                     if (item.children && item.children.length > 0) {
                         const result = this.findLabelByValue(item.children, value);
-                    if (result) {
-                        return result;
-                    }
+                        if (result) {
+                            return result;
+                        }
                     }
                 }
                 return null;
@@ -344,9 +354,114 @@
             },
             selectStoreEntrancePic(e){
                 this.select(e, 'storeEntrancePic')
+                // if (e.tempFiles[0].size > 1024 * 1024) {
+                //     uni.showToast({
+                //         duration: 3000,
+                //         icon:'error',
+                //         title:'图片大小超过1M',
+                //     })
+                //     return;
+                // }
+                // const path = 'apply/'+this.formData.businessCode+'/'+e.tempFiles[0].cloudPath
+                // const filePath =  e.tempFilePaths[0]
+                // uni.uploadFile({
+                //     url: 'https://upload.qiniup.com/', 
+                //     filePath: filePath,
+                //     name: 'file',
+                //     formData: {
+                //         'token': this.storageToken,
+                //         'key': path
+                //     },
+                //     success: (uploadFileRes) => {
+                //         if (uploadFileRes.statusCode===200) {
+                //             this.formData.storeEntrancePic = path
+                //             this.$u.api.v3.storage.file.GetUploadImage({
+                //                 provider: 'qiniu',
+                //                 key: path
+                //             }).then(res => {
+                //                 this.imgUrl.storeEntrancePic = res.url
+                //             }).catch(err => {
+                //                 uni.showToast({
+                //                     duration: 3000,
+                //                     icon:'error',
+                //                     title: err,
+                //                 })
+                //             })
+                //             uni.showToast({
+                //                 duration: 3000,
+                //                 icon:'success',
+                //                 title:'上传成功',
+                //             })
+                //         }else{
+                //             uni.showToast({
+                //                 duration: 3000,
+                //                 icon:'error',
+                //                 title:'上传失败',
+                //             })
+                //         }
+                //     },
+                //     fail: (err) => {
+                //         console.log(err.errMsg);
+                //         uni.showToast({
+                //             duration: 3000,
+                //             icon:'error',
+                //             title:'上传失败'+err.errMsg,
+                //         })
+                // }
+                // })
             },
             selectStoreIndoorPic(e){
                 this.select(e, 'storeIndoorPic')
+                // if (e.tempFiles[0].size > 1024 * 1024) {
+                //     uni.showToast({
+                //         duration: 3000,
+                //         icon:'error',
+                //         title:'图片大小超过1M',
+                //     })
+                //     return;
+                // }
+                // const path = 'apply/'+this.formData.businessCode+"/"+e.tempFiles[0].cloudPath
+                // const filePath =  e.tempFilePaths[0]
+                // uni.uploadFile({
+                //     url: 'https://upload.qiniup.com/', 
+                //     filePath: filePath,
+                //     name: 'file',
+                //     formData: {
+                //         'token': this.storageToken,
+                //         'key': path
+                //     },
+                //     success: (uploadFileRes) => {
+                //         if (uploadFileRes.statusCode===200) {
+                //             this.formData.storeIndoorPic = path
+                //             //获取图片地址
+                //             this.$u.api.v3.storage.file.GetUploadImage({
+                //                 provider: 'qiniu',
+                //                 key: path
+                //             }).then(res => {
+                //                 this.imgUrl.storeIndoorPic = res.url    
+                //                 uni.showToast({
+                //                     duration: 3000,
+                //                     icon:'success',
+                //                     title:'上传成功'
+                //                 })
+                //             })
+                //         }else{
+                //             uni.showToast({
+                //                 duration: 3000,
+                //                 icon:'error',
+                //                 title:'上传失败'
+                //             })
+                //         }
+                //     },
+                //     fail: (err) => {
+                //         console.log(err.errMsg);
+                //         uni.showToast({
+                //             duration: 3000,
+                //             icon:'error',
+                //             title:'上传失败'+err.errMsg
+                //         })
+                //     }
+                // })
             },
             selectStoreFrontDeskPic(e){
                 this.select(e, 'storeFrontDeskPic')
@@ -379,6 +494,13 @@
                                 key: path
                             }).then(res => {
                                 this.imgUrl[type] = res.url
+                                if(type==='storeFrontDeskPic'){
+                                    this.reUploadFrontDeskPic = false
+                                }else if(type==='storeIndoorPic'){
+                                    this.reUploadIndoorPic = false
+                                }else if(type==='storeEntrancePic'){
+                                    this.reUploadEntrancePic = false
+                                }
                             }).catch(err => {
                                 uni.showToast({
                                     duration: 3000,

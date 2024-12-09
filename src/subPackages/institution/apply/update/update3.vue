@@ -5,7 +5,7 @@
             <u-steps :list="numList" :current="2" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="250">
                 <u-form-item label="银行卡照片" prop="bankCardPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.bankCardPic"></u-image>
+                    <u-image width="100%" height="300rpx" :src="imgUrl.bankCardPic" v-if="reUploadBankCardPic"></u-image>
                     <uni-file-picker 
                         fileMediatype="image" 
                         mode="image" 
@@ -68,6 +68,7 @@
 	export default {
 		data() {
 			return {
+                reUploadBankCardPic: true,
                 imgUrl: {},
                 //开户支行下拉框
                 searchKeyword: '',
@@ -143,20 +144,15 @@
 			
 		},
         onload() {
-            // this.item = RouteParams()
-            // this.formData = this.item
-            // this.searchKeyword = this.item.bankName
-            // this.getUploadImage(this.formData.bankCardPic, 'bankCardPic')
         },
 		mounted() {
             this.initStorageToken()
+		},
+        onShow() {
             this.item = RouteParams()
             this.formData = this.item
             this.searchKeyword = this.item.bankName
             this.getUploadImage(this.formData.bankCardPic, 'bankCardPic')
-		},
-        onShow() {
-			// this.item = RouteParams()
 		},
 		methods: {
             async getUploadImage(path,name) {
@@ -311,6 +307,7 @@
                                 key: path
                             }).then(res => {
                                 this.imgUrl.bankCardPic = res.url
+                                this.reUploadBankCardPic = false
                                 this.$u.api.v3.storage.file.BankCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -356,17 +353,16 @@
             },
             nextPage(formName) {
                 console.log(this.formData);
-                this.$refs[formName].validate((valid) => {
-                    console.log(valid);
+                // this.$refs[formName].validate((valid) => {
                     delete this.formData.bankName
-                    if (valid) {
+                    // if (valid) {
                         this.$u.route({
                             type: 'to',
                             url: 'subPackages/institution/apply/update/update4',
                             params: this.formData
                         })
-                    }
-                })
+                    // }
+                // })
                
             },
 		},

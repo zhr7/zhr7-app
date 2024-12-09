@@ -11,7 +11,7 @@
                     <u-input v-model="formData.legalPersonPhone" placeholder="请输入法人电话"/>
                 </u-form-item>
                 <u-form-item label="法人身份证人像面照片" prop="legalPersonCardPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardPic"></u-image>
+                    <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardPic" v-if="reUploadPersonCardPic"></u-image>
                     <uni-file-picker 
                         fileMediatype="image" 
                         mode="image" 
@@ -20,7 +20,7 @@
                     />
                 </u-form-item>
                 <u-form-item label="法人身份证国徽面照片" prop="legalPersonCardNationalPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardNationalPic"></u-image>
+                    <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardNationalPic" v-if="reUploadPersonCardNationalPic"></u-image>
                     <uni-file-picker 
                         fileMediatype="image" 
                         mode="image" 
@@ -66,6 +66,8 @@
 	export default {
 		data() {
 			return {
+                reUploadPersonCardPic: true,
+                reUploadPersonCardNationalPic: true,
                 imgUrl: {},
                 numList: [{
 					name: '主体信息'
@@ -195,16 +197,10 @@
 		},
 		mounted() {
             this.initStorageToken()
-            // this.item = RouteParams();
-            // this.formData = this.item
-            // this.getUploadImage(this.formData.legalPersonCardPic, 'legalPersonCardPic')
-            // this.getUploadImage(this.formData.legalPersonCardNationalPic, 'legalPersonCardNationalPic')
 		},
         onShow() {
-			// this.item = RouteParams();
 		},
 		onLoad() {
-            // this.initFormData()
             this.item = RouteParams();
             this.formData = this.item
             this.getUploadImage(this.formData.legalPersonCardPic, 'legalPersonCardPic')
@@ -298,6 +294,7 @@
                                 key: path
                             }).then(res => {
                                 this.imgUrl.legalPersonCardPic = res.url
+                                this.reUploadPersonCardPic = false
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -372,6 +369,7 @@
                                 key: path
                             }).then(res => {
                                 this.imgUrl.legalPersonCardNationalPic = res.url
+                                this.reUploadPersonCardNationalPic = false
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
