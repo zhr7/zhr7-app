@@ -1,5 +1,6 @@
 <template>
-	<view class="item">
+	<view>
+		<view class="item" v-if="userId">
 		<view class="line">
 			<span v-if="item.brandId===item.id" class="info">
 				<m-icon name="brand" custom-prefix="colour-icon" class="38"></m-icon><br>
@@ -111,9 +112,14 @@
 		</u-modal>
 		<u-toast ref="uToast" />
 	</view>
+	<view v-if="!userId">
+		<u-form-item> 页面开发中，敬请期待</u-form-item>
+	</view>
+	</view>
 </template>
 <script>
 	import { RouteParams } from '@/utils'
+	import { mapState, mapGetters } from 'vuex'
 	export default {
 		computed: {
 		},
@@ -248,6 +254,10 @@
 				}
 			}
 		},
+		computed: {
+            ...mapGetters(['name','userId','avatar','roles']),
+            ...mapState({payQrcodeUrl: state => state.settings.payQrcodeUrl}),
+        },
 	}
 </script>
 
