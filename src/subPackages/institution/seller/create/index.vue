@@ -46,9 +46,12 @@
 	import { RouteParams } from '@/utils'
     import uniCombox from '@/components/uni-combox/uni-combox.vue'
     import {  mapState, mapGetters } from 'vuex'
-    export default {
+	import pickRegions from '@/subPackages/institution/components/pick-regions/pick-regions.vue'
+
+	export default {
         components: { 
-			uniCombox
+			pickRegions,
+            uniCombox
 		},
 		data() {
 			return {

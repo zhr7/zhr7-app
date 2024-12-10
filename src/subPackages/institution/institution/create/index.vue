@@ -46,7 +46,12 @@
 <script>
 	import { RouteParams } from '@/utils'
     import {  mapState, mapGetters } from 'vuex'
-    export default {
+	import pickRegions from '@/subPackages/institution/components/pick-regions/pick-regions.vue'
+
+	export default {
+        components: { 
+			pickRegions
+		},
 		data() {
 			return {
                 options: {},

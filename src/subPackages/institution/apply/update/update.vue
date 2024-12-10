@@ -81,7 +81,12 @@
     // https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter11_1_1.shtml
     import { parseTime, OCR, RouteParams } from '@/utils'
     import { mapState, mapGetters } from 'vuex'
+	import pickRegions from '@/subPackages/institution/components/pick-regions/pick-regions.vue'
+
 	export default {
+        components: { 
+			pickRegions
+		},
 		data() {
 			return {
                 reUploadHandPic: true,

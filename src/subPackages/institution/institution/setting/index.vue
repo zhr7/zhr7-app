@@ -34,7 +34,12 @@
 </template>
 <script>
     import { RouteParams } from '@/utils'
-    export default {
+	import pickRegions from '@/subPackages/institution/components/pick-regions/pick-regions.vue'
+
+	export default {
+        components: { 
+			pickRegions
+		},
 		data() {
 			return {
                 formData: {
