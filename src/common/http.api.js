@@ -126,25 +126,6 @@ const install = (Vue, vm) => {
 				Amount: (params = {}) => vm.$u.post('/pay-api/reports/amount', params) // 报表统计
 			},
 		},
-		message: {
-			device: {
-				List: (params = {}) => vm.$u.post('/message-api/devices/list', params),
-				Update: (params = {}) => vm.$u.post('/message-api/devices/update', params),
-				Create: (params = {}) => vm.$u.post('/message-api/devices/create', params),
-				Delete: (params = {}) => vm.$u.post('/message-api/devices/delete', params),
-			}
-		},
-		storage: {
-			file: {
-				Token: (params = {}) => vm.$u.post('/storage-api/files/token', params),
-				PrivateURL: (params = {}) => vm.$u.post('/storage-api/files/privateURL', params)
-			}
-		},
-		icbcjft: {
-			register: {
-				H5Register: (params = {}) => vm.$u.post('/icbcjft/registers/h5Register', params)
-			}
-		},
 		v3: {
 			user: {
 				auth: {
