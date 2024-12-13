@@ -31,28 +31,28 @@
                     <u-select v-model="showMcc" mode="mutil-column-auto" :list="mccCategoryCodes" @confirm="confirmMccCategoryCode"></u-select>
                 </u-form-item>
                 <u-form-item label="门店门头照片" prop="storeEntrancePic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.storeEntrancePic" v-if="reUploadEntrancePic"></u-image>
-                    <uni-file-picker 
+                    <!-- <u-image width="100%" height="300rpx" :src="imgUrl.storeEntrancePic" v-if="reUploadEntrancePic"></u-image> -->
+                    <uni-file-picker v-model="valueEntrance"
                         fileMediatype="image" 
-                        mode="image" 
+                        mode="grid" 
                         limit="1"
                         @select="selectStoreEntrancePic" 
                     />
                 </u-form-item>
                 <u-form-item label="店内环境照片" prop="storeIndoorPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.storeIndoorPic" v-if="reUploadIndoorPic"></u-image>
-                    <uni-file-picker 
+                    <!-- <u-image width="100%" height="300rpx" :src="imgUrl.storeIndoorPic" v-if="reUploadIndoorPic"></u-image> -->
+                    <uni-file-picker v-model="valueIndoor"
                         fileMediatype="image" 
-                        mode="image" 
+                        mode="grid" 
                         limit="1"
                         @select="selectStoreIndoorPic" 
                     />
                 </u-form-item>
                 <u-form-item label="前台照片" prop="storeFrontDeskPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.storeFrontDeskPic" v-if="reUploadFrontDeskPic"></u-image>
-                    <uni-file-picker 
+                    <!-- <u-image width="100%" height="300rpx" :src="imgUrl.storeFrontDeskPic" v-if="reUploadFrontDeskPic"></u-image> -->
+                    <uni-file-picker v-model="valueFrontDesk"
                         fileMediatype="image" 
-                        mode="image" 
+                        mode="grid" 
                         limit="1"
                         @select="selectStoreFrontDeskPic" 
                     />
@@ -87,6 +87,9 @@
 	export default {
 		data() {
 			return {
+                valueIndoor: [],
+                valueFrontDesk: [],
+                valueEntrance: [],
                 reUploadEntrancePic: true,
                 reUploadFrontDeskPic: true,
                 reUploadIndoorPic: true,
@@ -257,7 +260,7 @@
                 this.getUploadImage(this.formData.storeEntrancePic, 'storeEntrancePic')
                 this.getUploadImage(this.formData.storeIndoorPic, 'storeIndoorPic')
                 this.getUploadImage(this.formData.storeFrontDeskPic, 'storeFrontDeskPic')
-                console.log(this.hasShow)
+                // console.log(this.hasShow)
             } 
 		},
         onload() {
@@ -270,6 +273,15 @@
                         key: path,
                     });
                     this.imgUrl[name] = res.url
+                    let value1 = []
+                    value1.push(res)
+                    if(name == 'storeEntrancePic'){
+                        this.valueEntrance = value1
+                    }else if(name == 'storeIndoorPic'){
+                        this.valueIndoor = value1
+                    }else if(name == 'storeFrontDeskPic'){
+                        this.valueFrontDesk = value1
+                    }
                 } catch (err) {
                     console.log(err);
                     uni.showToast({
@@ -539,14 +551,14 @@
                 this.formData.wechatCategoryCode = JSON.stringify(newArr)
 			},
             confirmMccCategoryCode(e) {
-                console.log(e);
+                // console.log(e);
                 this.showMcc = !this.showMcc
                 const newArr = e.map(item => item.value);
                 this.mccCategoryCodeName = e[2].label
                 this.formData.mccCategoryCode = JSON.stringify(newArr)
             },
             submitForm(formName) {
-                console.log(this.formData);
+                // console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$u.api.v3.institution.apply.Update(this.formData).then(res => {

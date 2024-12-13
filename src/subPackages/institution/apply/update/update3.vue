@@ -5,10 +5,10 @@
             <u-steps :list="numList" :current="2" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="250">
                 <u-form-item label="银行卡照片" prop="bankCardPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.bankCardPic" v-if="reUploadBankCardPic"></u-image>
-                    <uni-file-picker 
+                    <!-- <u-image width="100%" height="300rpx" :src="imgUrl.bankCardPic" v-if="reUploadBankCardPic"></u-image> -->
+                    <uni-file-picker v-model="value"
                         fileMediatype="image" 
-                        mode="image" 
+                        mode="grid" 
                         limit="1"
                         @select="selectBankCardCopy" 
                     />
@@ -73,6 +73,7 @@
 		},
 		data() {
 			return {
+                value: [],
                 reUploadBankCardPic: true,
                 imgUrl: {},
                 //开户支行下拉框
@@ -167,6 +168,9 @@
                         key: path,
                     });
                     this.imgUrl[name] = res.url
+                    let value1 = []
+                    value1.push(res)
+                    this.value = value1
                 } catch (err) {
                     console.log(err);
                     uni.showToast({
@@ -357,7 +361,6 @@
                 })
             },
             nextPage(formName) {
-                console.log(this.formData);
                 // this.$refs[formName].validate((valid) => {
                     delete this.formData.bankName
                     // if (valid) {
@@ -366,6 +369,7 @@
                             url: 'subPackages/institution/apply/update/update4',
                             params: this.formData
                         })
+                        // console.log(this.formData);
                     // }
                 // })
                

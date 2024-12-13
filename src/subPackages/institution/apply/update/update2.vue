@@ -11,19 +11,19 @@
                     <u-input v-model="formData.legalPersonPhone" placeholder="请输入法人电话"/>
                 </u-form-item>
                 <u-form-item label="法人身份证人像面照片" prop="legalPersonCardPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardPic" v-if="reUploadPersonCardPic"></u-image>
-                    <uni-file-picker 
+                    <!-- <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardPic" v-if="reUploadPersonCardPic"></u-image> -->
+                    <uni-file-picker v-model="valueFront"
                         fileMediatype="image" 
-                        mode="image" 
+                        mode="grid" 
                         limit="1"
                         @select="selectIdCardCopy" 
                     />
                 </u-form-item>
                 <u-form-item label="法人身份证国徽面照片" prop="legalPersonCardNationalPic">
-                    <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardNationalPic" v-if="reUploadPersonCardNationalPic"></u-image>
-                    <uni-file-picker 
+                    <!-- <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardNationalPic" v-if="reUploadPersonCardNationalPic"></u-image> -->
+                    <uni-file-picker v-model="valueBack"
                         fileMediatype="image" 
-                        mode="image" 
+                        mode="grid" 
                         limit="1"
                         @select="selectIdCardNational" 
                     />
@@ -66,6 +66,8 @@
 	export default {
 		data() {
 			return {
+                valueFront: [],
+                valueBack: [],
                 reUploadPersonCardPic: true,
                 reUploadPersonCardNationalPic: true,
                 imgUrl: {},
@@ -252,6 +254,13 @@
                         key: path,
                     });
                     this.imgUrl[name] = res.url
+                    let value1 = []
+                    value1.push(res)
+                    if(name == 'legalPersonCardPic'){
+                        this.valueFront = value1
+                    }else if(name == 'legalPersonCardNationalPic'){
+                        this.valueBack = value1
+                    }
                 } catch (err) {
                     console.log(err);
                     uni.showToast({

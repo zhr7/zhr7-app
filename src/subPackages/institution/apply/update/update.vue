@@ -19,20 +19,20 @@
                         </u-radio-group>
                     </u-form-item>
                     <u-form-item label="手持身份证照片" prop="legalPersonCardHandPic" v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_PERSONAL'">
-                        <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardHandPic" v-if="reUploadHandPic"></u-image>
-                        <uni-file-picker 
+                        <!-- <u-image width="100%" height="300rpx" :src="imgUrl.legalPersonCardHandPic" v-if="reUploadHandPic"></u-image> -->
+                        <uni-file-picker v-model="valueHand"
                             fileMediatype="image" 
-                            mode="image" 
+                            mode="grid" 
                             limit="1"
                             @select="selectHandPic" 
                         />
                     </u-form-item>
                     <div v-if="formData.licenseSubjectType === 'SUBJECT_TYPE_ENTERPRISE' || formData.licenseSubjectType === 'SUBJECT_TYPE_INDIVIDUAL' || formData.licenseSubjectType === 'SUBJECT_TYPE_STOCK_COMPANY'">
                     <u-form-item label="营业执照照片" prop="licensePic"> 
-                        <u-image width="100%" height="300rpx" :src="imgUrl.licensePic" v-if="reUploadLicensePic"></u-image>
-                        <uni-file-picker 
+                        <!-- <u-image width="100%" height="300rpx" :src="imgUrl.licensePic" v-if="reUploadLicensePic"></u-image> -->
+                        <uni-file-picker v-model="valueLicense"
                             fileMediatype="image" 
-                            mode="image" 
+                            mode="grid" 
                             limit="1"
                             @select="selectLicensePic" 
                         />
@@ -89,6 +89,8 @@
 		},
 		data() {
 			return {
+                valueLicense: [],
+                valueHand: [],
                 reUploadHandPic: true,
                 reUploadLicensePic: true,
                 imgUrl: {
@@ -213,6 +215,10 @@
             
         },
 		methods: {
+            // 上传成功
+			success(e){
+				console.log('上传成功')
+			},
             initFormData() {
                 this.formData = {
                     businessCode: '', // 业务申请编号
@@ -290,6 +296,13 @@
                         key: path,
                     });
                     this.imgUrl[name] = res.url
+                    let value1 = []
+                    value1.push(res)
+                    if(name == 'licensePic'){
+                        this.valueLicense = value1
+                    }else if(name == 'legalPersonCardHandPic'){
+                        this.valueHand = value1
+                    }
                 } catch (err) {
                     console.log(err);
                     uni.showToast({
