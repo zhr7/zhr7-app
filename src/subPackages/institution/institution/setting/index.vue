@@ -1,39 +1,45 @@
 <template>
 	<view>
-		<view class="item">
-            <u-form :model="formData" ref="dataForm" label-width="150">
-                <u-form-item label="机构名称" prop="name">
-                    <u-input v-model="formData.name" placeholder="请输入机构名称"/>
-                </u-form-item>
-                <u-form-item label="佣金比例" prop="rebate">
-                    <template slot="right">%</template>
-                    <u-input v-model="formData.rebate" placeholder="请输入佣金比例百分比"/>
-                </u-form-item>
-                <u-form-item label="联系手机" prop="mobile">
-                    <u-input v-model="formData.mobile" placeholder="请输入联系手机"/>
-                </u-form-item>
-                <u-form-item label="地址" prop="addressCode">
-                    <pick-regions :defaultRegion="formData.addressCode" @getRegion="handleGetRegion"/>
-                </u-form-item>
-                <u-form-item label="详细地址" prop="address">
-                    <u-input v-model="formData.address" placeholder="请输入详细地址"/>
-                </u-form-item>
-            </u-form>
-            <u-line />
-            <view class="bottom">	
-                <u-button 
-                    type="warning" 
-                    @click="submitForm('dataForm')"
-                >
-                    确认修改
-                </u-button>
-		    </view>	
-        </view>	
-        <u-toast ref="uToast" />
-	</view>
+        <view v-if="userId">
+            <view class="item">
+                <u-form :model="formData" ref="dataForm" label-width="150">
+                    <u-form-item label="机构名称" prop="name">
+                        <u-input v-model="formData.name" placeholder="请输入机构名称"/>
+                    </u-form-item>
+                    <u-form-item label="佣金比例" prop="rebate">
+                        <template slot="right">%</template>
+                        <u-input v-model="formData.rebate" placeholder="请输入佣金比例百分比"/>
+                    </u-form-item>
+                    <u-form-item label="联系手机" prop="mobile">
+                        <u-input v-model="formData.mobile" placeholder="请输入联系手机"/>
+                    </u-form-item>
+                    <u-form-item label="地址" prop="addressCode">
+                        <pick-regions :defaultRegion="formData.addressCode" @getRegion="handleGetRegion"/>
+                    </u-form-item>
+                    <u-form-item label="详细地址" prop="address">
+                        <u-input v-model="formData.address" placeholder="请输入详细地址"/>
+                    </u-form-item>
+                </u-form>
+                <u-line />
+                <view class="bottom">	
+                    <u-button 
+                        type="warning" 
+                        @click="submitForm('dataForm')"
+                    >
+                        确认修改
+                    </u-button>
+                </view>	
+            </view>	
+            <u-toast ref="uToast" />
+        </view>
+        <view v-if="!userId">
+            <u-form-item> 页面开发中，敬请期待</u-form-item>
+        </view>
+    </view>
 </template>
 <script>
     import { RouteParams } from '@/utils'
+    import {  mapState, mapGetters } from 'vuex'
 	import pickRegions from '@/subPackages/institution/components/pick-regions/pick-regions.vue'
 
 	export default {
@@ -197,7 +203,11 @@
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
             this.$refs.dataForm.setRules(this.rules);
-        }
+        },
+        computed: {
+            ...mapGetters(['name','userId','avatar','roles']),
+            ...mapState({payQrcodeUrl: state => state.settings.payQrcodeUrl}),
+        },
 	}
 </script>
 
