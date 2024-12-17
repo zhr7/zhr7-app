@@ -61,6 +61,7 @@
             <u-line />
             <view class="bottom">	
                 <u-button 
+                    :disabled="isSubmitting"
                     type="warning" 
                     @click="submitForm('dataForm')"
                 >
@@ -85,6 +86,7 @@
 	export default {
 		data() {
 			return {
+                isSubmitting: false, // 控制按钮是否禁用
                 checked: false,
                 numList: [{
 					name: '主体信息'
@@ -373,6 +375,8 @@
             submitForm(formName) {
                 console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
+                    if (this.isSubmitting) return; // 如果正在提交，则不再执行
+                    this.isSubmitting = true; // 设置为不可点击状态
                     if (valid) {
                         this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
                             if (res.valid) {
@@ -382,12 +386,13 @@
                                     icon:'success',
                                     title:'进件成功',
                                 })
+                                this.isSubmitting = false;
                                 setTimeout(() => {
                                     this.$u.route({
                                         type: 'to',
                                         url: 'subPackages/institution/apply/list',
                                     });
-                                }, 3000);
+                                }, 2000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,

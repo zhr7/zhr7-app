@@ -573,7 +573,7 @@
                                         type: 'to',
                                         url: 'subPackages/institution/apply/list',
                                     });
-                                }, 3000);
+                                }, 2000);
                             } else {
                                 uni.showToast({
                                     duration: 3000,
