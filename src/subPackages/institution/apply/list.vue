@@ -84,16 +84,17 @@
 			return {
 				show: false,
 				optionsSwipe: [
-					{
-						text: '详情',
-						style: {
-							backgroundColor: '#007aff'
-						}
-					},
+					// {
+					// 	text: '详情',
+					// 	style: {
+					// 		backgroundColor: '#007aff'
+					// 	}
+					// },
 					{
 						text: '编辑',
 						style: {
-							backgroundColor: '#dd524d'
+							// backgroundColor: '#dd524d'
+							backgroundColor: '#007aff'
 						}
 					}
 				],
