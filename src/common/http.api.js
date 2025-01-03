@@ -1,9 +1,51 @@
+import CryptoJS from 'crypto-js';
+import JSEncrypt from 'jsencrypt';
+
+/**
+ * 解密RSA公钥
+ * @param {string} encryptedData - 加密的公钥
+ * @param {string} key - AES密钥
+ * @param {string} keyViMd5 - key和vi组合的MD5值
+ * @returns {Promise<string>} 解密后的公钥
+ */
+async function decryptRsaPublicKey(encryptedData, key, keyViMd5) {
+	// 暴力破解vi（00000-99999）
+	for (let i = 0; i < 100000; i++) {
+		const vi = i.toString().padStart(5, '0');
+		const testMd5 = CryptoJS.MD5(key + vi).toString();
+		
+		if (testMd5 === keyViMd5) {
+			try {
+				// 创建16位的vi
+				const paddedVi = vi.padEnd(16, '0');
+				const decrypted = CryptoJS.AES.decrypt(
+					encryptedData,
+					CryptoJS.enc.Utf8.parse(key),
+					{
+						iv: CryptoJS.enc.Utf8.parse(paddedVi),
+						mode: CryptoJS.mode.CBC,
+						padding: CryptoJS.pad.Pkcs7
+					}
+				);
+				
+				const publicKey = decrypted.toString(CryptoJS.enc.Utf8);
+				if (publicKey.includes('MII')) {
+					return publicKey;
+				}
+			} catch (e) {
+				continue;
+			}
+		}
+	}
+	throw new Error('无法找到正确的vi值');
+}
+
 // 如果没有通过拦截器配置域名的话，可以在这里写上完整的URL(加上域名部分)
 
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
-const V3 = "https://www.bichengbituo.com/api"
-// const V3 = "http://127.0.0.1:8081"
+// const V3 = "https://www.bichengbituo.com/api"
+const V3 = "http://127.0.0.1:8081"
 const install = (Vue, vm) => {
 	// 此处使用了传入的params参数，一切自定义即可
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
@@ -129,7 +171,34 @@ const install = (Vue, vm) => {
 		v3: {
 			user: {
 				auth: {
-					Auth: (params = {}) => vm.$u.post(V3+'/user/auth/login', params),
+					GetRsaPublicKey: (params = {}) => vm.$u.post(V3+'/user/auth/getRsaPublicKey', params),
+					
+					Auth: async (params = {}) => {
+						try {
+							const rsaKeyRes = await vm.$u.post(V3+'/user/auth/getRsaPublicKey', {
+								username: params.username
+							});
+							
+							const publicKey = await decryptRsaPublicKey(
+								rsaKeyRes.encryptedPublicKey,
+								rsaKeyRes.key,
+								rsaKeyRes.keyViMd5
+							);
+							
+							const encrypt = new JSEncrypt();
+							encrypt.setPublicKey(publicKey);
+							const encryptedPassword = encrypt.encrypt(params.password);
+							
+							return vm.$u.post(V3+'/user/auth/login', {
+								...params,
+								password: encryptedPassword
+							});
+						} catch (error) {
+							console.error('登录加密失败:', error);
+							throw error;
+						}
+					},
+					// Auth: (params = {}) => vm.$u.post(V3+'/user/auth/login', params),
 					UserInfo: (params = {}) => vm.$u.post(V3+'/user/auth/userInfo', params),
 				},
 				order: {
