@@ -271,7 +271,7 @@
             initFormData() {
                 this.formData = {
                      // 门店资料
-                     storeShortName: '', // 门店简称
+                    storeShortName: '', // 门店简称
                     storeBusinessName: '', // 门店商户名称
                     storePerson: '',    // 门店联系人
                     storePhone: '',    // 门店电话
@@ -400,14 +400,14 @@
                                     title:'进件失败',
                                 })
                             }
-                }).catch(err => {
-                    console.log(err);
-                    uni.showToast({
-                        duration: 3000,
-                        icon:'error',
-                        title: err.datal,
-                    })
-                })
+                        }).catch(err => {
+                            console.log(err);
+                            uni.showToast({
+                                duration: 3000,
+                                icon:'error',
+                                title: err.data,
+                            })
+                        })
                     }
                 })
                

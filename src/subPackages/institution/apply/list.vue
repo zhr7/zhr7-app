@@ -1,5 +1,6 @@
 <template>
 	<view>
+		
 		<view class="top">
 			<view class="search">
 				<!-- <u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search> -->
@@ -7,7 +8,37 @@
 			</view>	
 		</view>
 		<view class="content">
-			<view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
+			<u-swipe-action :show="item.show" :index="index" 
+				v-for="(item, index) in list" :key="item.id" 
+				@click="click" @open="open"
+				:options="optionsSwipe"
+			>
+				<view class="item">
+						<view class="left">
+						<span>
+							<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
+							进件
+						</span>
+					</view>
+					<view class="center">
+						<view class="title">
+							{{item.licenseMerchantName}}
+						</view>
+						<view class="time">
+							{{item.licenseCode}}
+						</view>
+					</view>
+					<view class="right">
+						<view>
+							{{item.legalPerson}}
+						</view>
+						<view class="status">
+							{{parseTime(item.updatedAt)}}
+						</view>
+					</view>
+				</view>
+			</u-swipe-action>
+			<!-- <view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
 				<view class="left">
                     <span>
 						<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
@@ -33,7 +64,7 @@
 				<view class="arrow-right">
 					<u-icon name="arrow-right" size="30"></u-icon>
 				</view>
-			</view>
+			</view> -->
 			<u-loadmore :status="status" />
 		</view>
 		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
@@ -51,6 +82,21 @@
 		},
 		data() {
 			return {
+				show: false,
+				optionsSwipe: [
+					{
+						text: '详情',
+						style: {
+							backgroundColor: '#007aff'
+						}
+					},
+					{
+						text: '编辑',
+						style: {
+							backgroundColor: '#dd524d'
+						}
+					}
+				],
 				options: {},
 				status: 'loadmore',
 				list: [],
@@ -139,6 +185,7 @@
                     // console.log(res)
 					if (res.items) {
 						res.items.forEach(item => {
+							item.show = false
 							this.list.push(item)
 						});
 						this.total = Number(res.total)
@@ -165,14 +212,38 @@
 				this.list = []
 				this.getList()
 			},
-			click(item){
-				this.$u.route({
-					type: 'to',
-					url: '/subPackages/institution/apply/update/update', 
-					params: item
+			// click(item){
+			// 	this.$u.route({
+			// 		type: 'to',
+			// 		url: '/subPackages/institution/apply/update/update', 
+			// 		params: item
+			// 	})
+			// }
+			click(index, index1) {
+				console.log(this.list[index])
+				if(index1 == 1) {  //编辑
+					this.$u.route({
+						type: 'to',
+						url: '/subPackages/institution/apply/update/update', 
+						params: this.list[index]
+					})
+				} else {
+					this.$u.route({
+						type: 'to',
+						url: '/subPackages/institution/apply/detail/detail', 
+						params: this.list[index]
+					})
+				}
+			},
+			// 如果打开一个的时候，不需要关闭其他，则无需实现本方法
+			open(index) {
+				// 先将正在被操作的swipeAction标记为打开状态，否则由于props的特性限制，
+				// 原本为'false'，再次设置为'false'会无效
+				this.list[index].show = true;
+				this.list.map((val, idx) => {
+					if(index != idx) this.list[idx].show = false;
 				})
 			}
-			
 		},
 	}
 </script>

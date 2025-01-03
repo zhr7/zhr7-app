@@ -390,24 +390,25 @@
                                     this.formData.licenseAddress = res.address
                                     this.formData.licenseBusinessRange = res.business
                                     // 识别地址
-                                    const address = smatrAddress(res.address);
+                                    const address = this.smatrAddress(res.address);
                                     this.formData.licenseDistrictCode = [
                                         address.provinceCode,
                                         address.cityCode,
                                         address.countyCode,
                                     ];
+                                    console.log(this.formData.licenseDistrictCode)
                                 }).catch(err => {
                                     uni.showToast({
                                         duration: 3000,
                                         icon:'error',
-                                        title: "营业执照识别失败:"+err,
+                                        title: "营业执照识别失败:"+err.data,
                                     })
                                 })
                             }).catch(err => {
                                 uni.showToast({
                                     duration: 3000,
                                     icon:'error',
-                                    title: "营业执照识别失败:"+err,
+                                    title: err.data,
                                 })
                             })
                             uni.showToast({
@@ -424,7 +425,6 @@
                         }
                     },
                     fail: (err) => {
-                        console.log('err')
                         console.log(err.errMsg);
                         uni.showToast({
                             duration: 3000,

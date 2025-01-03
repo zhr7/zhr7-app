@@ -201,6 +201,12 @@ const install = (Vue, vm) => {
 					Get: (params = {}) => vm.$u.post(V3+'/application/application/get', params),
 					SearchBankInfo: (params = {}) => vm.$u.post(V3+'/application/bankInfo/searchBankInfo', params),	//
 					// GetUploadImage: (params = {}) => vm.$u.post(V3+'/storage/file/getUploadImage', params),	//
+					//添加通道接口
+					CommonSimpleList: (params = {}) => vm.$u.post(V3+'/channel/common/simpleList', params),	//
+					CommonCreate: (params = {}) => vm.$u.post(V3+'/channel/common/create', params),	//
+					CommonDelete: (params = {}) => vm.$u.post(V3+'/channel/common/delete', params),	//
+					CommonUpdate: (params = {}) => vm.$u.post(V3+'/channel/common/update', params),	//
+					CommonList: (params = {}) => vm.$u.post(V3+'/channel/common/search', params),	//
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),

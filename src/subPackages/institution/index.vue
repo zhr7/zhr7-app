@@ -105,6 +105,12 @@
 							url: '/subPackages/institution/institution/report/index'
 						})
 						break;
+					case "createPaymentApplication":
+					this.$u.route({
+						type: 'to',
+						url: '/subPackages/institution/apply/paymentApplication/index'
+					})
+					break;
 					case "sellerBrand":
 						this.path = "sellerBrand"
 						break;
