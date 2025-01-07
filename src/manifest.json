@@ -123,6 +123,9 @@
             "scope.userLocation" : {
                 "desc" : "通过位置获取最近店面"
             }
+        },
+        "optimization" : {
+            "subPackages" : true
         }
     },
     "mp-alipay" : {

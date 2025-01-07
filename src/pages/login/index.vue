@@ -31,6 +31,39 @@
 	</view>
 </template>
 <script>
+	import CryptoJS from 'crypto-js';
+	import JSEncrypt from 'jsencrypt';
+	function decryptRsaPublicKey(encryptedData, key, keyViMd5) {
+		// 暴力破解vi（00000-99999）
+		for (let i = 0; i < 100000; i++) {
+			const vi = i.toString().padStart(5, '0');
+			const testMd5 = CryptoJS.MD5(key + vi).toString();
+			
+			if (testMd5 === keyViMd5) {
+				try {
+					// 创建16位的vi
+					const paddedVi = vi.padEnd(16, '0');
+					const decrypted = CryptoJS.AES.decrypt(
+						encryptedData,
+						CryptoJS.enc.Utf8.parse(key),
+						{
+							iv: CryptoJS.enc.Utf8.parse(paddedVi),
+							mode: CryptoJS.mode.CBC,
+							padding: CryptoJS.pad.Pkcs7
+						}
+					);
+					
+					const publicKey = decrypted.toString(CryptoJS.enc.Utf8);
+					if (publicKey.includes('MII')) {
+						return publicKey;
+					}
+				} catch (e) {
+					continue;
+				}
+			}
+		}
+		throw new Error('无法找到正确的vi值');
+	}
 	export default {
 		data() {
 			return {
@@ -127,12 +160,27 @@
 					this.form.password = this.users[usernme].password
 				}
 				setTimeout(() => {
-					this.$refs.uForm.validate(valid => {
+					this.$refs.uForm.validate(async valid => {
 						if (valid) {
+							// 获取公钥
+							const rsaKeyRes = await this.$u.api.v3.user.auth.GetRsaPublicKey({
+								username: this.form.username
+							})
+							// 解密公钥
+							const publicKey = await decryptRsaPublicKey(
+								rsaKeyRes.encryptedPublicKey,
+								rsaKeyRes.key,
+								rsaKeyRes.keyViMd5
+							);
+							// 加密密码
+							const encrypt = new JSEncrypt();
+							encrypt.setPublicKey(publicKey);
+							const encryptedPassword = encrypt.encrypt(this.form.password);
+							// 登录
 							this.$store.dispatch('user/login',{
 								user: {
 									username: this.form.username,
-									password: this.form.password,
+									password: encryptedPassword,
 								},
 								type: 'username'
 							}).then(res =>{

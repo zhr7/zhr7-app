@@ -83,7 +83,7 @@
     import { parseTime, OCR } from '@/utils'
     import { mapState, mapGetters } from 'vuex'
 	import pickRegions from '@/subPackages/institution/components/pick-regions/pick-regions.vue'
-    import { smart as smatrAddress } from 'node-address-smart-parse';
+    // import { smart as smatrAddress } from 'node-address-smart-parse';
 
 	export default {
         components: { 
@@ -390,13 +390,13 @@
                                     this.formData.licenseAddress = res.address
                                     this.formData.licenseBusinessRange = res.business
                                     // 识别地址
-                                    const address = this.smatrAddress(res.address);
-                                    this.formData.licenseDistrictCode = [
-                                        address.provinceCode,
-                                        address.cityCode,
-                                        address.countyCode,
-                                    ];
-                                    console.log(this.formData.licenseDistrictCode)
+                                    // const address = this.smatrAddress(res.address);
+                                    // this.formData.licenseDistrictCode = [
+                                    //     address.provinceCode,
+                                    //     address.cityCode,
+                                    //     address.countyCode,
+                                    // ];
+                                    // console.log(this.formData.licenseDistrictCode)
                                 }).catch(err => {
                                     uni.showToast({
                                         duration: 3000,

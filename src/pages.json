@@ -28,11 +28,6 @@
 			}
 		},
 		{
-			"path": "pages/login/index",
-			"style": {
-			}
-		},
-		{
 			"path": "pages/seller/order/item",
 			"style": {
 				"enablePullDownRefresh": true
@@ -297,6 +292,17 @@
 						"navigationBarTitleText": "商户H5注册",
 						"navigationStyle":"custom",
 						"transparentTitle":"always" 
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/login",
+			"name": "subLogin",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
 					}
 				}
 			]
