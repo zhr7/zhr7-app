@@ -225,13 +225,13 @@
 				if(index1 == 1) {  //编辑
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/institution/apply/update/update', 
+						url: '/subPackages/institution/apply/detail/detail', 
 						params: this.list[index]
 					})
 				} else {
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/institution/apply/detail/detail', 
+						url: '/subPackages/institution/apply/update/update', 
 						params: this.list[index]
 					})
 				}
