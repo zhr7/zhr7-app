@@ -89,14 +89,14 @@
 </template>
 <script>
 import { parseTime, OCR } from '@/utils'
-import VueFormGenerator from "vue-form-generator";
+// import VueFormGenerator from "vue-form-generator";
 // import "vue-form-generator/dist/vfg.css"; 
 // Vue.use(VueFormGenerator);
 
 export default {
-    components: {
-		"vue-form-generator": VueFormGenerator.component
-	},
+    // components: {
+	// 	"vue-form-generator": VueFormGenerator.component
+	// },
     data() {
         return {
             // 表单自动生成器

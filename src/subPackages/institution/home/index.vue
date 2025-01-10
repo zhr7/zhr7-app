@@ -33,14 +33,14 @@
 					></m-icon>
 					<text class="grid-text grid-text-small">激活付款码</text>
 				</view>
-				<!-- <view @click="handler('createPaymentApplication')" class="item border-bottom-style border-left-style">
+				<view @click="handler('createPaymentApplication')" class="item border-bottom-style border-left-style">
 					<m-icon
 						name="pay" 
 						custom-prefix="colour-icon" 
 						:size="36"
 					></m-icon>
 					<text class="grid-text">通道进件</text>
-				</view> -->
+				</view>
 				<view @click="handler('apply')" class="item border-bottom-style">
 					<m-icon
 						name="secret-key" 
@@ -97,14 +97,14 @@
 					></m-icon>
 					<text class="grid-text">机构报表</text>
 				</view>
-				<!-- <view @click="handler('institutionSecretKey')" class="item border-bottom-style">
+				<view @click="handler('institutionSecretKey')" class="item border-bottom-style">
 					<m-icon
 						name="secretKey" 
 						custom-prefix="colour-icon" 
 						:size="38"
 					></m-icon>
 					<text class="grid-text">密钥管理</text>
-				</view> -->
+				</view>
 				<!-- <view @click="handler('institutionPay')" class="item border-bottom-style border-left-style">
 					<m-icon
 						name="pay" 

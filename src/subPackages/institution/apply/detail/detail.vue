@@ -50,12 +50,33 @@
                     </u-tr>
                     <u-tr class="u-tr">
                         <u-th class="u-th">营业执照地址</u-th>
-                        <u-th class="u-th">营业执照照片</u-th>
+                        <u-th v-if="item.licenseSubjectType=='SUBJECT_TYPE_INDIVIDUAL'||item.licenseSubjectType=='SUBJECT_TYPE_ENTERPRISE'||item.licenseSubjectType=='SUBJECT_TYPE_STOCK_COMPANY'" class="u-th">营业执照照片</u-th>
+                        <u-th v-if="item.licenseSubjectType=='SUBJECT_TYPE_PERSONAL'" class="u-th">手持身份证照片</u-th>
                     </u-tr>
                     <u-tr class="u-tr">
                         <u-td class="u-td">{{ item.licenseAddress }}</u-td>
-                        <td class="u-td">
+                        <!-- <td class="u-td">
                             <u-image width="50%" mode="widthFix" :src="imgUrlLicense"></u-image>
+                        </td> -->
+                        <td class="u-td" v-if="item.licenseSubjectType=='SUBJECT_TYPE_INDIVIDUAL'||item.licenseSubjectType=='SUBJECT_TYPE_ENTERPRISE'||item.licenseSubjectType=='SUBJECT_TYPE_STOCK_COMPANY'">
+                            <uni-file-picker v-model="imgUrlLicense"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectLicensePic" 
+                            />
+                        </td>
+                        <td class="u-td" v-if="item.licenseSubjectType=='SUBJECT_TYPE_PERSONAL'">
+                            <uni-file-picker v-model="imgUrlHand"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectHandPic" 
+                            />
                         </td>
                     </u-tr>
                 </u-table>
@@ -92,10 +113,26 @@
                     </u-tr>
                     <u-tr class="u-tr">
                         <td class="u-td">
-                            <u-image width="50%" mode="widthFix" :src="imgUrlCard"></u-image>
+                            <!-- <u-image width="50%" mode="widthFix" :src="imgUrlCard"></u-image> -->
+                            <uni-file-picker v-model="imgUrlCard"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectIdCardCopy" 
+                            />
                         </td>
                         <td class="u-td">
-                            <u-image width="50%" mode="widthFix" :src="imgUrlCardNational"></u-image>
+                            <!-- <u-image width="50%" mode="widthFix" :src="imgUrlCardNational"></u-image> -->
+                            <uni-file-picker v-model="imgUrlCardNational"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectIdCardNational" 
+                            />
                         </td>
                     </u-tr>
                     <u-tr class="u-tr">
@@ -132,7 +169,15 @@
                     <u-tr class="u-tr">
                         <u-td class="u-td">{{ item.bankAccountBank }}</u-td>
                         <td class="u-td">
-                            <u-image width="50%" mode="widthFix" :src="imgUrlbankCard"></u-image>
+                            <!-- <u-image width="50%" mode="widthFix" :src="imgUrlbankCard"></u-image> -->
+                            <uni-file-picker v-model="imgUrlbankCard"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectBankCardCopy" 
+                            />
                         </td>
                     </u-tr>
                 </u-table>
@@ -178,13 +223,37 @@
                     </u-tr>
                     <u-tr class="u-tr">
                         <td class="u-td">
-                            <u-image width="50%" mode="widthFix" :src="imgUrlEntrance"></u-image>
+                            <!-- <u-image width="50%" mode="widthFix" :src="imgUrlEntrance"></u-image> -->
+                            <uni-file-picker v-model="imgUrlEntrance"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectStoreEntrancePic" 
+                            />
                         </td>
                         <td class="u-td">
-                            <u-image width="50%" mode="widthFix" :src="imgUrlIndoor"></u-image>
+                            <!-- <u-image width="50%" mode="widthFix" :src="imgUrlIndoor"></u-image> -->
+                            <uni-file-picker v-model="imgUrlIndoor"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectStoreIndoorPic" 
+                            />
                         </td>
                         <td class="u-td">
-                            <u-image width="50%" mode="widthFix" :src="imgUrlFrontDesk"></u-image>
+                            <!-- <u-image width="50%" mode="widthFix" :src="imgUrlFrontDesk"></u-image> -->
+                            <uni-file-picker v-model="imgUrlFrontDesk"
+                                fileMediatype="image" 
+                                :image-styles="imageStyles"
+                                mode="grid" 
+                                :del-icon="false"
+                                limit="1"
+                                @select="selectStoreFrontDeskPic" 
+                            />
                         </td>
                     </u-tr>
                 </u-table>
@@ -197,6 +266,11 @@
     export default {
         data() {
             return {
+                imageStyles:{
+                    textAlign: 'center',
+                    width:60,
+                    height:60,
+                },
                 imgUrlLicense: '',
                 imgUrlHand: '',
                 imgUrlCard: '',
@@ -355,22 +429,32 @@
                         provider: 'qiniu',
                         key: path,
                     });
+                    let value1 = []
+                    value1.push(res)
                     if(name == 'licensePic'){
-                        this.imgUrlLicense = res.url
+                        // this.imgUrlLicense = res.url
+                        this.imgUrlLicense = value1
                     }else if(name == 'legalPersonCardHandPic'){
-                        this.imgUrlHand = res.url
+                        // this.imgUrlHand = res.url
+                        this.imgUrlHand = value1
                     }else if(name == 'legalPersonCardNationalPic'){
-                        this.imgUrlCardNational = res.url
+                        // this.imgUrlCardNational = res.url
+                        this.imgUrlCardNational = value1
                     }else if(name == 'legalPersonCardPic'){
-                        this.imgUrlCard = res.url
+                        // this.imgUrlCard = res.url
+                        this.imgUrlCard = value1
                     }else if(name == 'bankCardPic'){
-                        this.imgUrlbankCard = res.url
+                        // this.imgUrlbankCard = res.url
+                        this.imgUrlbankCard = value1
                     }else if(name == 'storeEntrancePic'){
-                        this.imgUrlEntrance = res.url
+                        // this.imgUrlEntrance = res.url
+                        this.imgUrlEntrance = value1
                     }else if(name == 'storeIndoorPic'){
-                        this.imgUrlIndoor = res.url
+                        // this.imgUrlIndoor = res.url
+                        this.imgUrlIndoor = value1
                     }else if(name == 'storeFrontDeskPic'){
-                        this.imgUrlFrontDesk = res.url
+                        // this.imgUrlFrontDesk = res.url
+                        this.imgUrlFrontDesk = value1
                     }
                 } catch (err) {
                     console.log(err);
@@ -387,21 +471,25 @@
 <style lang="scss" scoped>
     .collapse-item {
 		padding-bottom: 20rpx;
-        height: 600rpx;
+        height: 580rpx;
 	}
     .collapse-item1 {
 		padding-bottom: 20rpx;
-        height: 770rpx;
+        height: 650rpx;
 	}
     .collapse-item2 {
 		padding-bottom: 20rpx;
-        height: 600rpx;
+        height: 430rpx;
 	}
     .collapse-item3 {
 		padding-bottom: 20rpx;
-        height: 800rpx;
+        height: 710rpx;
 	}
     .u-td {
         width: 50%;
+        margin: 0 auto;
     }
+    // .u-tr {
+    //     text-align: center;
+    // }
 </style>
