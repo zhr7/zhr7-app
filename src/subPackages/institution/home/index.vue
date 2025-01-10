@@ -33,7 +33,7 @@
 					></m-icon>
 					<text class="grid-text grid-text-small">激活付款码</text>
 				</view>
-				<view @click="handler('createPaymentApplication')" class="item border-bottom-style border-left-style">
+				<view @click="handler('createChannel')" class="item border-bottom-style border-left-style">
 					<m-icon
 						name="pay" 
 						custom-prefix="colour-icon" 
