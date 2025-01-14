@@ -1,8 +1,5 @@
 <template>
     <view>
-        <div class="panel-body">
-    <vue-form-generator :schema="schema" :model="model" :options="formOptions"></vue-form-generator>
-  </div>
         <view class="item">
             <u-form :model="formData" ref="dataForm" label-width="260">
                 <u-form-item label="申请编号" prop="businessCode">
@@ -12,67 +9,25 @@
                     <u-input v-model="channelName" disabled  placeholder="请选择渠道" @click="showChannel = !showChannel"/>
                     <u-select v-model="showChannel" mode="mutil-column-auto" :list="channelList" @confirm="confirmChannel"></u-select>
                 </u-form-item> -->
-                <uni-section title="申请渠道">
+                <u-form-item label="申请渠道" prop="commonId" required>
                     <uni-data-select
                         v-model="formData.commonId"
                         :localdata="channelList"
                         @change="change"
                         placeholder="请选择申请渠道"
-                        label="申请渠道"
                     ></uni-data-select>
-                </uni-section>
-                <!--  -->
-                <u-form-item label="工商网截图" prop="ic_net_screen_shot_url">
-                    <uni-file-picker 
-                        fileMediatype="image" 
-                        mode="grid" 
-                        limit="1"
-                        @select="selectStoreEntrancePic" 
-                    />
                 </u-form-item>
-                <u-form-item label="微信渠道号" prop="channelIdentifier">
-                    <u-input v-model="formData.channelIdentifier" disabled placeholder="请输入微信渠道号"/>
-                </u-form-item>
-                <u-form-item label="代理编号" prop="directAgentNo">
-                    <u-input v-model="formData.directAgentNo" disabled placeholder="请输入代理编号"/>
-                </u-form-item>
-                <u-form-item label="备注" prop="remark">
-                    <u-input v-model="formData.remark" disabled placeholder="请输入备注"/>
-                </u-form-item>
-                <u-form-item label="登录标识" prop="loginAccount">
-                    <u-input v-model="formData.loginAccount" disabled placeholder="请输入登录标识"/>
-                </u-form-item>
+                
+                <!-- 杉德 -->
+                <!-- <sand/> -->
+                <!-- 华夏 -->
+                 <!-- <huaxia/> -->
+                <!-- 易宝 -->
+                 <!-- <yeePay/> -->
+                <!-- 盛付通 -->
+                 <!-- <shengfuPayment/> -->
                 <!-- 手续费详情 -->
-                <u-form-item label="批量手续费" prop="fee">
-                    <u-input v-model="formData.fee" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="微信手续费" prop="wechatFee">
-                    <u-input v-model="formData.wechatFee" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="支付宝手续费" prop="alipayFee">
-                    <u-input v-model="formData.alipayFee" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="云闪付手续费" prop="unionpayFee">
-                    <u-input v-model="formData.unionpayFee" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="借记卡费率" prop="rateOneDebit">
-                    <u-input v-model="formData.rateOneDebit" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="借记卡费率" prop="rateTwoDebit">
-                    <u-input v-model="formData.rateTwoDebit" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="借记卡费率" prop="rateDebitCap">
-                    <u-input v-model="formData.rateDebitCap" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="贷记卡费率" prop="rateOneCredit">
-                    <u-input v-model="formData.rateOneCredit" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="贷记卡费率" prop="rateTwoCredit">
-                    <u-input v-model="formData.rateTwoCredit" disabled placeholder="请输入"/>
-                </u-form-item>
-                <u-form-item label="分账手续费" prop="sharingFee">
-                    <u-input v-model="formData.sharingFee" disabled placeholder="请输入"/>
-                </u-form-item>
+                <serviceFee/>
             </u-form>
             <u-line />
             <view class="bottom">	
@@ -89,81 +44,22 @@
 </template>
 <script>
 import { parseTime, OCR } from '@/utils'
-// import VueFormGenerator from "vue-form-generator";
-// import "vue-form-generator/dist/vfg.css"; 
-// Vue.use(VueFormGenerator);
+import serviceFee from '../channelComponents/serviceFee'
+import shengfuPayment from '../channelComponents/shengfuPayment'
+import yeePay from '../channelComponents/yeePay'
+import huaxia from '../channelComponents/huaxia'
+import sand from '../channelComponents/sand'
 
 export default {
-    // components: {
-	// 	"vue-form-generator": VueFormGenerator.component
-	// },
+    components: {
+		serviceFee,
+        shengfuPayment,
+        yeePay,
+        huaxia,
+        sand
+	},
     data() {
         return {
-            // 表单自动生成器
-            model: {
-                id: 1,
-                name: 'John Doe',
-                password: 'J0hnD03!x4',
-                skills: ['Javascript', 'VueJS'],
-                email: 'john.doe@gmail.com',
-                status: true
-            },
-            schema: {
-                fields: [
-                    {
-                        type: 'input',
-                        inputType: 'text',
-                        label: 'ID (disabled text field)',
-                        model: 'id',
-                        readonly: true,
-                        disabled: true
-                    },
-                    {
-                        type: 'input',
-                        inputType: 'text',
-                        label: 'Name',
-                        model: 'name',
-                        placeholder: 'Your name',
-                        featured: true,
-                        required: true
-                    },
-                    {
-                        type: 'input',
-                        inputType: 'password',
-                        label: 'Password',
-                        model: 'password',
-                        min: 6,
-                        required: true,
-                        hint: 'Minimum 6 characters',
-                        // validator: VueFormGenerator.validators.string
-                    },
-                    {
-                        type: 'select',
-                        label: 'Skills',
-                        model: 'skills',
-                        values: ['Javascript', 'VueJS', 'CSS3', 'HTML5']
-                    },
-                    {
-                        type: 'input',
-                        inputType: 'email',
-                        label: 'E-mail',
-                        model: 'email',
-                        placeholder: 'User\'s e-mail address'
-                    },
-                    {
-                        type: 'checkbox',
-                        label: 'Status',
-                        model: 'status',
-                        default: true
-                    }
-                ]
-            },
-            formOptions: {
-                validateAfterLoad: true,
-                validateAfterChanged: true,
-                validateAsync: true
-            },
-
             // showChannel: false,
             channelList: [],
             // channelName: '',
