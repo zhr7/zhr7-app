@@ -165,12 +165,6 @@ export default {
         height: 100%;
         padding: 5vw;
     }
-    .line {
-        font-size: 4vw;
-        font-weight: 900;
-        padding: 5px;
-        color: #dd6161;
-    }
     .bottom {
         margin-top: 3vh;
     }
