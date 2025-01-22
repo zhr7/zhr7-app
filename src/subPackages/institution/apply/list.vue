@@ -8,10 +8,40 @@
 			</view>	
 		</view>
 		<view class="content">
-			<u-swipe-action :show="item.show" :index="index" 
+			<u-swipe-action v-if="isChannel=='1'" :show="item.show" :index="index" 
 				v-for="(item, index) in list" :key="item.id" 
 				@click="click" @open="open"
 				:options="optionsSwipe"
+			>
+				<view class="item">
+						<view class="left">
+						<span>
+							<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
+							进件
+						</span>
+					</view>
+					<view class="center">
+						<view class="title">
+							{{item.licenseMerchantName}}
+						</view>
+						<view class="time">
+							{{item.licenseCode}}
+						</view>
+					</view>
+					<view class="right">
+						<view>
+							{{item.legalPerson}}
+						</view>
+						<view class="status">
+							{{parseTime(item.updatedAt)}}
+						</view>
+					</view>
+				</view>
+			</u-swipe-action>
+			<u-swipe-action v-if="isChannel=='0'" :show="item.show" :index="index" 
+				v-for="(item, index) in list" :key="item.id" 
+				@click="clickChannel" @open="open"
+				:options="optionsSwipeChannel"
 			>
 				<view class="item">
 						<view class="left">
@@ -82,6 +112,7 @@
 		},
 		data() {
 			return {
+				isChannel: '1',
 				show: false,
 				optionsSwipe: [
 					{
@@ -91,7 +122,21 @@
 						}
 					},
 					{
-						text: '详情',
+						text: '详情', //进件详情
+						style: {
+							backgroundColor: '#e69138'
+						}
+					}
+				],
+				optionsSwipeChannel: [
+					{
+						text: '添加',
+						style: {
+							backgroundColor: '#007aff'
+						}
+					},
+					{
+						text: '详情', //通道详情
 						style: {
 							backgroundColor: '#e69138'
 						}
@@ -128,6 +173,10 @@
 		},
 		onShow() {
 			this.options = RouteParams()
+			if (this.options.item) {
+			    this.isChannel = this.options.item
+			}
+			console.log(this.options.item)
 		},
 		mounted() {
 			this.title = '进件管理'
@@ -221,7 +270,7 @@
 			// }
 			click(index, index1) {
 				console.log(this.list[index])
-				if(index1 == 1) {  //编辑
+				if(index1 == 1) {  //详情
 					this.$u.route({
 						type: 'to',
 						url: '/subPackages/institution/apply/detail/detail', 
@@ -231,6 +280,22 @@
 					this.$u.route({
 						type: 'to',
 						url: '/subPackages/institution/apply/update/update', 
+						params: this.list[index]
+					})
+				}
+			},
+			clickChannel(index, index1) {
+				console.log(this.list[index])
+				if(index1 == 1) {  //通道详情
+					this.$u.route({
+						type: 'to',
+						url: '/subPackages/institution/apply/channelDetail/channelDetail', 
+						params: this.list[index]
+					})
+				} else { //添加
+					this.$u.route({
+						type: 'to',
+						url: '/subPackages/institution/apply/channel/index', 
 						params: this.list[index]
 					})
 				}

@@ -20,6 +20,14 @@ export default {
                 ic_net_screen_shot_url: ''
             }
         }
+    },
+    methods: {
+        getData() {
+            return this.formData
+        },
+        setData(data) {
+            this.formData = data
+        }
     }
 }
 </script>

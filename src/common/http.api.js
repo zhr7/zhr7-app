@@ -204,11 +204,17 @@ const install = (Vue, vm) => {
 					SearchBankInfo: (params = {}) => vm.$u.post(V3+'/application/bankInfo/searchBankInfo', params),	//
 					// GetUploadImage: (params = {}) => vm.$u.post(V3+'/storage/file/getUploadImage', params),	//
 					//添加通道接口
-					CommonSimpleList: (params = {}) => vm.$u.post(V3+'/channel/common/simpleList', params),	//
-					CommonCreate: (params = {}) => vm.$u.post(V3+'/channel/common/create', params),	//
-					CommonDelete: (params = {}) => vm.$u.post(V3+'/channel/common/delete', params),	//
-					CommonUpdate: (params = {}) => vm.$u.post(V3+'/channel/common/update', params),	//
-					CommonList: (params = {}) => vm.$u.post(V3+'/channel/common/search', params),	//
+					CommonSimpleList: (params = {}) => vm.$u.post(V3+'/channel/common/simpleList', params),	
+					// CommonCreate: (params = {}) => vm.$u.post(V3+'/channel/common/create', params),	
+					// CommonDelete: (params = {}) => vm.$u.post(V3+'/channel/common/delete', params),	
+					// CommonUpdate: (params = {}) => vm.$u.post(V3+'/channel/common/update', params),	
+					// CommonList: (params = {}) => vm.$u.post(V3+'/channel/common/search', params),	
+					ChannelCreate: (params = {}) => vm.$u.post(V3+'/application/channel/create', params),	
+					ChannelDelete: (params = {}) => vm.$u.post(V3+'/application/channel/delete', params),	
+					ChannelUpdate: (params = {}) => vm.$u.post(V3+'/application/channel/update', params),
+					ChannelGet: (params = {}) => vm.$u.post(V3+'/application/channel/get', params), //进件查询
+					ChannelSearch: (params = {}) => vm.$u.post(V3+'/application/channel/search', params),	//进件内通道列表
+					ContractQuery: (params = {}) => vm.$u.post(V3+'/application/applyment/contractQuery', params),	//进件内合同查询
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),

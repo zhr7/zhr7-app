@@ -108,7 +108,8 @@
 					case "createChannel":
 					this.$u.route({
 						type: 'to',
-						url: '/subPackages/institution/apply/channel/index'
+						// url: '/subPackages/institution/apply/channel/index'
+						url: '/subPackages/institution/apply/list?item=0'
 					})
 					break;
 					case "sellerBrand":
@@ -157,7 +158,7 @@
 					case "apply":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/institution/apply/list'
+							url: '/subPackages/institution/apply/list?item=1'
 						})
 						break;
 					default:

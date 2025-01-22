@@ -10,11 +10,7 @@ import store from './store'
 import App from './App'
 import uView from "uview-ui";
 
-// 自动生成表单
-import VueFormGenerator from 'vue-form-generator'
-// import 'vue-form-generator/dist/vfg.css'
 
-Vue.use(VueFormGenerator)
 
 Vue.use(store);
 Vue.use(uView);

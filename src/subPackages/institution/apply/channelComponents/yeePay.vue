@@ -2,10 +2,10 @@
     <view>
         <u-form :model="formData" ref="dataForm" label-width="260">
             <u-form-item label="微信渠道号" prop="channelIdentifier">
-                <u-input v-model="formData.channelIdentifier" disabled placeholder="请输入微信渠道号"/>
+                <u-input v-model="formData.channelIdentifier" placeholder="请输入微信渠道号"/>
             </u-form-item>
             <u-form-item label="代理编号" prop="directAgentNo">
-                <u-input v-model="formData.directAgentNo" disabled placeholder="请输入代理编号"/>
+                <u-input v-model="formData.directAgentNo" placeholder="请输入代理编号"/>
             </u-form-item>
             <u-form-item label="非法人关系" prop="relation" required>
                 <uni-data-select
@@ -34,7 +34,33 @@ export default {
                 { text: '子公司关系', value: 'SUBSIDIARY' },
                 { text: '亲属关系', value: 'KINSHIP' },
             ],
+            rules: {
+                channelIdentifier: [
+                    { required: false, message: '请输入微信渠道号', trigger: 'blur' },
+                ],
+                directAgentNo: [
+                    { required: false, message: '请输入代理编号', trigger: 'blur' },
+                ],
+                relation: [
+                    { required: true, message: '请选择非法人关系', trigger: 'change' },
+                ]
+            }
         }
+    },
+    methods: {
+        change(e) {
+            this.formData.relation = e
+            console.log(e)
+        },
+        getData() {
+            return this.formData
+        },
+        setData(data) {
+            this.formData = data
+        }
+    },
+    onReady() {
+        this.$refs.dataForm.setRules(this.rules)
     }
 }
 </script>

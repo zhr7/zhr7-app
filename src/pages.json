@@ -205,6 +205,16 @@
 					}
 				},
 				{
+					"path": "apply/channelDetail/channelDetail",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/contract/contract",
+					"style": {
+					}
+				},
+				{
 					"path": "activateCode/index",
 					"style": {
 					}

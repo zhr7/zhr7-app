@@ -189,7 +189,7 @@
 		},
 		created() {
 			uni.setNavigationBarTitle({
-				title:'商户进件'
+				title:'商户进件编辑'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
