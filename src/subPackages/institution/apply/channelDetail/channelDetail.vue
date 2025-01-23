@@ -46,7 +46,7 @@
                                     <u-button type="warning" size="mini" :throttle-time="500" @click="toContract(item)">电子合同</u-button>
                                 </u-col>
                                 <u-col span="3">
-                                    <u-button type="error" size="mini" :throttle-time="500" @click="toAuthentication(item)">实名认证</u-button>
+                                    <u-button type="error" size="mini" :throttle-time="500" @click="toRealName(item)">实名认证</u-button>
                                 </u-col>
                                 <u-col span="3">
                                     <u-button type="success" size="mini" :throttle-time="500" @click="toWeChatConfig(item)">微信配置</u-button>
@@ -152,6 +152,13 @@
                 this.$u.route({
                     type: 'to',
                     url: '/subPackages/institution/apply/contract/contract', 
+                    params: item
+                })
+            },
+            toRealName(item) {
+                this.$u.route({
+                    type: 'to',
+                    url: '/subPackages/institution/apply/realName/realName', 
                     params: item
                 })
             },

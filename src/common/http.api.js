@@ -215,6 +215,7 @@ const install = (Vue, vm) => {
 					ChannelGet: (params = {}) => vm.$u.post(V3+'/application/channel/get', params), //进件查询
 					ChannelSearch: (params = {}) => vm.$u.post(V3+'/application/channel/search', params),	//进件内通道列表
 					ContractQuery: (params = {}) => vm.$u.post(V3+'/application/applyment/contractQuery', params),	//进件内合同查询
+					ApplymentRealNameQuery: (params = {}) => vm.$u.post(V3+'/application/applyment/applymentRealNameQuery', params),	//进件内实名认证
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),

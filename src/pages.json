@@ -215,6 +215,11 @@
 					}
 				},
 				{
+					"path": "apply/realName/realName",
+					"style": {
+					}
+				},
+				{
 					"path": "activateCode/index",
 					"style": {
 					}
