@@ -216,6 +216,9 @@ const install = (Vue, vm) => {
 					ChannelSearch: (params = {}) => vm.$u.post(V3+'/application/channel/search', params),	//进件内通道列表
 					ContractQuery: (params = {}) => vm.$u.post(V3+'/application/applyment/contractQuery', params),	//进件内合同查询
 					ApplymentRealNameQuery: (params = {}) => vm.$u.post(V3+'/application/applyment/applymentRealNameQuery', params),	//进件内实名认证
+					ConfigQuery: (params = {}) => vm.$u.post(V3+'/application/wechat/configQuery', params),    //微信配置
+					SubAppidConfig: (params = {}) => vm.$u.post(V3+'/application/wechat/subAppidConfig', params),
+					JsapiPathConfig: (params = {}) => vm.$u.post(V3+'/application/wechat/jsapiPathConfig', params)
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),

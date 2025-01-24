@@ -49,7 +49,7 @@
                                     <u-button type="error" size="mini" :throttle-time="500" @click="toRealName(item)">实名认证</u-button>
                                 </u-col>
                                 <u-col span="3">
-                                    <u-button type="success" size="mini" :throttle-time="500" @click="toWeChatConfig(item)">微信配置</u-button>
+                                    <u-button type="success" size="mini" :throttle-time="500" @click="towechatConfig(item)">微信配置</u-button>
                                 </u-col>
                             </u-row>
                         </u-td>
@@ -159,6 +159,13 @@
                 this.$u.route({
                     type: 'to',
                     url: '/subPackages/institution/apply/realName/realName', 
+                    params: item
+                })
+            },
+            towechatConfig(item) {
+                this.$u.route({
+                    type: 'to',
+                    url: '/subPackages/institution/apply/wechatConfig/wechatConfig', 
                     params: item
                 })
             },
