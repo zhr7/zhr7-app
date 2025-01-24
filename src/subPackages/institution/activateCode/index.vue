@@ -222,7 +222,7 @@
                 } catch (err) {
                     console.log(err);
                         uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取平台商户信息失败",
                     });
@@ -264,7 +264,7 @@
                 } catch (err) {
                     console.log(err);
                         uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取品牌信息失败",
                     });
@@ -305,7 +305,7 @@
                 } catch (err) {
                     console.log(err);
                         uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取软件服务商信息失败",
                     });
@@ -357,7 +357,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取上传凭证失败:"+ err.datal,
                     })
@@ -386,7 +386,7 @@
                             if (res.valid) {
                                 this.initFormData()
                                 uni.showToast({
-                                    duration: 5000,
+                                    duration: 10000,
                                     icon:'success',
                                     title:'激活成功',
                                 })
@@ -398,7 +398,7 @@
                                 }, 3000);
                             } else {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title:'激活失败',
                                 })
@@ -406,7 +406,7 @@
                         }).catch(err => {
                             console.log(err);
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title: err.data,
                             })

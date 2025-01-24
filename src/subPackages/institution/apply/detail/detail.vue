@@ -356,7 +356,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取上传凭证失败:"+ err.data,
                     })
@@ -373,7 +373,7 @@
                         }).catch(err => {
                             console.log(err);
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title: err.data,
                             })
@@ -417,7 +417,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: err.data,
                     })
@@ -459,7 +459,7 @@
                 } catch (err) {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon: 'error',
                         title: err.data,
                     });

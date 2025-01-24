@@ -171,7 +171,7 @@ export default {
                 this.storageToken = res.token
             }).catch(err => {
                 uni.showToast({
-                    duration: 3000,
+                    duration: 10000,
                     icon:'error',
                     title: "获取上传凭证失败:"+ err.data,
                 })
@@ -223,7 +223,7 @@ export default {
                     }
                 }).catch(err => {
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: err.data,
                     })
@@ -410,7 +410,7 @@ export default {
                             let id = this.formData.applicationId
                             this.initFormData()
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'success',
                                 title:'添加通道成功',
                             })
@@ -423,7 +423,7 @@ export default {
                             }, 2000);
                         } else {
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title:'添加通道失败',
                             })
@@ -431,7 +431,7 @@ export default {
                     }).catch(err => {
                             console.log(err);
                             uni.showToast({
-                            duration: 3000,
+                            duration: 10000,
                             icon:'error',
                             title: err.data,
                         })

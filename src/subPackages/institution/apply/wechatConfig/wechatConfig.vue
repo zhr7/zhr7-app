@@ -104,7 +104,7 @@ export default {
             }).catch(err => {
                 console.log(err);
                 uni.showToast({
-                    duration: 3000,
+                    duration: 10000,
                     icon:'error',
                     title: "获取上传凭证失败:"+ err.data,
                 })
@@ -127,7 +127,7 @@ export default {
             }).catch(err => {
                 console.log(err);
                 uni.showToast({
-                    duration: 3000,
+                    duration: 10000,
                     icon:'error',
                     title: err.data,
                 })
@@ -151,14 +151,14 @@ export default {
                                 console.log(res);
                                 this.getInfo()
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'success',
                                     title: '配置成功',
                                 })
                                 this.isSubmitting = false;
                             }else {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title:'配置失败',
                                 })
@@ -166,7 +166,7 @@ export default {
                         }).catch(err => {
                             console.log(err);
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title: err.data,
                             })
@@ -178,14 +178,14 @@ export default {
                                 console.log(res);
                                 this.getInfo()
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'success',
                                     title: '配置成功',
                                 })
                                 this.isSubmitting = false;
                             }else {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title:'配置失败',
                                 })
@@ -193,7 +193,7 @@ export default {
                         }).catch(err => {
                             console.log(err);
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title: err.data,
                             })

@@ -76,7 +76,7 @@ export default {
             }).catch(err => {
                 console.log(err);
                 uni.showToast({
-                    duration: 3000,
+                    duration: 10000,
                     icon:'error',
                     title: "获取上传凭证失败:"+ err.data,
                 })
@@ -92,7 +92,7 @@ export default {
             }).catch(err => {
                 console.log(err);
                 uni.showToast({
-                    duration: 3000,
+                    duration: 10000,
                     icon:'error',
                     title: err.data,
                 })
@@ -103,6 +103,7 @@ export default {
                 data: url,
                 success: function(res) {
                 uni.showToast({
+                    duration: 10000,
                     title: '复制成功',
                     icon: 'success'
                 });
@@ -118,12 +119,14 @@ export default {
                 filePath: this.qrcodeSrc,
                 success: function(res) {
                 uni.showToast({
+                    duration: 10000,
                     title: '保存成功',
                     icon: 'success'
                 });
                 },
                 fail: function(err) {
                 uni.showToast({
+                    duration: 10000,
                     title: '保存失败',
                     icon: 'none'
                 });

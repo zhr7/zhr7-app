@@ -46,7 +46,7 @@
                     data: data,
                     success() {
                         uni.showToast({
-                            duration: 3000,
+                            duration: 10000,
                             icon:'success',
                             title:'复制成功',
                         })

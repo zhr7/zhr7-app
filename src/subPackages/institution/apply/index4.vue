@@ -293,7 +293,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取上传凭证失败:"+ err.datal,
                     })
@@ -316,7 +316,7 @@
 			select(e,type){
                 if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title:'图片大小超过1M',
                     })
@@ -336,13 +336,13 @@
                         if (uploadFileRes.statusCode===200) {
                             this.formData[type] = path
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'success',
                                 title:'上传成功',
                             })
                         }else{
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title:'上传失败',
                             })
@@ -351,7 +351,7 @@
                     fail: (err) => {
                     console.log(err.errMsg);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title:'上传失败'+err.errMsg,
                     })
@@ -382,7 +382,7 @@
                             if (res.valid) {
                                 this.initFormData()
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'success',
                                     title:'进件成功',
                                 })
@@ -395,7 +395,7 @@
                                 }, 2000);
                             } else {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title:'进件失败',
                                 })
@@ -403,7 +403,7 @@
                         }).catch(err => {
                             console.log(err);
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title: err.data,
                             })

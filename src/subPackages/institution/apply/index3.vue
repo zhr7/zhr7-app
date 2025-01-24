@@ -180,7 +180,7 @@
                 } catch (err) {
                     console.log(err);
                         uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取银行信息失败",
                     });
@@ -212,7 +212,7 @@
                 } catch (err) {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取银行信息失败",
                     });
@@ -248,7 +248,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取上传凭证失败:"+ err.datal,
                     })
@@ -265,7 +265,7 @@
                 console.log(e);
                 if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title:'图片大小超过1M',
                     })
@@ -300,26 +300,26 @@
                                     this.formData.bankAccountNo = res.cardNo
                                 }).catch(err => {
                                     uni.showToast({
-                                        duration: 3000,
+                                        duration: 10000,
                                         icon:'error',
                                         title: "银行卡识别失败:"+err,
                                     })
                                 })
                             }).catch(err => {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title: "银行卡识别失败:"+err,
                                 })
                             })
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'success',
                                 title:'上传成功'
                             })
                         }else{
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title:'上传失败'
                             })
@@ -328,7 +328,7 @@
                     fail: (err) => {
                     console.log(err.errMsg);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title:'上传失败'+err.errMsg
                     })

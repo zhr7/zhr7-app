@@ -285,7 +285,7 @@
                 } catch (err) {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon: 'error',
                         title: err.data,
                     });
@@ -354,7 +354,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: "获取上传凭证失败:"+ err.datal,
                     })
@@ -482,7 +482,7 @@
 			select(e,type){
                 if (e.tempFiles[0].size > 1024 * 1024) {
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title:'图片大小超过1M',
                     })
@@ -515,19 +515,19 @@
                                 }
                             }).catch(err => {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title: err,
                                 })
                             })
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'success',
                                 title:'上传成功',
                             })
                         }else{
                             uni.showToast({
-                                duration: 3000,
+                                duration: 10000,
                                 icon:'error',
                                 title:'上传失败',
                             })
@@ -536,7 +536,7 @@
                     fail: (err) => {
                     console.log(err.errMsg);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title:'上传失败'+err.errMsg,
                     })
@@ -564,7 +564,7 @@
                         this.$u.api.v3.institution.apply.Update(this.formData).then(res => {
                             if (res.valid) {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'success',
                                     title:'编辑成功',
                                 })
@@ -576,7 +576,7 @@
                                 }, 2000);
                             } else {
                                 uni.showToast({
-                                    duration: 3000,
+                                    duration: 10000,
                                     icon:'error',
                                     title:'编辑失败',
                                 })
@@ -584,7 +584,7 @@
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
-                        duration: 3000,
+                        duration: 10000,
                         icon:'error',
                         title: err.datal,
                     })
