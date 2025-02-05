@@ -2,7 +2,7 @@
     <view>
         <u-form :model="formData" ref="dataForm" label-width="360">
             <u-form-item label="批量手续费 (‱)" prop="fee" required>
-                <u-number-box v-model="formData.fee" :min="20" :max="60"></u-number-box>
+                <u-number-box v-model="formData.fee" :min="20" :max="60" @change="handleChange"></u-number-box>
             </u-form-item>
             <u-form-item label="微信手续费 (‱)" prop="wechatFee" required>
                 <u-number-box v-model="formData.wechatFee" :min="20" :max="60"></u-number-box>
@@ -54,6 +54,13 @@ export default {
         }
     },
     methods: {
+        handleChange() {
+            // this.$emit('change', this.formData)
+            this.formData.wechatFee = this.formData.fee
+            this.formData.alipayFee = this.formData.fee
+            this.formData.rateOneDebit = this.formData.fee
+            this.formData.rateOneCredit = this.formData.fee
+        },
         getData() {
             return this.formData
         },
