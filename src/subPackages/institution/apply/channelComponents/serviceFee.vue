@@ -13,19 +13,19 @@
             <u-form-item label="云闪付手续费 (‱)" prop="unionpayFee" required>
                 <u-number-box v-model="formData.unionpayFee" :min="20" :max="60"></u-number-box>
             </u-form-item>
-            <u-form-item label="借记卡费率(<=1000) (‱)" prop="rateOneDebit" required>
+            <u-form-item label="借记卡费率(<=1000元) (‱)" prop="rateOneDebit" required>
                 <u-number-box v-model="formData.rateOneDebit" :min="20" :max="60"></u-number-box>
             </u-form-item>
-            <u-form-item label="借记卡费率(>1000) (‱)" prop="rateTwoDebit" required>
+            <u-form-item label="借记卡费率(>1000元) (‱)" prop="rateTwoDebit" required>
                 <u-number-box v-model="formData.rateTwoDebit" :min="20" :max="200"></u-number-box>
             </u-form-item>
-            <u-form-item label="借记卡费率(封顶值) (‱)" prop="rateDebitCap">
+            <u-form-item label="借记卡费率(封顶值) (元)" prop="rateDebitCap">
                 <u-number-box v-model="formData.rateDebitCap" :min="1" :max="200"></u-number-box>
             </u-form-item>
-            <u-form-item label="贷记卡费率(<=1000) (‱)" prop="rateOneCredit" required>
+            <u-form-item label="贷记卡费率(<=1000元) (‱)" prop="rateOneCredit" required>
                 <u-number-box v-model="formData.rateOneCredit" :min="20" :max="60"></u-number-box>
             </u-form-item>
-            <u-form-item label="贷记卡费率(>1000) (‱)" prop="rateTwoCredit" required>
+            <u-form-item label="贷记卡费率(>1000元) (‱)" prop="rateTwoCredit" required>
                 <u-number-box v-model="formData.rateTwoCredit" :min="20" :max="200"></u-number-box>
             </u-form-item>
             <u-form-item label="分账手续费 (‱)" prop="sharingFee">
@@ -55,11 +55,11 @@ export default {
     },
     methods: {
         handleChange() {
-            // this.$emit('change', this.formData)
             this.formData.wechatFee = this.formData.fee
             this.formData.alipayFee = this.formData.fee
             this.formData.rateOneDebit = this.formData.fee
             this.formData.rateOneCredit = this.formData.fee
+            this.formData.unionpayFee = this.formData.fee
         },
         getData() {
             return this.formData

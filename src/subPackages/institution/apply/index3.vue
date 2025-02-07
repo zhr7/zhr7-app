@@ -44,14 +44,6 @@
                     下一步
                 </u-button>
 		    </view>
-            <!-- <view class="bottom">	
-                <u-button 
-                    type="warning" 
-                    @click="submitForm('dataForm')"
-                >
-                    提交资料
-                </u-button>
-		    </view>	 -->
         </view>	
         <u-toast ref="uToast" />
 	</view>
