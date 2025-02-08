@@ -95,6 +95,7 @@
                     bankDistrictCode: '',   // 支行地址
                     bankCityCode: '', 
                     bankProvinceCode: '',
+                    tempConfig: {}, // 临时配置
                 },
                 
                 rules: {
@@ -141,9 +142,11 @@
             this.initStorageToken()
 		},
         onShow() {
+            console.log(this.item)
 			this.item = RouteParams()
             this.item.formData = JSON.parse(this.item.formData)
             this.formData = {...this.item.formData, ...this.formData}
+            console.log(this.formData)
 		},
 		methods: {
             //开户支行
@@ -229,6 +232,8 @@
                     bankDistrictCode: '', // 支行地址
                     bankCityCode: '', 
                     bankProvinceCode: '',
+
+                    tempConfig: {}, // 临时配置
                 }
             },
             initStorageToken() {
@@ -281,7 +286,8 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                console.log(res)
+                                // console.log(res)
+                                this.formData.tempConfig.bankCardPic = res.url
                                 this.$u.api.v3.storage.file.BankCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -392,7 +398,7 @@
             //     })
 			// },
             nextPage(formName) {
-                console.log(this.formData);
+                console.log(this.formData)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$u.route({
@@ -400,9 +406,8 @@
                             url: 'subPackages/institution/apply/index4',
                             params: { formData: JSON.stringify(this.formData) }
                         })
-                    }
+                    } 
                 })
-               
             },
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕

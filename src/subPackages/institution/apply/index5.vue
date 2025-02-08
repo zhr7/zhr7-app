@@ -19,7 +19,7 @@
                 </u-form-item>
                 <u-form-item label="申请渠道" prop="commonId">
                     <uni-data-select
-                        v-model="formData.commonId"
+                        v-model="formData.channelConfig.commonId"
                         :localdata="channelList"
                         @change="change"
                         placeholder="请选择申请渠道"
@@ -98,30 +98,33 @@ export default {
             formData: {
                 userId: '', // 所属商户
                 userName: '', // 登录账号
-                commonId: '', // 申请渠道
                 // ic_net_screen_shot_url: '', // 网银截图
                 relation: '', // 关系
                 channelIdentifier: '', // 微信渠道号
                 directAgentNo: '', // 代理编号
                 remark: '', // 备注
                 loginAccount: '', // 登录标识
-                //手续费详情
-                fee: '',
-                wechatFee: '',
-                alipayFee: '',
-                unionpayFee: '',
-                rateOneDebit: '',
-                rateTwoDebit: '',
-                rateDebitCap: '',
-                rateOneCredit: '',
-                rateTwoCredit: '',
-                sharingFee: '',
 
-                config: {},
                 status: '',
                 subMerId: '',
 
                 applicationId: '', 
+
+                channelConfig: {
+                    commonId: '', // 申请渠道
+                    config: {},
+                    //手续费详情
+                    fee: '',
+                    wechatFee: '',
+                    alipayFee: '',
+                    unionpayFee: '',
+                    rateOneDebit: '',
+                    rateTwoDebit: '',
+                    rateDebitCap: '',
+                    rateOneCredit: '',
+                    rateTwoCredit: '',
+                    sharingFee: '',
+                },
             },
         }
     },
@@ -167,30 +170,35 @@ export default {
             this.formData = {
                 userId: '', // 所属商户
                 userName: '', // 登录账号
-                commonId: '', // 申请渠道
+                
                 // ic_net_screen_shot_url: '', // 网银截图
                 relation: '', // 关系
                 channelIdentifier: '', // 微信渠道号
                 directAgentNo: '', // 代理编号
                 remark: '', // 备注
                 loginAccount: '', // 登录标识
-                //手续费详情
-                fee: '',
-                wechatFee: '',
-                alipayFee: '',
-                unionpayFee: '',
-                rateOneDebit: '',
-                rateTwoDebit: '',
-                rateDebitCap: '',
-                rateOneCredit: '',
-                rateTwoCredit: '',
-                sharingFee: '',
+                
 
-                config: {},
+                
                 status: '',
                 subMerId: '',
 
                 applicationId: '', 
+                channelConfig: {
+                    commonId: '', // 申请渠道
+                    config: {},
+                    //手续费详情
+                    fee: '',
+                    wechatFee: '',
+                    alipayFee: '',
+                    unionpayFee: '',
+                    rateOneDebit: '',
+                    rateTwoDebit: '',
+                    rateDebitCap: '',
+                    rateOneCredit: '',
+                    rateTwoCredit: '',
+                    sharingFee: '',
+                },
             }
             
         },
@@ -218,7 +226,7 @@ export default {
             }
             let selectedValue = e;
             let selectedText = this.channelList.find(item => item.value === selectedValue).text;
-            this.formData.commonId = e;
+            this.formData.channelConfig.commonId = e;
             this.isShowKeyword = selectedText;
             console.log(selectedText);
         },
@@ -302,16 +310,16 @@ export default {
             this.$nextTick(() => {
                 // 调用子组件的方法
                 const serviceFeeRefData = this.$refs.serviceFeeRef;
-                this.formData.fee = serviceFeeRefData.formData.fee;
-                this.formData.wechatFee = serviceFeeRefData.formData.wechatFee;
-                this.formData.alipayFee = serviceFeeRefData.formData.alipayFee;
-                this.formData.unionpayFee = serviceFeeRefData.formData.unionpayFee;
-                this.formData.rateOneDebit = serviceFeeRefData.formData.rateOneDebit;
-                this.formData.rateTwoDebit = serviceFeeRefData.formData.rateTwoDebit;
-                this.formData.rateDebitCap = serviceFeeRefData.formData.rateDebitCap;
-                this.formData.rateOneCredit = serviceFeeRefData.formData.rateOneCredit;
-                this.formData.rateTwoCredit = serviceFeeRefData.formData.rateTwoCredit;
-                this.formData.sharingFee = Number(serviceFeeRefData.formData.sharingFee);
+                this.formData.channelConfig.fee = serviceFeeRefData.formData.fee;
+                this.formData.channelConfig.wechatFee = serviceFeeRefData.formData.wechatFee;
+                this.formData.channelConfig.alipayFee = serviceFeeRefData.formData.alipayFee;
+                this.formData.channelConfig.unionpayFee = serviceFeeRefData.formData.unionpayFee;
+                this.formData.channelConfig.rateOneDebit = serviceFeeRefData.formData.rateOneDebit;
+                this.formData.channelConfig.rateTwoDebit = serviceFeeRefData.formData.rateTwoDebit;
+                this.formData.channelConfig.rateDebitCap = serviceFeeRefData.formData.rateDebitCap;
+                this.formData.channelConfig.rateOneCredit = serviceFeeRefData.formData.rateOneCredit;
+                this.formData.channelConfig.rateTwoCredit = serviceFeeRefData.formData.rateTwoCredit;
+                this.formData.channelConfig.sharingFee = Number(serviceFeeRefData.formData.sharingFee);
                 console.log(serviceFeeRefData.formData);
             });
             
@@ -340,14 +348,144 @@ export default {
                 console.log(shengfuPaymentRefData.formData);
             });
         },
+        async getConfigInfo() {
+            console.log(this.formData.applicationId);
+            // const picList = {};
+            try {
+                const res = await this.$u.api.v3.institution.apply.Get({id: this.formData.applicationId});
+                const data = JSON.parse(JSON.stringify(res.item));
+                console.log(data);
+                const picList = {};
+                if (data.storeEntrancePic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.storeEntrancePic,
+                    });
+                    picList.storeEntrancePic = res.url;
+                }
+                if (data.storeIndoorPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.storeIndoorPic,
+                    });
+                    picList.storeIndoorPic = res.url;
+                }
+                if (data.storeFrontDeskPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.storeFrontDeskPic,
+                    });
+                    picList.storeFrontDeskPic = res.url;
+                }
+                if (data.licensePic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.licensePic,
+                    });
+                    picList.licensePic = res.url;
+                }
+                if (data.legalPersonCardPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.legalPersonCardPic,
+                    });
+                    picList.legalPersonCardPic = res.url;
+                }
+                if (data.legalPersonCardNationalPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.legalPersonCardNationalPic,
+                    });
+                    picList.legalPersonCardNationalPic = res.url;
+                }
+                if (data.legalPersonCardHandPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.legalPersonCardHandPic,
+                    });
+                    picList.legalPersonCardHandPic = res.url;
+                }
+                if (data.bankCardPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.bankCardPic,
+                    });
+                    picList.bankCardPic = res.url;
+                }
+                if (data.ilLegalPersonCardPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.ilLegalPersonCardPic,
+                    });
+                    picList.ilLegalPersonCardPic = res.url;
+                }
+                if (data.ilLegalPersonCardNationalPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.ilLegalPersonCardNationalPic,
+                    });
+                    picList.ilLegalPersonCardNationalPic = res.url;
+                }
+                if (data.ilLegalPersonBankCardPic) {
+                    const res = await this.$u.api.v3.storage.file.GetUploadImage({
+                        provider: 'qiniu',
+                        key: data.ilLegalPersonBankCardPic,
+                    });
+                    picList.ilLegalPersonBankCardPic = res.url;
+                }
+                
+                picList.commonId = this.formData.channelConfig.commonId;
+                if(this.formData.remark!=''){
+                    picList.remark = this.formData.remark;
+                }
+                if(this.formData.loginAccount!=''){
+                    picList.loginAccount = this.formData.loginAccount;
+                }
+                if(this.formData.channelIdentifier!=''){
+                    picList.channelIdentifier = this.formData.channelIdentifier;
+                }
+                if(this.formData.relation!=''){
+                    picList.relation = this.formData.relation;
+                }
+                if(this.formData.directAgentNo!=''){
+                    picList.directAgentNo = this.formData.directAgentNo;
+                }
+                Object.assign(this.formData.channelConfig.config, picList);
+                this.formData.channelConfig.config = JSON.stringify(this.formData.channelConfig.config);
+                //提交时删除多余字段
+                delete this.formData.remark;
+                delete this.formData.loginAccount;
+                delete this.formData.channelIdentifier;
+                delete this.formData.relation;
+                delete this.formData.directAgentNo;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        },
         submitForm(formName) {
-            console.log(this.formData);
-            this.$refs[formName].validate((valid) => {
-                if (this.isSubmitting) return; // 如果正在提交，则不再执行
-                this.isSubmitting = true; // 设置为不可点击状态
-                if (valid) {
+            Promise.all([
+                this.getConfigInfo(),
+                this.getChannelServiceFeeRefData(),
+                this.getChannelHuaxiaRefData(),
+                this.getChannelShengfuPaymentRefData(),
+                this.getChannelYeePayRefData(),
+            ]).then(() => {
+                if (this.isShowKeyword.includes('华夏')) {
+                    this.getChannelHuaxiaRefData();
+                } else if (this.isShowKeyword.includes('盛付通')) {
+                    this.getChannelShengfuPaymentRefData();
+                } else if (this.isShowKeyword.includes('易宝')) {
+                    this.getChannelYeePayRefData();
+                }
+                console.log(this.formData);
+                this.$refs[formName].validate((valid) => {
+                    if (this.isSubmitting) return; // 如果正在提交，则不再执行
+                    this.isSubmitting = true; // 设置为不可点击状态
+                    if (valid) {
+                    console.log(this.formData);
                     this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
                         if (res.valid) {
+                            let id = this.formData.applicationId
                             this.initFormData()
                             uni.showToast({
                                 duration: 10000,
@@ -361,6 +499,12 @@ export default {
                                     url: 'subPackages/institution/apply/list',
                                 });
                             }, 2000);
+                            // setTimeout(() => {
+                            //     this.$u.route({
+                            //         type: 'to',
+                            //         url: 'subPackages/institution/apply/channelDetail/channelDetail?id=' + id, //添加通道成功后跳转到通道详情页面
+                            //     });
+                            // }, 2000);
                         } else {
                             uni.showToast({
                                 duration: 10000,
@@ -369,16 +513,58 @@ export default {
                             })
                         }
                     }).catch(err => {
-                        console.log(err);
-                        uni.showToast({
+                            console.log(err);
+                            uni.showToast({
                             duration: 10000,
                             icon:'error',
                             title: err.data,
                         })
                     })
-                }
-            })
+                    }
+                })
+            }).catch(err => {
+                console.error('Error:', err);
+            });
         }
+        // submitForm(formName) {
+        //     console.log(this.formData);
+        //     this.$refs[formName].validate((valid) => {
+        //         if (this.isSubmitting) return; // 如果正在提交，则不再执行
+        //         this.isSubmitting = true; // 设置为不可点击状态
+        //         if (valid) {
+        //             this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
+        //                 if (res.valid) {
+        //                     this.initFormData()
+        //                     uni.showToast({
+        //                         duration: 10000,
+        //                         icon:'success',
+        //                         title:'进件成功',
+        //                     })
+        //                     this.isSubmitting = false;
+        //                     setTimeout(() => {
+        //                         this.$u.route({
+        //                             type: 'to',
+        //                             url: 'subPackages/institution/apply/list',
+        //                         });
+        //                     }, 2000);
+        //                 } else {
+        //                     uni.showToast({
+        //                         duration: 10000,
+        //                         icon:'error',
+        //                         title:'进件失败',
+        //                     })
+        //                 }
+        //             }).catch(err => {
+        //                 console.log(err);
+        //                 uni.showToast({
+        //                     duration: 10000,
+        //                     icon:'error',
+        //                     title: err.data,
+        //                 })
+        //             })
+        //         }
+        //     })
+        // }
     },
      // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
      onReady() {

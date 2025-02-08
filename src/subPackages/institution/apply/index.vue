@@ -137,6 +137,7 @@
                     licenseCityCode: '', 
                     licenseProvinceCode: '',
                     
+                    tempConfig: {}, // 临时配置
                 },
                 rules: {
                     businessCode: [
@@ -217,6 +218,8 @@
                     licenseBusinessRange: '', // 营业执照经营范围
                     licenseCityCode: '', 
                     licenseProvinceCode: '',
+
+                    tempConfig: {}, // 临时配置
                 }
             },
             initStorageToken() {
@@ -265,6 +268,19 @@
                     success: (uploadFileRes) => {
                         if (uploadFileRes.statusCode===200) {
                             this.formData.legalPersonCardHandPic = path
+                            this.$u.api.v3.storage.file.GetUploadImage({
+                                provider: 'qiniu',
+                                key: path
+                            }).then(res => {
+                                this.formData.tempConfig.legalPersonCardHandPic = res.url
+                            }).catch(err => {
+                                console.log(err);
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title: err.data,
+                                })
+                            })
                             uni.showToast({
                                 duration: 10000,
                                 icon:'success',
@@ -367,6 +383,7 @@
                                 key: path
                             }).then(res => {
                                 console.log(res)
+                                this.formData.tempConfig.licensePic = res.url
                                 this.$u.api.v3.storage.file.BizLicenseOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,

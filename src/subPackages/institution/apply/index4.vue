@@ -117,6 +117,7 @@
                     storeEntrancePic: '',  // 门店门头照片
                     storeIndoorPic: '',  // 店内环境照片
                     storeFrontDeskPic: '',  // 前台照片
+                    tempConfig: {}, // 临时配置
                 },
                 rules: {
                     storeShortName: [
@@ -244,6 +245,7 @@
 		},
 		methods: {
             quickFill(){
+                console.log(this.formData);
                 if(this.checked){
                     if(this.formData.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL'||this.formData.licenseSubjectType == 'SUBJECT_TYPE_STOCK_COMPANY'){
                         this.formData.storeShortName = this.formData.licenseMerchantName
@@ -281,6 +283,7 @@
                     storeEntrancePic: '',  // 门店门头照片
                     storeIndoorPic: '',  // 店内环境照片
                     storeFrontDeskPic: '',  // 前台照片
+                    tempConfig: {}, // 临时配置
                 }
             },
             initStorageToken() {
@@ -334,6 +337,20 @@
                     success: (uploadFileRes) => {
                         if (uploadFileRes.statusCode===200) {
                             this.formData[type] = path
+                            this.$u.api.v3.storage.file.GetUploadImage({
+                                provider: 'qiniu',
+                                key: path
+                            }).then(res => {
+                                this.formData.tempConfig[type] = res.url
+                                console.log(this.formData.tempConfig)
+                            }).catch(err => {
+                                console.log(err);
+                                uni.showToast({
+                                    duration: 3000,
+                                    icon:'error',
+                                    title: err.data,
+                                })
+                            })
                             uni.showToast({
                                 duration: 10000,
                                 icon:'success',

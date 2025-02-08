@@ -107,6 +107,8 @@
                     legalPersonCardCardAddress: '',    // 法人身份证地址
                     legalPersonCardPeriodBegin: '',  // 身份证有效期开始
                     legalPersonCardPeriodEnd: '',  // 身份证有效期结束
+
+                    tempConfig: {}, // 临时配置
                 },
                 rules: {
                     legalPerson: [
@@ -233,6 +235,8 @@
                     legalPersonCardCardAddress: '',    // 法人身份证地址
                     legalPersonCardPeriodBegin: '20010-01-01',  // 身份证有效期开始
                     legalPersonCardPeriodEnd: '2030-01-01',  // 身份证有效期结束
+
+                    tempConfig: {}, // 临时配置
                 }
             },
             initStorageToken() {
@@ -377,6 +381,7 @@
                                 key: path
                             }).then(res => {
                                 // console.log(res)
+                                this.formData.tempConfig.legalPersonCardPic = res.url
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -453,6 +458,7 @@
                                 key: path
                             }).then(res => {
                                 // console.log(res)
+                                this.formData.tempConfig.legalPersonCardNationalPic = res.url
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -503,7 +509,7 @@
                 })
             },
             nextPage(formName) {
-                // console.log(this.formData);
+                console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$u.route({
