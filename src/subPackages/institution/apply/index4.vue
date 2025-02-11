@@ -63,9 +63,9 @@
                 <u-button 
                     :disabled="isSubmitting"
                     type="warning" 
-                    @click="submitForm('dataForm')"
+                    @click="nextPage('dataForm')"
                 >
-                    提交资料
+                    下一步
                 </u-button>
 		    </view>	
         </view>	
@@ -372,76 +372,19 @@
                 this.mccCategoryCodeName = e[2].label
                 this.formData.mccCategoryCode = JSON.stringify(newArr)
             },
-            submitForm(formName) {
+            nextPage(formName) {
                 console.log(this.formData);
                 this.$refs[formName].validate((valid) => {
-                    if (this.isSubmitting) return; // 如果正在提交，则不再执行
-                    this.isSubmitting = true; // 设置为不可点击状态
                     if (valid) {
-                        this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
-                            if (res.valid) {
-                                this.initFormData()
-                                uni.showToast({
-                                    duration: 10000,
-                                    icon:'success',
-                                    title:'进件成功',
-                                })
-                                this.isSubmitting = false;
-                                setTimeout(() => {
-                                    this.$u.route({
-                                        type: 'to',
-                                        url: 'subPackages/institution/apply/list',
-                                    });
-                                }, 2000);
-                            } else {
-                                uni.showToast({
-                                    duration: 10000,
-                                    icon:'error',
-                                    title:'进件失败',
-                                })
-                            }
-                        }).catch(err => {
-                            console.log(err);
-                            uni.showToast({
-                                duration: 10000,
-                                icon:'error',
-                                title: err.data,
-                            })
+                        this.$u.route({
+                            type: 'to',
+                            url: 'subPackages/institution/apply/index5',
+                            params: { formData: JSON.stringify(this.formData) }
                         })
                     }
                 })
                
-
-                // this.$refs[formName].validate((valid) => {
-                //     if (valid) {
-                //         this.$u.api.v3.institution.apply.Create({
-                //             apply: this.formData
-                //         }).then(res => {
-                //             if (res.valid) {
-                //                 this.initFormData()
-                //                 uni.showToast({
-                //                     duration: 5000,
-                //                     icon:'success',
-                //                     title:'进件成功',
-                //                 })
-                //             } else {
-                //                 uni.showToast({
-                //                     duration: 3000,
-                //                     icon:'error',
-                //                     title:'进件失败',
-                //                 })
-                //             }
-                //         }).catch(err => {
-                //             console.log(err);
-                //             uni.showToast({
-                //                 duration: 3000,
-                //                 icon:'error',
-                //                 title: err.datal,
-                //             })
-                //         })
-                //     }
-                // })
-            }
+            },
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {

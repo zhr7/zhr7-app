@@ -102,9 +102,8 @@
                     bankAccountName: '',   // 账户户名
                     bankDistrictCode: '',   // 支行地址
                     bankCityCode: '', 
-                    bankProvinceCode: '',
+                    bankProvinceCode: '',   
                 },
-                
                 rules: {
                     bankCardPic: [
                         { required: true, message: '请上传银行卡照片', trigger: 'blur' },

@@ -215,7 +215,7 @@
 		},
         onShow() {
 			this.item = RouteParams();
-            console.log(this.item.formData)
+            console.log(this.item)
             this.item.formData = JSON.parse(this.item.formData);
             this.formData = {...this.item.formData, ...this.formData}; // 合并数据
             console.log(this.formData)
@@ -376,7 +376,6 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                // console.log(res)
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -452,7 +451,6 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                // console.log(res)
                                 this.$u.api.v3.storage.file.IDCardOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,

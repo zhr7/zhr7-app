@@ -136,7 +136,6 @@
                     licenseBusinessRange: '', // 营业执照经营范围
                     licenseCityCode: '', 
                     licenseProvinceCode: '',
-                    
                 },
                 rules: {
                     businessCode: [
@@ -289,54 +288,6 @@
                 })
                 
             },
-            // selectLicenseCopy(e){
-            //     // if (e.tempFilePaths[0].size > 1024 * 1024) {
-            //     //     console.log('图片超过1m');
-            //     //     this.$toast('文件大小不能超过1M');
-            //     //     uni.showToast({
-            //     //         duration: 3000,
-            //     //         icon:'error',
-            //     //         title: "图片大小超过1M",
-            //     //     }) 
-            //     //     return false;
-            //     // }
-            //     OCR(e.tempFilePaths[0],'biz_license').then(res => {
-            //         console.log(res);
-            //         if (res.bizLicense) {
-            //             this.formData.licenseCode = res.bizLicense.reg_num
-            //             this.formData.licenseMerchantName = res.bizLicense.enterprise_name
-            //             if (res.bizLicense.period) {
-            //                 const periods = res.bizLicense.period
-            //                     .replace('年', '')
-            //                     .replace('月', '')
-            //                     .replace('日', '')
-            //                     .split('至');
-            //                 this.formData.licensePersonCardPeriodBegin = periods[0]
-            //                 this.formData.licensePersonCardPeriodEnd = periods[1]
-            //             } else {
-            //                 this.formData.licensePersonCardPeriodBegin = this.formatDate(res.bizLicense.registered_date) 
-            //                 this.formData.licensePersonCardPeriodEnd = '长期'
-            //             }
-            //             this.formData.licenseAddress = res.bizLicense.address
-            //             this.formData.licenseBusinessRange = res.bizLicense.business_scope
-            //         }else{
-            //            uni.showToast({
-            //                 duration: 3000,
-            //                 icon:'error',
-            //                 title: "营业执照识别失败",
-            //             }) 
-            //             return
-            //         }
-            //     }).catch(err => {
-            //         uni.showToast({
-            //             duration: 3000,
-            //             icon:'error',
-            //             title: "营业执照识别失败:"+err,
-            //         })
-            //     })
-            //     this.select(e, 'licensePic')
-            // },
-
             // 获取上传状态
 			selectLicensePic(e){
                 console.log(e);
@@ -366,7 +317,7 @@
                                 provider: 'qiniu',
                                 key: path
                             }).then(res => {
-                                console.log(res)
+                                console.log(path)
                                 this.$u.api.v3.storage.file.BizLicenseOCR({
                                     imageBase64: '',
                                     imageUrl: res.url,
@@ -449,38 +400,6 @@
                     } 
                 })
             },
-            // submitForm(formName) {
-            //     // console.log(this.formData.subjectType);
-            //     this.$refs[formName].validate((valid) => {
-            //         if (valid) {
-            //             this.$u.api.institution.apply.Create({
-            //                 apply: this.formData
-            //             }).then(res => {
-            //                 if (res.valid) {
-            //                     this.initFormData()
-            //                     uni.showToast({
-            //                         duration: 5000,
-            //                         icon:'success',
-            //                         title:'进件成功',
-            //                     })
-            //                 } else {
-            //                     uni.showToast({
-            //                         duration: 3000,
-            //                         icon:'error',
-            //                         title:'进件失败',
-            //                     })
-            //                 }
-            //             }).catch(err => {
-            //                 console.log(err);
-            //                 uni.showToast({
-            //                     duration: 3000,
-            //                     icon:'error',
-            //                     title: err.datal,
-            //                 })
-            //             })
-            //         }
-            //     })
-            // }
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
