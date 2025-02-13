@@ -199,6 +199,11 @@
 					}
 				},
 				{
+					"path": "apply/update/update5",
+					"style": {
+					}
+				},
+				{
 					"path": "apply/detail/detail",
 					"style": {
 					}

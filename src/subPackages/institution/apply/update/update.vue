@@ -253,6 +253,28 @@
                     })
                 })
             },
+            async searchSellerInfoById(id) {
+                let params = {
+                    page: 1,
+                    pageSize: 1000,
+                    sort: 'ORDER BY created_at DESC, id DESC',
+                    where: 'WHERE true',
+                }
+                if(id){
+                    params.where = `WHERE true AND id LIKE '%${id}%'`;
+                }
+                try {
+                    const res = await this.$u.api.v3.institution.seller.SellerSimpleList(params);
+                    this.formData.userIdName = res.items[0].name
+                } catch (err) {
+                    console.log(err);
+                        uni.showToast({
+                        duration: 10000,
+                        icon:'error',
+                        title: "获取信息失败",
+                    });
+                }
+            },
             getInfo() {
                 this.$u.api.v3.institution.apply.Get({id: this.item.id}).then(res => {
                     if(res){
@@ -268,6 +290,9 @@
                                 title: err.data,
                             })
                         })
+                        if(this.formData.userId){
+                            this.searchSellerInfoById(this.formData.userId)
+                        }
                         console.log('getInfo')
                         console.log(this.formData)
                         if(res.item.licenseSubjectType == 'SUBJECT_TYPE_ENTERPRISE' || res.item.licenseSubjectType == 'SUBJECT_TYPE_INDIVIDUAL' || res.item.licenseSubjectType == 'SUBJECT_TYPE_STOCK_COMPANY'){

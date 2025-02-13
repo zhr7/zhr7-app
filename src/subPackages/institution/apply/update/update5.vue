@@ -68,11 +68,11 @@
 <script>
 import { parseTime, OCR, RouteParams } from '@/utils'
 import { ref } from 'vue';
-import serviceFee from './channelComponents/serviceFee'
-import shengfuPayment from './channelComponents/shengfuPayment'
-import yeePay from './channelComponents/yeePay'
-import huaxia from './channelComponents/huaxia'
-import sand from './channelComponents/sand'
+import serviceFee from '../channelComponents/serviceFee'
+import shengfuPayment from '../channelComponents/shengfuPayment'
+import yeePay from '../channelComponents/yeePay'
+import huaxia from '../channelComponents/huaxia'
+import sand from '../channelComponents/sand'
 export default {
     components: {
 		serviceFee,
@@ -150,9 +150,10 @@ export default {
     onLoad() {
         this.getChannelInfo()
         this.item = RouteParams()
-        this.item.formData = JSON.parse(this.item.formData)
-        this.formData = {...this.item.formData, ...this.formData}
-        console.log(this.item)
+        this.formData = Object.assign(this.formData, this.item)
+        if(this.formData.userIdName!='') {
+            this.searchKeyword = this.formData.userIdName
+        }
         // if (this.item.id) {
         //     this.formData.applicationId = this.item.id
         // }
@@ -162,7 +163,7 @@ export default {
     },
     created() {
         uni.setNavigationBarTitle({
-            title:'商户进件'
+            title:'商户进件编辑'
         })
         uni.setNavigationBarColor({
             frontColor: '#000000',  
@@ -175,12 +176,6 @@ export default {
         // this.getSellerSimpleList()
         
     },
-    // onShow() {
-    //     this.item = RouteParams()
-    //     this.item.formData = JSON.parse(this.item.formData)
-    //     this.formData = {...this.item.formData, ...this.formData}
-    //     console.log(this.item)
-    // },
     methods: {
         initFormData() {
             this.formData = {
@@ -376,7 +371,9 @@ export default {
                 })
         },
         getChannelServiceFeeRefData() {
+            console.log(this.formData)
             this.$nextTick(() => {
+                console.log(this.$refs.serviceFeeRef)
                 // 调用子组件的方法
                 const serviceFeeRefData = this.$refs.serviceFeeRef;
                 this.formData.channelConfig.fee = serviceFeeRefData.formData.fee;
@@ -553,17 +550,18 @@ export default {
                     this.isSubmitting = true; // 设置为不可点击状态
                     if (valid) {
                     console.log(this.formData);
-                    this.$u.api.v3.institution.apply.Create(this.formData).then(res => {
+                    this.$u.api.v3.institution.apply.Update(this.formData).then(res => {
                         if (res.valid) {
                             let id = this.formData.applicationId
                             this.initFormData()
                             uni.showToast({
                                 duration: 10000,
                                 icon:'success',
-                                title:'进件成功',
+                                title:'编辑进件成功',
                             })
                             this.isSubmitting = false;
                             setTimeout(() => {
+                                // this.$router.go(-Infinity)
                                 this.$u.route({
                                     type: 'reLaunch',
                                     url: 'subPackages/institution/apply/list',
@@ -573,7 +571,7 @@ export default {
                             uni.showToast({
                                 duration: 10000,
                                 icon:'error',
-                                title:'进件失败',
+                                title:'编辑进件失败',
                             })
                         }
                     }).catch(err => {

@@ -62,12 +62,21 @@
                 </u-form-item>
             </u-form>
             <u-line />
-            <view class="bottom">	
+            <!-- <view class="bottom">	
                 <u-button 
                     type="warning" 
                     @click="submitForm('dataForm')"
                 >
                     提交资料
+                </u-button>
+		    </view>	 -->
+            <view class="bottom">	
+                <u-button 
+                    :disabled="isSubmitting"
+                    type="warning" 
+                    @click="nextPage('dataForm')"
+                >
+                    下一步
                 </u-button>
 		    </view>	
         </view>	
@@ -591,7 +600,19 @@
                 })
                     }
                 })
-            }
+            },
+            nextPage(formName) {
+                console.log(this.formData);
+                // this.$refs[formName].validate((valid) => {
+                    // if (valid) {
+                        this.$u.route({
+                            type: 'to',
+                            url: 'subPackages/institution/apply/update/update5',
+                            params: this.formData
+                        })
+                    // }
+                // })
+            },
 		},
          // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
         onReady() {
