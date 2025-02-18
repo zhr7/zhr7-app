@@ -230,6 +230,16 @@
 					}
 				},
 				{
+					"path": "apply/bankChange/bankChange",
+					"style": {
+					}
+				},
+				{
+					"path": "apply/rateChange/rateChange",
+					"style": {
+					}
+				},
+				{
 					"path": "apply/wechatConfig/wechatConfig",
 					"style": {
 					    

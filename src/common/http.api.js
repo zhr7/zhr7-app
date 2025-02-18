@@ -218,7 +218,9 @@ const install = (Vue, vm) => {
 					ApplymentRealNameQuery: (params = {}) => vm.$u.post(V3+'/application/applyment/applymentRealNameQuery', params),	//进件内实名认证
 					ConfigQuery: (params = {}) => vm.$u.post(V3+'/application/wechat/configQuery', params),    //微信配置
 					SubAppidConfig: (params = {}) => vm.$u.post(V3+'/application/wechat/subAppidConfig', params),
-					JsapiPathConfig: (params = {}) => vm.$u.post(V3+'/application/wechat/jsapiPathConfig', params)
+					JsapiPathConfig: (params = {}) => vm.$u.post(V3+'/application/wechat/jsapiPathConfig', params),
+					BankQuery: (params = {}) => vm.$u.post(V3+'/application/bank/bankQuery', params),	//银行信息查询
+					BankChange: (params = {}) => vm.$u.post(V3+'/application/bank/bankChange', params),	//银行信息修改
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),
