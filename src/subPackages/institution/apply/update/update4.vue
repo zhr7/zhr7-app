@@ -113,7 +113,9 @@
 					name: '结算信息'
 				}, {
 					name: '门店信息'
-				}, ],
+				}, {
+                    name: '通道信息'
+                },],
                 wechatCategoryCodeName: '',
                 mccCategoryCodeName: '',
                 showWechat: false,

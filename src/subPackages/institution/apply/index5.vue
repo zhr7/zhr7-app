@@ -1,6 +1,7 @@
 <template>
     <view>
         <view class="item">
+            <u-steps :list="numList" :current="4" mode="number"></u-steps>
             <u-form :model="formData" ref="dataForm" label-width="130">
                 <!-- <u-form-item label="所属商户" prop="userId">
                     <uni-data-select
@@ -104,6 +105,17 @@ export default {
                 sort: 'ORDER BY created_at DESC, id DESC',
                 where: 'WHERE true',
             },
+            numList: [{
+                name: '主体信息'
+            }, {
+                name: '法人信息'
+            }, {
+                name: '结算信息'
+            }, {
+                name: '门店信息'
+            }, {
+                name: '通道信息'
+            },],
             formData: {
                 userId: '', // 所属商户
                 userName: '', // 登录账号
@@ -112,7 +124,7 @@ export default {
                 relation: '', // 关系
                 channelIdentifier: '', // 微信渠道号
                 directAgentNo: '', // 代理编号
-                remark: '', // 备注
+                remarks: '', // 备注
                 loginAccount: '', // 登录标识
                 //手续费详情
                 // fee: '',
@@ -191,7 +203,7 @@ export default {
                 relation: '', // 关系
                 channelIdentifier: '', // 微信渠道号
                 directAgentNo: '', // 代理编号
-                remark: '', // 备注
+                remarks: '', // 备注
                 loginAccount: '', // 登录标识
                 //手续费详情
                 // fee: '',
@@ -240,13 +252,13 @@ export default {
         change(e) {
             console.log("e:", e);
             if(this.isShowKeyword!='') {
-                this.formData.remark = ''
+                this.formData.remarks = ''
                 this.formData.loginAccount = ''
                 this.formData.channelIdentifier = ''
                 this.formData.directAgentNo = ''
                 this.formData.relation = ''
                 this.formData.ic_net_screen_shot_url = ''
-                this.formData.remark = ''
+                this.formData.remarks = ''
             }
             let selectedValue = e;
             let selectedText = this.channelList.find(item => item.value === selectedValue).text;
@@ -396,7 +408,7 @@ export default {
         getChannelHuaxiaRefData() {
             this.$nextTick(() => {
                 const huaxiaRefData = this.$refs.huaxiaRef;
-                this.formData.remark = huaxiaRefData.formData.remark;
+                this.formData.remarks = huaxiaRefData.formData.remarks;
                 console.log(huaxiaRefData.formData);
             });
         },
@@ -412,7 +424,7 @@ export default {
         getChannelShengfuPaymentRefData() {
             this.$nextTick(() => {
                 const shengfuPaymentRefData = this.$refs.shengfuPaymentRef;
-                this.formData.remark = shengfuPaymentRefData.formData.remark;
+                this.formData.remarks = shengfuPaymentRefData.formData.remarks;
                 this.formData.loginAccount = shengfuPaymentRefData.formData.loginAccount;
                 console.log(shengfuPaymentRefData.formData);
             });
@@ -503,10 +515,11 @@ export default {
                     });
                     picList.ilLegalPersonBankCardPic = res.url;
                 }
-                
-                picList.commonId = this.formData.channelConfig.commonId;
-                if(this.formData.remark!=''){
-                    picList.remark = this.formData.remark;
+                if(this.formData.channelConfig.commonId!=''){
+                    picList.commonId = this.formData.channelConfig.commonId;
+                }
+                if(this.formData.remarks!=''){
+                    picList.remarks = this.formData.remarks;
                 }
                 if(this.formData.loginAccount!=''){
                     picList.loginAccount = this.formData.loginAccount;
@@ -520,14 +533,18 @@ export default {
                 if(this.formData.directAgentNo!=''){
                     picList.directAgentNo = this.formData.directAgentNo;
                 }
+                console.log(picList)
                 Object.assign(this.formData.channelConfig.config, picList);
                 this.formData.channelConfig.config = JSON.stringify(this.formData.channelConfig.config);
                 //提交时删除多余字段
-                delete this.formData.remark;
+                delete this.formData.remarks;
                 delete this.formData.loginAccount;
                 delete this.formData.channelIdentifier;
                 delete this.formData.relation;
                 delete this.formData.directAgentNo;
+                if (this.formData.channelConfig.commonId==''){
+                    delete this.formData.channelConfig.commonId;
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

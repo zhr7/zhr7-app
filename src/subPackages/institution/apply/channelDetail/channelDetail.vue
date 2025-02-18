@@ -132,18 +132,20 @@
                 this.$u.api.v3.institution.apply.ChannelGet({id: item.id}).then(res => {
                     console.log(res);
                     if(res){
-                        this.getInfo()
                         uni.showToast({
                             duration: 10000,
                             icon:'none',
                             title: res.message,
                         })
+                        setTimeout(() => {
+                            this.getInfo()
+                        }, 5000);
                     }
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({
                         duration: 10000,
-                        icon:'error',
+                        icon:'none',
                         title: err.data,
                     })
                 })
