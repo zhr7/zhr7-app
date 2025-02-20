@@ -124,6 +124,7 @@ export default {
     },
     onShow() {
         this.item = RouteParams();
+        console.log(this.item);
     },
     onLoad() {
     },
