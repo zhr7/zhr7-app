@@ -40,22 +40,22 @@
                         <u-td class="u-td">
                             <u-row v-if="item.commonName.includes('盛付通')">
                                 <u-col span="2">
-                                    <u-button type="primary" size="mini" throttle-time="500" @click="toApplyQuery(item)">进件查询</u-button>
+                                    <u-button type="primary" size="mini" :custom-style="customStyle" throttle-time="500" @click="toApplyQuery(item)">进件查询</u-button>
                                 </u-col>
                                 <u-col span="2" v-if="!item.commonName.includes('华夏')">
-                                    <u-button type="warning" size="mini" :throttle-time="500" @click="toContract(item)">电子合同</u-button>
+                                    <u-button type="warning" size="mini" :custom-style="customStyle" :throttle-time="500" @click="toContract(item)">电子合同</u-button>
                                 </u-col>
                                 <u-col span="2">
-                                    <u-button type="error" size="mini" :throttle-time="500" @click="toRealName(item)">实名认证</u-button>
+                                    <u-button type="error" size="mini" :custom-style="customStyle" :throttle-time="500" @click="toRealName(item)">实名认证</u-button>
                                 </u-col>
                                 <u-col span="2">
-                                    <u-button type="success" size="mini" :throttle-time="500" @click="towechatConfig(item)">微信配置</u-button>
+                                    <u-button type="success" size="mini" :custom-style="customStyle" :throttle-time="500" @click="towechatConfig(item)">微信配置</u-button>
                                 </u-col>
                                 <u-col span="2">
-                                    <u-button type="primary" size="mini" :throttle-time="500" @click="toBankChange(item)">结算银行</u-button>
+                                    <u-button type="primary" size="mini" :custom-style="customStyle" :throttle-time="500" @click="toBankChange(item)">结算银行</u-button>
                                 </u-col>
                                 <u-col span="2">
-                                    <u-button type="warning" size="mini" :throttle-time="500" @click="toRateChange(item)">费率变更</u-button>
+                                    <u-button type="warning" size="mini" :custom-style="customStyle" :throttle-time="500" @click="toRateChange(item)">费率变更</u-button>
                                 </u-col>
                             </u-row>
                             <u-row v-else>
@@ -88,6 +88,11 @@
                     marginTop: '20px',
                     backgroundColor: '#fff',
                     padding: '10px',
+                },
+                customStyle: {
+                    // marginTop: '20px', 
+                    padding: '0 2px',
+                    width: '56px',
                 },
                 listQuery: {
 					page: 1,
@@ -237,8 +242,5 @@
     .u-td {
         width: 50%;
         margin: 0 auto;
-    }
-    .custom-button {
-
     }
 </style>

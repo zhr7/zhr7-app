@@ -1,58 +1,102 @@
 <template>
-  <view v-if="itemList.length>0">
-    <u-collapse :item-style="itemStyle">
-            <u-collapse-item :index="index" title="结算银行" v-for="(item, index) in itemList" :key="index" :open="true">
-                <view class="collapse-item">
-                    <u-table align="center">
-                        <u-tr class="u-tr">
-                            <u-th class="u-th">银行类型</u-th>
-                            <u-td class="u-td">
-                                <span v-if="item.bankAccountType === 'PERSONAL'">法人账户</span>
-                                <span v-if="item.bankAccountType === 'CORPORATE'">对公账户</span>
-                            </u-td>
-                        </u-tr>
-                        <u-tr class="u-tr">
-                            <u-th class="u-th">银行名称</u-th>
-                            <u-td class="u-td">{{ item.bankAccountBank || '-' }}</u-td>
-                        </u-tr>
-                        <u-tr class="u-tr">
-                            <u-th class="u-th">账号名称</u-th>
-                            <u-td class="u-td">{{ item.bankAccountName || '-' }}</u-td>
-                        </u-tr>
-                        <u-tr class="u-tr">
-                            <u-th class="u-th">银行账号</u-th>
-                            <u-td class="u-td">{{ item.bankAccountNo || '-' }}</u-td>
-                        </u-tr>
-                    </u-table>
-                </view>
-            </u-collapse-item>
-        </u-collapse>
-        <u-line />
-        <view class="bottom">	
-            <u-button 
-                type="warning" 
-                @click="submitForm('dataForm')"
-            >
-                提交
-            </u-button>
-        </view>
+  <view>
+    <view>
+        <u-table align="center" style="margin-bottom: 20px;" v-for="(item, index) in itemList" :key="index">
+            <u-tr class="u-tr">
+                <u-th class="u-th">ID</u-th>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-td class="u-td">{{ item.id || '-' }}</u-td>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-th class="u-th">商户号</u-th>
+                <u-th class="u-th">状态</u-th>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-td class="u-td">{{ item.subMerId || '-' }}</u-td>
+                <u-td class="u-td" v-if="item.status == 'SUBMIT'">已提交待查询</u-td>
+                <u-td class="u-td" v-if="item.status == 'SUCCESS'">修改成功</u-td>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-th class="u-th">费率</u-th>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-td class="u-td">
+                    <view>微信 {{ item.wechatFee || '-' }}‱ 万分之一</view>
+                    <view>支付宝 {{ item.alipayFee || '-' }}‱ 万分之一</view>
+                    <view>借记卡费率(<=1000元) {{ item.rateOneDebit || '-' }}‱ 万分之一</view>
+                    <view>借记卡费率(>1000元) {{item.rateTwoDebit || '-' }}‱ 万分之一</view>
+                    <view>借记卡费率(封顶值) {{ item.rateDebitCap || '-' }}‱ 万分之一</view>
+                    <view>贷记卡费率(<=1000元) {{ item.rateOneCredit || '-' }}‱ 万分之一</view>
+                    <view>贷记卡费率(>1000元) {{ item.rateTwoCredit || '-' }}‱ 万分之一</view>
+                    <view>分账手续费{{ item.sharingFee || '-' }}‱ 万分之一</view>
+            </u-td>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-th class="u-th">创建时间</u-th>
+                <u-th class="u-th">签约链接</u-th>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-td class="u-td">{{ parseTime(item.createdAt) || '-' }}</u-td>
+                <u-td class="u-td">{{ '-' }}</u-td>
+            </u-tr>
+            <u-tr class="u-tr">
+                <button type="primary" size="mini" @click="feeQuery(item)">费率变更查询</button>
+            </u-tr>
+        </u-table>
+    </view>
+    <view class="collapse-item">
+        <u-divider>手续费详情</u-divider>
+        <u-form :model="formData" ref="dataForm" label-width="360" style="padding: 0 20px;background-color: #fff">
+            <u-form-item label="批量手续费 (‱)" prop="fee" required>
+                <u-number-box v-model="formData.fee" :min="20" :max="60" @change="handleChange"></u-number-box>
+            </u-form-item>
+            <u-form-item label="微信手续费 (‱)" prop="wechatFee" required>
+                <u-number-box v-model="formData.wechatFee" :min="20" :max="60"></u-number-box>
+            </u-form-item>
+            <u-form-item label="支付宝手续费 (‱)" prop="alipayFee" required>
+                <u-number-box v-model="formData.alipayFee" :min="20" :max="60"></u-number-box>
+            </u-form-item>
+            <u-form-item label="云闪付手续费 (‱)" prop="unionpayFee" required>
+                <u-number-box v-model="formData.unionpayFee" :min="20" :max="60"></u-number-box>
+            </u-form-item>
+            <u-form-item label="借记卡费率(<=1000元) (‱)" prop="rateOneDebit" required>
+                <u-number-box v-model="formData.rateOneDebit" :min="20" :max="60"></u-number-box>
+            </u-form-item>
+            <u-form-item label="借记卡费率(>1000元) (‱)" prop="rateTwoDebit" required>
+                <u-number-box v-model="formData.rateTwoDebit" :min="20" :max="200"></u-number-box>
+            </u-form-item>
+            <u-form-item label="借记卡费率(封顶值) (元)" prop="rateDebitCap">
+                <u-number-box v-model="formData.rateDebitCap" :min="1" :max="200"></u-number-box>
+            </u-form-item>
+            <u-form-item label="贷记卡费率(<=1000元) (‱)" prop="rateOneCredit" required>
+                <u-number-box v-model="formData.rateOneCredit" :min="20" :max="60"></u-number-box>
+            </u-form-item>
+            <u-form-item label="贷记卡费率(>1000元) (‱)" prop="rateTwoCredit" required>
+                <u-number-box v-model="formData.rateTwoCredit" :min="20" :max="200"></u-number-box>
+            </u-form-item>
+            <u-form-item label="分账手续费 (‱)" prop="sharingFee">
+                <u-number-box v-model="formData.sharingFee" :min="0" :max="200"></u-number-box>
+            </u-form-item>
+        </u-form>
+        <u-button 
+            type="warning" 
+            @click="submitForm('dataForm')"
+        >
+            提交
+        </u-button>
+    </view>
   </view>
-  <view v-else><u-divider bg-color="#f3f4f6">{{info}}</u-divider></view>
 </template>
 
 <script>
 import { parseTime, OCR, RouteParams } from '@/utils'
 import { ref } from 'vue'
-import serviceFee from '../channelComponents/serviceFee'
 export default {
-    components: {
-		serviceFee,
-	},
   data() {
     return {
-        info: '',
         itemStyle: {
-            marginTop: '20px',
+            marginTop: '0px',
             backgroundColor: '#fff',
             padding: '10px',
         },
@@ -85,18 +129,15 @@ export default {
         }
     },
     onload() {
-        
     },
     onShow() {
         this.item = RouteParams();
-        console.log(this.item)
+        this.getInfo()
     },
     mounted() {
         this.initStorageToken()
-        this.getInfo()
     },
     updated() {
-        this.getChannelServiceFeeRefData()
     },
     created() {
         uni.setNavigationBarTitle({
@@ -135,34 +176,57 @@ export default {
             sharingFee: '',
         }
     },
-    getChannelServiceFeeRefData() {
-        this.$nextTick(() => {
-            // 调用子组件的方法
-            const serviceFeeRefData = this.$refs.serviceFeeRef;
-            console.log(serviceFeeRefData);
-            this.formData.fee = serviceFeeRefData.formData.fee;
-            this.formData.wechatFee = serviceFeeRefData.formData.wechatFee;
-            this.formData.alipayFee = serviceFeeRefData.formData.alipayFee;
-            this.formData.unionpayFee = serviceFeeRefData.formData.unionpayFee;
-            this.formData.rateOneDebit = serviceFeeRefData.formData.rateOneDebit;
-            this.formData.rateTwoDebit = serviceFeeRefData.formData.rateTwoDebit;
-            this.formData.rateDebitCap = serviceFeeRefData.formData.rateDebitCap;
-            this.formData.rateOneCredit = serviceFeeRefData.formData.rateOneCredit;
-            this.formData.rateTwoCredit = serviceFeeRefData.formData.rateTwoCredit;
-            this.formData.sharingFee = Number(serviceFeeRefData.formData.sharingFee);
-            console.log(serviceFeeRefData.formData);
-        }); 
+    handleChange() {
+        this.formData.wechatFee = this.formData.fee
+        this.formData.alipayFee = this.formData.fee
+        this.formData.rateOneDebit = this.formData.fee
+        this.formData.rateOneCredit = this.formData.fee
+        this.formData.unionpayFee = this.formData.fee
+    },
+    parseTime(time){
+        return parseTime(time)
     },
     getInfo() {
         let filter = {}
-        if (this.item.id) {
+        if (this.item.applicationId) {
             this.listQuery.applicationId = this.item.applicationId
         }
         this.listQuery.filter = JSON.stringify(filter)
         this.$u.api.v3.institution.apply.ChannelSearch(this.listQuery).then(res => {
             if(res){
-                this.itemList = res.items.filter(item => item.commonName.includes('盛付通'));
-                console.log(this.itemList);
+                let feeData = res.items.filter(item => item.commonName.includes('盛付通'));
+                console.log(feeData);
+                this.formData.fee = feeData[0].fee;
+                this.formData.wechatFee = feeData[0].wechatFee;
+                this.formData.alipayFee = feeData[0].alipayFee;
+                this.formData.unionpayFee = feeData[0].unionpayFee;
+                this.formData.rateOneDebit = feeData[0].rateOneDebit;
+                this.formData.rateTwoDebit = feeData[0].rateTwoDebit;
+                this.formData.rateDebitCap = feeData[0].rateDebitCap;
+                this.formData.rateOneCredit = feeData[0].rateOneCredit;
+                this.formData.rateTwoCredit = feeData[0].rateTwoCredit;
+                this.formData.sharingFee = feeData[0].sharingFee;
+
+                let params = {
+                    applicationChannelId: feeData[0].id,
+                    page: 1,
+                    pageSize: 15,
+                    filter: '{}',
+                    sort: JSON.stringify([{key: '_id', value: -1}]) 
+                }
+                this.$u.api.v3.institution.apply.FeeSearch(params).then(res => {
+                    if(res){
+                        this.itemList = res.items;
+                        console.log(this.itemList);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 10000,
+                        icon:'error',
+                        title: err.data,
+                    })
+                })
             }
             
         }).catch(err => {
@@ -170,6 +234,25 @@ export default {
             uni.showToast({
                 duration: 10000,
                 icon:'error',
+                title: err.data,
+            })
+        })
+    },
+    feeQuery(item) {
+        this.$u.api.v3.institution.apply.FeeQuery({id: item.id}).then(res => {
+            if(res){
+                console.log(res);
+                uni.showToast({
+                    duration: 10000,
+                    icon:'none',
+                    title: res.message,
+                })
+            }
+        }).catch(err => {
+            console.log(err);
+            uni.showToast({
+                duration: 10000,
+                icon:'none',
                 title: err.data,
             })
         })
@@ -203,7 +286,7 @@ export default {
                     console.log(err);
                     uni.showToast({
                         duration: 10000,
-                        icon:'error',
+                        icon:'none',
                         title: err.data,
                     })
                 })
@@ -216,12 +299,16 @@ export default {
 
 <style lang="scss" scoped>
     .collapse-item {
-		padding-bottom: 20rpx;
-        height:230rpx;
+		padding: 30rpx;
+        background-color: #fff;
+        margin-top: 20rpx;
 	}
     .u-td {
-        width: 50%;
+        width: 230px;
         margin: 0 auto;
+    }
+    .u-th {
+        width: 130px;
     }
     .u-tr {
         width: 40%;
@@ -232,12 +319,12 @@ export default {
         padding: 10rpx 0rpx 10rpx 0rpx!important;
         border-radius: 8rpx;
     }
-    .item {
-        background-color: #fff;
-        height: 100%;
-        padding: 5vw;
-    }
-    .bottom {
-        margin-top: 3vh;
-    }
+    // .item {
+    //     background-color: #fff;
+    //     height: 100%;
+    //     padding: 5vw;
+    // }
+    // .bottom {
+    //     margin-top: 3vh;
+    // }
 </style>

@@ -222,6 +222,8 @@ const install = (Vue, vm) => {
 					BankQuery: (params = {}) => vm.$u.post(V3+'/application/bank/bankQuery', params),	//银行信息查询
 					BankChange: (params = {}) => vm.$u.post(V3+'/application/bank/bankChange', params),	//银行信息修改
 					FeeChange: (params = {}) => vm.$u.post(V3+'/application/fee/feeChange', params),	//费率修改
+					FeeSearch: (params = {}) => vm.$u.post(V3+'/application/fee/search', params),	//费率变更记录查询
+					FeeQuery: (params = {}) => vm.$u.post(V3+'/application/fee/feeQuery', params),	//费率查询
 				},
 				tradeAuth: {
 					QRCode: (params = {}) => vm.$u.post(V3+'/trade/auth/qrCode', params),
