@@ -28,11 +28,27 @@
 	export default {
 		data() {
             var validatePass = (rule, value, callback) => {
+                const hasUpperCase = /[A-Z]/.test(value);
+                const hasLowerCase = /[a-z]/.test(value);
+                const hasNumbers = /\d/.test(value);
+                const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
                 if (value === undefined) {
                     callback()
                 } else {
-                    if (!/^.{6,16}$/.test(value)) {
-                        callback('密码长度请控制在 6 到 16 个字符')
+                    if (!/^.{8,16}$/.test(value)) {
+                        callback('密码长度请控制在 8 到 16 个字符')
+                    }
+                    if (!hasUpperCase) {
+                        callback('密码必须包含大写字母')
+                    }
+                    if (!hasLowerCase) {
+                        callback('密码必须包含小写字母')
+                    }
+                    if (!hasNumbers) {
+                        callback('密码必须包含数字')
+                    }
+                    if (!hasSpecialChar) {
+                        callback('密码必须包含特殊字符')
                     }
                     if (this.formData.password !== value) {
                         callback('两次密码不一样')
@@ -54,14 +70,33 @@
                     {
                         required: true,
                         validator: (rule, value, callback) => {
-                        if (value === undefined) {
-                            callback()
-                        } else {
-                            if (!/^.{6,16}$/.test(value)) {
-                            callback('密码长度请控制在 6 到 16 个字符')
+                            const hasUpperCase = /[A-Z]/.test(value);
+                            const hasLowerCase = /[a-z]/.test(value);
+                            const hasNumbers = /\d/.test(value);
+                            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+                            if (value === undefined) {
+                                callback()
+                            } else {
+                                if (!/^.{8,16}$/.test(value)) {
+                                    callback('密码长度请控制在 8 到 16 个字符')
+                                }
+                                if (!hasUpperCase) {
+                                    callback('密码必须包含大写字母')
+                                }
+                                if (!hasLowerCase) {
+                                    callback('密码必须包含小写字母')
+                                }
+                                if (!hasNumbers) {
+                                    callback('密码必须包含数字')
+                                }
+                                if (!hasSpecialChar) {
+                                    callback('密码必须包含特殊字符')
+                                }
+                                if (this.formData.password !== value) {
+                                    callback('两次密码不一样')
+                                }
+                                callback()
                             }
-                            callback()
-                        }
                         },
                         trigger: 'blur'
                     }
@@ -89,14 +124,12 @@
             this.options = JSON.parse(JSON.stringify(RouteParams()))
 		},
 		methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
+            submitForm(dataForm) {
+                this.$refs[dataForm].validate((valid) => {
                     if (valid) {
-                        this.$u.api.institution.institution.Password({
-                            user: {
-                                id: this.options.id,
-                                password: this.formData.password
-                            }
+                        this.$u.api.v3.institution.institution.Password({
+                            id: this.options.id,
+                            password: this.formData.password
                         }).then(res => {
                             if (res.valid) {
                                 uni.showToast({

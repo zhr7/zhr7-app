@@ -194,6 +194,7 @@ const install = (Vue, vm) => {
 			institution: {
 			    institution: {
 					Search: (params = {}) => vm.$u.post(V3+'/institution/institution/search', params), // 
+					Password: (params = {}) => vm.$u.post(V3+'/institution/institution/password', params), //
 				},
 				apply: {	//  进件
 					List: (params = {}) => vm.$u.post(V3+'/application/application/search', params),	// 
@@ -244,6 +245,7 @@ const install = (Vue, vm) => {
 			seller: {
 				seller: {
 					Search: (params = {}) => vm.$u.post(V3+'/seller/seller/search', params), // 
+					Password: (params = {}) => vm.$u.post(V3+'/seller/seller/password', params), //
 				}
 			},
 			storage: {
