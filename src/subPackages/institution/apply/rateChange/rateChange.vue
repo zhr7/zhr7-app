@@ -4,44 +4,44 @@
         <u-table align="center" style="margin-bottom: 20px;" v-for="(item, index) in itemList" :key="index">
             <u-tr class="u-tr">
                 <u-th class="u-th">ID</u-th>
+                <u-th class="u-th">商户号</u-th>
             </u-tr>
             <u-tr class="u-tr">
                 <u-td class="u-td">{{ item.id || '-' }}</u-td>
-            </u-tr>
-            <u-tr class="u-tr">
-                <u-th class="u-th">商户号</u-th>
-                <u-th class="u-th">状态</u-th>
-            </u-tr>
-            <u-tr class="u-tr">
                 <u-td class="u-td">{{ item.subMerId || '-' }}</u-td>
-                <u-td class="u-td" v-if="item.status == 'SUBMIT'">已提交待查询</u-td>
-                <u-td class="u-td" v-if="item.status == 'SUCCESS'">修改成功</u-td>
             </u-tr>
             <u-tr class="u-tr">
                 <u-th class="u-th">费率</u-th>
+                <u-th class="u-th">状态</u-th>
             </u-tr>
             <u-tr class="u-tr">
                 <u-td class="u-td">
-                    <view>微信 {{ item.wechatFee || '-' }}‱ 万分之一</view>
+                    {{ item.fee || '-'}}
+                    <!-- <view>微信 {{ item.wechatFee || '-' }}‱ 万分之一</view>
                     <view>支付宝 {{ item.alipayFee || '-' }}‱ 万分之一</view>
                     <view>借记卡费率(<=1000元) {{ item.rateOneDebit || '-' }}‱ 万分之一</view>
                     <view>借记卡费率(>1000元) {{item.rateTwoDebit || '-' }}‱ 万分之一</view>
                     <view>借记卡费率(封顶值) {{ item.rateDebitCap || '-' }}‱ 万分之一</view>
                     <view>贷记卡费率(<=1000元) {{ item.rateOneCredit || '-' }}‱ 万分之一</view>
                     <view>贷记卡费率(>1000元) {{ item.rateTwoCredit || '-' }}‱ 万分之一</view>
-                    <view>分账手续费{{ item.sharingFee || '-' }}‱ 万分之一</view>
-            </u-td>
+                    <view>分账手续费{{ item.sharingFee || '-' }}‱ 万分之一</view> -->
+                </u-td>
+                <u-td class="u-td" v-if="item.status == 'SUBMIT'">已提交待查询</u-td>
+                <u-td class="u-td" v-if="item.status == 'SUCCESS'">修改成功</u-td>
             </u-tr>
             <u-tr class="u-tr">
-                <u-th class="u-th">创建时间</u-th>
                 <u-th class="u-th">签约链接</u-th>
+                <u-th class="u-th">创建时间</u-th>
             </u-tr>
             <u-tr class="u-tr">
+                <u-td class="u-td">{{ item.signUrl || '-' }}</u-td>
                 <u-td class="u-td">{{ parseTime(item.createdAt) || '-' }}</u-td>
-                <u-td class="u-td">{{ '-' }}</u-td>
             </u-tr>
             <u-tr class="u-tr">
-                <button type="primary" size="mini" @click="feeQuery(item)">费率变更查询</button>
+                <u-th class="u-th">操作</u-th>
+            </u-tr>
+            <u-tr class="u-tr">
+                <u-td class="u-td"><button type="primary" size="mini" @click="feeQuery(item)">费率变更查询</button></u-td>
             </u-tr>
         </u-table>
     </view>
