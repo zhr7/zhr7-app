@@ -373,5 +373,4 @@ export default {
     .bottom {
         margin-top: 3vh;
     }
-    
 </style>
