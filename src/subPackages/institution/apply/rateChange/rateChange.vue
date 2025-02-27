@@ -41,7 +41,7 @@
                 <u-th class="u-th">操作</u-th>
             </u-tr>
             <u-tr class="u-tr">
-                <u-td class="u-td"><button type="primary" size="mini" @click="feeQuery(item)">查询</button></u-td>
+                <u-td class="u-td"><button type="primary" size="mini" @click="feeQuery(item)">费率变更查询</button></u-td>
             </u-tr>
         </u-table>
     </view>
