@@ -149,7 +149,7 @@ export default {
                 console.log(err);
                 uni.showToast({
                     duration: 10000,
-                    icon:'error',
+                    icon:'none',
                     title: "获取上传凭证失败:"+ err.data,
                 })
             })
@@ -199,7 +199,7 @@ export default {
                 console.log(err);
                     uni.showToast({
                     duration: 10000,
-                    icon:'error',
+                    icon:'none',
                     title: "获取银行信息失败",
                 });
             }
@@ -224,7 +224,7 @@ export default {
                 console.log(err);
                 uni.showToast({
                     duration: 10000,
-                    icon:'error',
+                    icon:'none',
                     title: err.data,
                 })
             })
@@ -238,7 +238,7 @@ export default {
             if (e.tempFiles[0].size > 1024 * 1024) {
                 uni.showToast({
                     duration: 10000,
-                    icon:'error',
+                    icon:'none',
                     title:'图片大小超过1M',
                 })
                 return;
@@ -273,14 +273,14 @@ export default {
                             }).catch(err => {
                                 uni.showToast({
                                     duration: 10000,
-                                    icon:'error',
+                                    icon:'none',
                                     title: "银行卡识别失败:"+err,
                                 })
                             })
                         }).catch(err => {
                             uni.showToast({
                                 duration: 10000,
-                                icon:'error',
+                                icon:'none',
                                 title: "银行卡识别失败:"+err,
                             })
                         })
@@ -292,7 +292,7 @@ export default {
                     }else{
                         uni.showToast({
                             duration: 10000,
-                            icon:'error',
+                            icon:'none',
                             title:'上传失败'
                         })
                     }
@@ -301,7 +301,7 @@ export default {
                 console.log(err.errMsg);
                 uni.showToast({
                     duration: 10000,
-                    icon:'error',
+                    icon:'none',
                     title:'上传失败'+err.errMsg
                 })
             }
@@ -337,7 +337,7 @@ export default {
                         console.log(err);
                         uni.showToast({
                             duration: 10000,
-                            icon:'error',
+                            icon:'none',
                             title: err.data,
                         })
                     })
@@ -373,5 +373,4 @@ export default {
     .bottom {
         margin-top: 3vh;
     }
-    
 </style>
