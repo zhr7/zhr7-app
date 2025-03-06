@@ -10,7 +10,7 @@
 				<view class="left">
 					<span>
 						<m-icon name="institution" custom-prefix="colour-icon" size="38"></m-icon><br>
-						{{item.level}}级机构
+						{{item.mobile}}
 					</span>
 				</view>
 				<view class="center">
@@ -18,7 +18,7 @@
 						{{item.name}}
 					</view>
 					<view class="time">
-						{{item.mobile}}
+						{{item.id}}
 					</view>
 				</view>
 				<view class="right">
