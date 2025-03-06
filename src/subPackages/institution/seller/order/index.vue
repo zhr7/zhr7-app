@@ -299,6 +299,7 @@
 		},
 		onShow() {
 			this.options = JSON.parse(JSON.stringify(RouteParams()))
+			console.log(this.options)
 			uni.setNavigationBarTitle({
 				title: this.options.sellerName
 			})
@@ -409,8 +410,11 @@
 				}
 				
 				this.listQuery.where = where
-				this.listQuery.userId = this.options.sellerId
-				// this.listQuery.startTime = 
+				if(this.options.sellerId === this.options.brandId){
+					this.listQuery.brandId = this.options.brandId
+				}else{
+				    this.listQuery.userId = this.options.sellerId
+				}
 				this.status = 'loading';
 
 				this.$u.api.v3.order.order.Search(this.listQuery).then(res => {
