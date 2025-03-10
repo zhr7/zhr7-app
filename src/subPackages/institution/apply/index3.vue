@@ -1,7 +1,6 @@
 <template>
 	<view>
-        <!-- <view v-if="userId"> -->
-            <view>
+        <view v-if="userId">
             <view class="item">
                 <u-steps :list="numList" :current="2" mode="number"></u-steps>
                 <u-form :model="formData" ref="dataForm" label-width="320">
@@ -123,9 +122,9 @@
             </view>	
             <u-toast ref="uToast" />
         </view>
-        <!-- <view v-if="!userId">
+        <view v-if="!userId">
             <u-form-item> 页面开发中，敬请期待</u-form-item>
-        </view> -->
+        </view>
     </view>
 </template>
 <script>
