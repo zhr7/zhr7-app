@@ -292,6 +292,20 @@
                                 title: err.data,
                             })
                         })
+                        // 非法人银行卡支行信息
+                        if(this.formData.ilLegalPerson!= ''){
+                            filter = "{ \"bankCode\": { \"$regex\": \"" + res.item.ilLegalPersonBankChannelNo + "\", \"$options\": \"i\" } }"
+                            this.$u.api.v3.institution.apply.SearchBankInfo({filter}).then(res => {
+                                this.formData.bankNameIlLegal = res.items[0].bankName
+                            }).catch(err => {
+                                console.log(err);
+                                uni.showToast({
+                                    duration: 10000,
+                                    icon:'error',
+                                    title: err.data,
+                                })
+                            })
+                        }
                         if(this.formData.userId){
                             this.searchSellerInfoById(this.formData.userId)
                         }
