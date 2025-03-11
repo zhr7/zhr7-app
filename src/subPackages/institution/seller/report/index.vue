@@ -67,7 +67,6 @@
 			uni.setNavigationBarTitle({
 				title: this.routes.sellerName
 			})
-			console.log(this.routes)
 		},
 		onShow() {
 			this.init()
@@ -115,7 +114,11 @@
 					}
 				}
 				this.listQuery.filter = JSON.stringify(filter)
-				this.listQuery.userId = this.routes.sellerId
+				if(this.routes.sellerId === this.routes.brandId){
+ 					this.listQuery.brandId = this.routes.brandId
+ 				}else{
+ 				    this.listQuery.userId = this.routes.sellerId
+ 				}
 				this.status = 'loading';
 				this.$u.api.v3.report.report.ReportSearch(this.listQuery).then(res => {
 					if (res.items) {

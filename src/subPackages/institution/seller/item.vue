@@ -174,7 +174,7 @@
 					case "sellerReport":
 						this.$u.route({
 							type: 'to',
-							url: '/subPackages/institution/seller/report/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name
+							url: '/subPackages/institution/seller/report/index?sellerId=' + this.item.id + '&sellerName=' + this.item.name + '&brandId=' + this.item.brandId
 						})
 						break;
 					case "sellerPassword":
