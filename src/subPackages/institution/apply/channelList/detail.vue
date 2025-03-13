@@ -82,11 +82,15 @@
                     </u-table>
                 </view>
 		</u-collapse-item>
+        <u-loadmore :status="status" />
+        <u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
+		<u-toast ref="uToast" />
     </u-collapse>
 </template>
 <script>
     import { parseTime, OCR, RouteParams } from '@/utils'
     export default {
+        
         data() {
             return {
                 itemStyle: {
@@ -95,7 +99,6 @@
                     padding: '10px',
                 },
                 customStyle: {
-                    // marginTop: '20px', 
                     padding: '0 2px',
                     width: '56px',
                 },
@@ -114,35 +117,23 @@
                     config: '', // 配置
                     createdAt: '', // 创建时间
                 },
-                // options: [
-                //     {
-                //         text: "删除",
-                //         style: {
-                //             // backgroundColor: "#dd524d",
-                //             backgroundColor: "#ffffff",
-                //             textAlign: "center",
-                //             color: "#FF0000",
-                //         },
-                //     },
-                // ],
             }
         },
         watch: {
             itemList() {
-                console.log(this.itemList);
                 this.$forceUpdate();
-            }
+            },
         },
         onShow() {
             this.item = RouteParams();
         },
 		mounted() {
             this.initStorageToken()
-            this.getInfo()
+            this.getList()
 		},
         created() {
 			uni.setNavigationBarTitle({
-				title:'通道详情'
+				title:'通道列表'
 			})
 			uni.setNavigationBarColor({
 				frontColor: '#000000',  
@@ -162,6 +153,24 @@
                     })
                 })
             },
+            init() {
+				this.listQuery = {
+					page: 1,
+					pageSize: 15,
+					filter: '',
+					sort: JSON.stringify([{key: '_id', value: -1}]) 
+				}
+				this.itemList = []
+				this.getList()
+				uni.$on('uOnReachBottom',()=>{
+					this.listQuery.page++
+					if (this.itemList.length>=this.total) {
+						this.status = 'nomore'
+						return
+					}
+					this.getList()
+				})
+			},
             parseTime(time){
 				return parseTime(time)
 			},
@@ -171,7 +180,6 @@
 			},
             toApplyQuery(item) {
                 this.$u.api.v3.institution.apply.ChannelGet({id: item.id}).then(res => {
-                    console.log(res);
                     if(res){
                         uni.showToast({
                             duration: 10000,
@@ -179,7 +187,7 @@
                             title: res.message,
                         })
                         setTimeout(() => {
-                            this.getInfo()
+                            this.getList()
                         }, 5000);
                     }
                 }).catch(err => {
@@ -226,18 +234,18 @@
                     params: item
                 })
             },
-            getInfo() {
+            getList() {
                 let filter = {}
-				if (this.item.id) {
-					this.listQuery.applicationId = this.item.id
-				}
 				this.listQuery.filter = JSON.stringify(filter)
                 this.$u.api.v3.institution.apply.ChannelSearch(this.listQuery).then(res => {
                     if(res){
-                        this.itemList = res.items
-                        console.log(this.itemList);
+                        res.items.forEach(item => {
+                            if(this.item.id == item.id){
+                                this.itemList.push(item)
+                            }
+                        })
+                        console.log(this.itemList)
                     }
-                    
                 }).catch(err => {
                     console.log(err);
                     uni.showToast({

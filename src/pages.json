@@ -215,6 +215,18 @@
 					}
 				},
 				{
+				    "path": "apply/channelList/index",
+					"style": {
+					    
+					}
+				},
+				{
+					"path": "apply/channelList/detail",
+					"style": {
+
+					}
+				},
+				{
 					"path": "apply/channelDetail/channelDetail",
 					"style": {
 					}

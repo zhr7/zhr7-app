@@ -98,6 +98,14 @@
 						></m-icon>
 						<text class="grid-text">机构报表</text>
 					</view>
+					<view @click="handler('institution-channel-list')" class="item border-bottom-style border-left-style">
+						<m-icon
+							name="oauth" 
+							custom-prefix="colour-icon" 
+							:size="38"
+						></m-icon>
+						<text class="grid-text">通道列表</text>
+					</view>
 					<view @click="handler('institutionSecretKey')" class="item border-bottom-style">
 						<m-icon
 							name="secretKey" 
@@ -114,17 +122,17 @@
 						></m-icon>
 						<text class="grid-text">支付通道</text>
 					</view> -->
-					<view @click="handler('institution-secret-key')" class="item border-bottom-style">
+					<!-- <view @click="handler('institution-secret-key')" class="item border-bottom-style">
 						<m-icon
 							name="secret-key" 
 							custom-prefix="colour-icon" 
 							:size="38"
 						></m-icon>
 						<text class="grid-text">密钥仓库</text>
-					</view>
-					<view @click="handler('institutionOauth')" class="item border-bottom-style border-left-style">
+					</view> -->
+					<view @click="handler('institutionOauth')" class="item border-left-style">
 						<m-icon
-							name="oauth" 
+							name="device" 
 							custom-prefix="colour-icon" 
 							:size="36"
 						></m-icon>

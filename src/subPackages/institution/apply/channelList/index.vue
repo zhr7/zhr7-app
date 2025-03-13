@@ -1,36 +1,34 @@
 <template>
 	<view>
-		
 		<view class="top">
 			<view class="search">
-				<!-- <u-search placeholder="商家品牌/门店名称/商户号/电话" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search> -->
-				<u-search placeholder="商户名称/法人姓名" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
+				<u-search placeholder="商户名称/营业执照号" v-model="search" @custom="handlerSearch" @search="handlerSearch"></u-search>
 			</view>	
 		</view>
 		<view class="content">
-			<u-swipe-action v-if="isChannel=='1'" :show="item.show" :index="index" 
+			<u-swipe-action :show="item.show" :index="index" 
 				v-for="(item, index) in list" :key="item.id" 
-				@click="click" @open="open"
+				@click="click(item, index)" @open="open"
 				:options="optionsSwipe"
 			>
 				<view class="item">
 						<view class="left">
 						<span>
-							<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
-							进件
+							<m-icon name="oauth" custom-prefix="colour-icon" size="38"></m-icon><br>
+							通道
 						</span>
 					</view>
 					<view class="center">
 						<view class="title">
-							{{item.licenseMerchantName}}
+							{{item.commonName}}
 						</view>
 						<view class="time">
-							{{item.licenseCode}}
+							{{item.id}}
 						</view>
 					</view>
 					<view class="right">
 						<view>
-							{{item.legalPerson}}
+							{{}}
 						</view>
 						<view class="status">
 							{{parseTime(item.updatedAt)}}
@@ -38,63 +36,6 @@
 					</view>
 				</view>
 			</u-swipe-action>
-			<u-swipe-action v-if="isChannel=='0'" :show="item.show" :index="index" 
-				v-for="(item, index) in list" :key="item.id" 
-				@click="clickChannel" @open="open"
-				:options="optionsSwipeChannel"
-			>
-				<view class="item">
-						<view class="left">
-						<span>
-							<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
-							进件
-						</span>
-					</view>
-					<view class="center">
-						<view class="title">
-							{{item.licenseMerchantName}}
-						</view>
-						<view class="time">
-							{{item.licenseCode}}
-						</view>
-					</view>
-					<view class="right">
-						<view>
-							{{item.legalPerson}}
-						</view>
-						<view class="status">
-							{{parseTime(item.updatedAt)}}
-						</view>
-					</view>
-				</view>
-			</u-swipe-action>
-			<!-- <view class="item" v-for="(item, index) in list" :key="index" @click="click(item)">
-				<view class="left">
-                    <span>
-						<m-icon name="seller" custom-prefix="colour-icon" size="38"></m-icon><br>
-						进件
-					</span>
-				</view>
-				<view class="center">
-					<view class="title">
-						{{item.licenseMerchantName}}
-					</view>
-					<view class="time">
-						{{item.licenseCode}}
-					</view>
-				</view>
-				<view class="right">
-					<view>
-						{{item.legalPerson}}
-					</view>
-					<view class="status">
-						{{parseTime(item.updatedAt)}}
-					</view>
-				</view>
-				<view class="arrow-right">
-					<u-icon name="arrow-right" size="30"></u-icon>
-				</view>
-			</view> -->
 			<u-loadmore :status="status" />
 		</view>
 		<u-calendar v-model="showDate" mode="range" @change="changeDate"></u-calendar>
@@ -112,31 +53,10 @@
 		},
 		data() {
 			return {
-				isChannel: '1',
 				show: false,
 				optionsSwipe: [
 					{
-						text: '编辑',
-						style: {
-							backgroundColor: '#007aff'
-						}
-					},
-					{
 						text: '详情', //进件详情
-						style: {
-							backgroundColor: '#e69138'
-						}
-					}
-				],
-				optionsSwipeChannel: [
-					{
-						text: '添加',
-						style: {
-							backgroundColor: '#007aff'
-						}
-					},
-					{
-						text: '详情', //通道详情
 						style: {
 							backgroundColor: '#e69138'
 						}
@@ -173,17 +93,9 @@
 		},
 		onShow() {
 			this.options = RouteParams()
-			if (this.options.item) {
-			    this.isChannel = this.options.item
-			}
-			console.log(this.options.item)
 		},
 		mounted() {
-			if (this.options.item=='0') {
-			    this.title = '通道管理'
-			}else {
-				this.title = '进件管理'
-			}
+            this.title = '通道列表'
 			uni.setNavigationBarTitle({
 				title:this.title
 			})
@@ -223,20 +135,11 @@
 				return fee ? Number(fee)  : 0
 			},
 			getList() {
-				let filter = {}
-				if (this.query.search) {
-					filter = {
-						$or: [
-							{ legalPerson: { $regex: this.query.search, $options: 'i' } },
-							{ licenseMerchantName: { $regex: this.query.search, $options: 'i' } }
-						]
-					}
-				}
+                let filter = {}
 				this.listQuery.filter = JSON.stringify(filter)
-				this.status = 'loading';
-				this.$u.api.v3.institution.apply.List(this.listQuery).then(res => {
-                    // console.log(res)
-					if (res.items) {
+                this.status = 'loading';
+                this.$u.api.v3.institution.apply.ChannelSearch(this.listQuery).then(res => {
+                    if (res.items) {
 						res.items.forEach(item => {
 							item.show = false
 							this.list.push(item)
@@ -248,7 +151,15 @@
 					}else{
 						this.status = 'nomore'
 					}
-				})
+                    
+                }).catch(err => {
+                    console.log(err);
+                    uni.showToast({
+                        duration: 10000,
+                        icon:'error',
+                        title: err.data,
+                    })
+                })
 			},
 			handlerSearch(res) {
 				if (res) {
@@ -265,44 +176,12 @@
 				this.list = []
 				this.getList()
 			},
-			// click(item){
-			// 	this.$u.route({
-			// 		type: 'to',
-			// 		url: '/subPackages/institution/apply/update/update', 
-			// 		params: item
-			// 	})
-			// }
-			click(index, index1) {
-				console.log(this.list[index])
-				if(index1 == 1) {  //详情
-					this.$u.route({
-						type: 'to',
-						url: '/subPackages/institution/apply/detail/detail', 
-						params: this.list[index]
-					})
-				} else {
-					this.$u.route({
-						type: 'to',
-						url: '/subPackages/institution/apply/update/update', 
-						params: this.list[index]
-					})
-				}
-			},
-			clickChannel(index, index1) {
-				console.log(this.list[index])
-				if(index1 == 1) {  //通道详情
-					this.$u.route({
-						type: 'to',
-						url: '/subPackages/institution/apply/channelDetail/channelDetail', 
-						params: this.list[index]
-					})
-				} else { //添加
-					this.$u.route({
-						type: 'to',
-						url: '/subPackages/institution/apply/channel/index', 
-						params: this.list[index]
-					})
-				}
+			click(item, index1) {
+                this.$u.route({
+                    type: 'to',
+                    url: '/subPackages/institution/apply/channelList/detail', 
+                    params: item
+                })
 			},
 			// 如果打开一个的时候，不需要关闭其他，则无需实现本方法
 			open(index) {

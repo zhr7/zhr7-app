@@ -432,7 +432,7 @@ export default {
                             console.log(err);
                             uni.showToast({
                             duration: 10000,
-                            icon:'error',
+                            icon:'none',
                             title: err.data,
                         })
                     })

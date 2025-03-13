@@ -129,6 +129,12 @@
 						break;
 					case "institution-secret-key":
 						break;
+					case "institution-channel-list": 
+						this.$u.route({
+							type: 'to',
+							url: '/subPackages/institution/apply/channelList/index'
+						})
+						break;
 					case "institutionPay":
 						this.$refs.uToast.show({
 							title: "努力开发中"
